@@ -194,6 +194,32 @@ dialog::backdrop{background:rgba(10,18,30,.72);backdrop-filter:blur(2px)}
 .bl .tot{font-family:var(--display);font-size:18px;margin-top:10px}
 @media (prefers-reduced-motion:no-preference){ dialog[open]{animation:lbin .18s ease-out} @keyframes lbin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}} }
 
+/* ── Thème « anniversaire 5 ans » (anniversaire.html, data-mode="anniv") : ciel bleu, fanions, confettis, pas de sapin ni de ruban ── */
+:root[data-mode="anniv"]{--accent:#ff6a3d;--gold:#ffd43b;--pine:#2a6df4;--pine-2:#4f8dff;--bg:#f6f9ff;--soft:#eef3ff}
+@media (prefers-color-scheme:dark){ :root[data-mode="anniv"]:not([data-theme="light"]){--pine:#1d3f8f;--pine-2:#2a57b8;--bg:#121a2c;--soft:#1f2a44} }
+:root[data-mode="anniv"][data-theme="dark"]{--pine:#1d3f8f;--pine-2:#2a57b8;--bg:#121a2c;--soft:#1f2a44}
+[data-mode="anniv"] .band{background:linear-gradient(180deg,var(--pine) 0%,var(--pine-2) 100%);border-bottom:6px solid var(--gold)}
+[data-mode="anniv"] .band::after{height:0;background:none}
+[data-mode="anniv"] .band::before{content:"";position:absolute;inset:0 0 auto 0;height:46px;z-index:1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='46' viewBox='0 0 160 46'%3E%3Cpath d='M0 6 Q80 14 160 6' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3Cpath d='M4 7l16 32 16-31z' fill='%23ff6a3d'/%3E%3Cpath d='M44 9l16 32 16-31z' fill='%23ffd43b'/%3E%3Cpath d='M84 9l16 32 16-31z' fill='%2345d483'/%3E%3Cpath d='M124 7l16 32 16-31z' fill='%23ff8fd1'/%3E%3C/svg%3E") repeat-x top left}
+[data-mode="anniv"] .tabs{display:none}
+[data-mode="anniv"] header.hero{padding-top:62px}
+[data-mode="anniv"] h1{font-family:var(--display);font-weight:800;font-size:clamp(40px,6.5vw,68px);letter-spacing:-.01em;text-shadow:0 3px 0 rgba(0,0,0,.18)}
+[data-mode="anniv"] .eyebrow{color:var(--gold)}
+[data-mode="anniv"] .countdown.big span{background:var(--gold);color:#2b1d00;border-color:transparent;box-shadow:0 4px 0 rgba(0,0,0,.15)}
+[data-mode="anniv"] .countdown.big b{color:var(--accent);font-size:48px}
+[data-mode="anniv"] .notice{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.5)}
+[data-mode="anniv"] .photo{transform:rotate(-3deg);border-color:var(--gold)}
+[data-mode="anniv"] .photo .bow{display:none}
+[data-mode="anniv"] .photo .tag{background:var(--accent)}
+.age-badge{display:none}
+[data-mode="anniv"] .age-badge{display:flex;flex-direction:column;align-items:center;justify-content:center;position:absolute;top:-14px;right:-16px;width:74px;height:74px;border-radius:50%;background:var(--gold);color:#2b1d00;font-family:var(--display);font-weight:800;line-height:1;box-shadow:0 4px 0 rgba(0,0,0,.2);transform:rotate(12deg);border:4px solid #fff}
+[data-mode="anniv"] .age-badge b{font-size:34px}
+[data-mode="anniv"] .age-badge small{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+[data-mode="anniv"] .btn{background:var(--accent)}
+[data-mode="anniv"] .chip[aria-pressed="true"]{background:var(--pine);border-color:var(--pine);color:#fff}
+[data-mode="anniv"] .stars .s.on,[data-mode="anniv"] .stars button.on{color:var(--accent)}
+[data-mode="anniv"] .pbar{background:var(--gold)}
+[data-mode="anniv"] .pill .dot{background:var(--pine)}
 footer{color:var(--muted);font-size:12.5px;padding-block:22px 0;max-width:80ch}
 footer p{margin:6px 0}
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:var(--shadow);max-width:calc(100vw - 32px);z-index:50}
@@ -229,6 +255,7 @@ footer p{margin:6px 0}
       <img id="photo-img" src="" alt="">
       <svg class="bow" viewBox="0 0 54 54" aria-hidden="true"><g fill="var(--accent)" stroke="#fff" stroke-width="2"><ellipse cx="17" cy="20" rx="12" ry="8" transform="rotate(-25 17 20)"/><ellipse cx="37" cy="20" rx="12" ry="8" transform="rotate(25 37 20)"/><path d="M22 27l-8 20h10l3-16zM32 27l8 20H30l-3-16z"/><circle cx="27" cy="25" r="6"/></g></svg>
       <figcaption class="tag" id="photo-tag"></figcaption>
+      <span class="age-badge" aria-hidden="true"><b>5</b><small>ans</small></span>
     </figure>
   </header>
 </div></div>
@@ -330,15 +357,21 @@ footer p{margin:6px 0}
 
 <script src="data.js?v=10"></script>
 <script>
-/* Neige légère dans le bandeau (désactivée si l'utilisateur préfère moins d'animations) */
+/* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
   const c=document.getElementById("snow"); if(!c) return;
+  const anniv=document.documentElement.dataset.mode==="anniv";
   const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
   const ctx=c.getContext("2d"); let W,H,flakes=[];
+  const COLORS=["#ff6a3d","#ffd43b","#45d483","#ff8fd1","#ffffff","#7fd1ff"];
   function size(){const r=c.parentElement.getBoundingClientRect();W=c.width=Math.max(1,Math.floor(r.width));H=c.height=Math.max(1,Math.floor(r.height));
-    flakes=Array.from({length:Math.min(90,Math.floor(W/12))},()=>({x:Math.random()*W,y:Math.random()*H,r:1+Math.random()*2.4,s:.25+Math.random()*.7,w:Math.random()*6.28}));}
-  function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle="rgba(255,255,255,.85)";for(const f of flakes){ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,6.28);ctx.fill();}}
-  function tick(){for(const f of flakes){f.y+=f.s;f.w+=.01;f.x+=Math.sin(f.w)*.3;if(f.y>H+4){f.y=-4;f.x=Math.random()*W;}}draw();requestAnimationFrame(tick);}
+    flakes=Array.from({length:Math.min(anniv?70:90,Math.floor(W/12))},()=>anniv
+      ?{x:Math.random()*W,y:Math.random()*H,w:4+Math.random()*6,h:6+Math.random()*8,s:.35+Math.random()*.8,a:Math.random()*6.28,va:(Math.random()-.5)*.08,c:COLORS[Math.floor(Math.random()*COLORS.length)],d:Math.random()*6.28}
+      :{x:Math.random()*W,y:Math.random()*H,r:1+Math.random()*2.4,s:.25+Math.random()*.7,w:Math.random()*6.28});}
+  function draw(){ctx.clearRect(0,0,W,H);
+    if(anniv){ for(const f of flakes){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(f.a);ctx.fillStyle=f.c;ctx.globalAlpha=.9;ctx.fillRect(-f.w/2,-f.h/2,f.w,f.h);ctx.restore();} }
+    else { ctx.fillStyle="rgba(255,255,255,.85)";for(const f of flakes){ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,6.28);ctx.fill();} } }
+  function tick(){for(const f of flakes){f.y+=f.s;if(anniv){f.a+=f.va;f.d+=.02;f.x+=Math.sin(f.d)*.6;}else{f.w+=.01;f.x+=Math.sin(f.w)*.3;}if(f.y>H+8){f.y=-8;f.x=Math.random()*W;}}draw();requestAnimationFrame(tick);}
   size(); addEventListener("resize",size); new ResizeObserver(size).observe(c.parentElement); draw(); if(!reduce) requestAnimationFrame(tick);
 })();
 </script>
@@ -576,7 +609,7 @@ function render(){
   const cd=document.getElementById("countdown"); cd.replaceChildren(); cd.classList.toggle("big",ANNIV);
   const dn=daysTo(DATES.noel), da=daysTo(DATES.anniv);
   const fmt=(n,label)=>n>1?[el("b",{text:String(n)})," jours avant "+label]:n===1?[el("b",{text:"1"})," jour avant "+label]:n===0?["C'est aujourd'hui : "+label+" !"]:[label+", c'est passé"];
-  if(ANNIV) cd.append(el("span",{},...fmt(da,"l'anniversaire de Louis"))); else cd.append(el("span",{},...fmt(dn,"Noël")));
+  if(ANNIV) cd.append(el("span",{},...fmt(da,"les 5 ans de Louis"))); else cd.append(el("span",{},...fmt(dn,"Noël")));
   const nt=document.getElementById("notice"); nt.hidden=!ANNIV; if(ANNIV){ nt.replaceChildren(el("b",{text:"Et pour Noël ?"})," Les listes de Noël de Louis, Capucine, Clémentine et Charles seront partagées plus tard, dans un autre lien."); }
   const pa=document.getElementById("p-anniv"); const annivN=(!ANNIV&&L.id==="louis")?baseItems().filter(i=>isAnnivGift(i)).length:0; pa.hidden=ANNIV||L.id!=="louis"; pa.textContent=(state.showAnniv?"Revenir à la liste de Noël":"Offerts à l'anniversaire")+" ("+annivN+")"; pa.setAttribute("aria-pressed",String(state.showAnniv));
   const tb=document.getElementById("rows"); tb.replaceChildren();
@@ -622,7 +655,7 @@ function renderTabs(){
 }
 function selectList(id,push){
   const L=PAGE_LISTS.find(x=>x.id===id)||PAGE_LISTS[0]; state.list=L; state.open=null; state.confirmCancel=null; state.confirmRemove=null; state.showHidden=false; state.showAnniv=false;
-  if(ANNIV){ document.getElementById("eyebrow").textContent="Jeudi 3 décembre 2026 · Louis fête son anniversaire"; document.getElementById("title").textContent="L'anniversaire de Louis"; document.getElementById("lead").textContent="Louis a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 je veux absolument. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche), le prix Amazon et le moins cher trouvé sur le web. Pour lui offrir un jouet, cliquez sur Réserver et indiquez votre prénom : tout le monde verra qu'il est pris."; }
+  if(ANNIV){ document.getElementById("eyebrow").textContent="Jeudi 3 décembre 2026 · Louis fête ses 5 ans"; document.getElementById("title").textContent="L'anniversaire de Louis"; document.getElementById("lead").textContent="Louis a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 je veux absolument. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche), le prix Amazon et le moins cher trouvé sur le web. Pour lui offrir un jouet, cliquez sur Réserver et indiquez votre prénom : tout le monde verra qu'il est pris."; }
   else { document.getElementById("eyebrow").textContent=L.eyebrow; document.getElementById("title").textContent=L.titre; document.getElementById("lead").textContent=L.intro; }
   const pi=document.getElementById("photo-img"); pi.src=L.photo; pi.alt=L.prenom; document.getElementById("photo-tag").textContent=L.prenom;
   document.getElementById("q").placeholder="Chercher dans la liste de "+L.prenom+"…";
