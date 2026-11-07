@@ -2,7 +2,7 @@
 // Source : catalogue King Jouet Noël 2026 (prix catalogue magasin valables du 14/10 au 01/12/2026)
 // + fiches king-jouet.com relevées le 07/11/2026 (prixWeb). "ailleurs" = meilleur prix trouvé chez un autre vendeur (hors frais de port).
 const KJ = "https://www.king-jouet.com";
-const ITEMS = [
+const ITEMS_LOUIS = [
  {id:"megasaurus", nom:"Véhicule Megasaurus", sub:"Pat' Patrouille · Le Film Mission Dino · dinosaure géant gonflable + figurine Rocky", marque:"Spin Master", age:3, ref:"1032628", prixCat:59.99, prixWeb:50.99, prixWebOrig:null,
   url:KJ+"/jeu-jouet/vehicules-circuits-jouets-radiocommandes/Autres-vehicules/ref-1032628-vehicule-megasaurus-la-pat-patrouille-le-film-mission-dino.htm", img:"img/1032628.jpg"},
  {id:"timmy", nom:"Timmy le dino explorateur", sub:"Pat' Patrouille Mission Dino · figurine interactive sons & lumières + figurine Rex", marque:"Spin Master", age:3, ref:"1034128", prixCat:49.99, prixWeb:49.99, prixWebOrig:null,
@@ -93,8 +93,8 @@ const ITEMS = [
  {id:"monster-jam", nom:"Coffret 5 Monster Jam 1/64 Marvel", sub:"Spider-Man · vraies suspensions, roues souples", marque:"Spin Master", age:3, ref:"995744", prixCat:24.99, prixWeb:26.99, prixWebOrig:29.99,
   url:KJ+"/jeu-jouet/vehicules-circuits-jouets-radiocommandes/Autres-vehicules/ref-995744-pack-de-5-vehicules-spider-man-1-64-monster-jam.htm", img:"img/995744.jpg"},
 ];
-// Meilleur prix trouvé ailleurs (rempli après comparaison) : {vendeur, prix, url, verifie, note}
-const AILLEURS = {
+// Meilleur prix trouvé ailleurs : {vendeur, prix, url, verifie, note}
+const AILLEURS_LOUIS = {
  "megasaurus": {"vendeur":"Amazon.fr","prix":49.99,"url":"https://www.amazon.fr/dp/B0FR9B3J29","verifie":false,"note":"1 € sous le prix web King Jouet. Relevé comparateur du 07/11/2026, livraison gratuite (fiche Amazon non consultable). E.Leclerc 56,95 €, Auchan 56,99 €."},
  "timmy": {"vendeur":"E.Leclerc (vendeur tiers)","prix":55.67,"url":"https://www.e.leclerc/fp/timmy-le-dino-explorateur-et-rex-0068114711483?offerId=249250628","verifie":false,"note":"Rien de moins cher trouvé. Oxybul au même prix (49,99 €)."},
  "qg-dino": {"vendeur":"Auchan.fr (vendeur tiers Multishop)","prix":66.5,"url":"https://www.auchan.fr/paw-patrol-quartier-general-dino-mobile-la-pat-patrouille-le-film-mission-dino-spinmaster-a-partir-de-3-ans/pr-2395b571-9fd1-4e3b-92f4-a7b3a7831cfd","verifie":true,"note":"Page vérifiée le 07/11/2026 : vendeur partenaire de la marketplace Auchan (port 4,99 € en plus), au lieu de 94,99 €. Autre vendeur sur la même page : GpasPlus 69,38 € port offert."},
@@ -140,3 +140,122 @@ const AILLEURS = {
  "cars-color": {"vendeur":"Mattel (boutique officielle)","prix":11.99,"url":"https://shopping.mattel.com/fr-fr/products/disney-pixar-cars-assortiment-color-changers-gny94-fr-fr","verifie":false,"note":"Prix conseillé 11,99 € pour l'assortiment Color Changers GNY94 (modèle aléatoire), page non consultée. Carrefour 11,99 € (non vérifié), Auchan 12,99 € (vérifié)."},
  "monster-jam": {"vendeur":"Auchan (vendeur tiers)","prix":29.33,"url":"https://www.auchan.fr/monster-jam-pack-de-5-vehicules-monster-jam-marvel-die-cast/pr-7c38231c-127a-41df-83d9-08fc084259de","verifie":true,"note":"Rien de moins cher que le catalogue (24,99 €) : Auchan marketplace 29,33 €, Rue du Commerce 30,56 €."}
 };
+// Prix Amazon.fr relevé le 07/11/2026 (prix affiché dans les résultats de recherche, vendeur non vérifié) : {prix, url, approx, note}
+const AMAZON_LOUIS = {
+ "megasaurus": {"prix": 49.99, "url": "https://www.amazon.fr/dp/B0FR9B3J29"},
+ "timmy": {"prix": null, "url": null, "note": "Timmy le dino explorateur non trouvé sur Amazon.fr (seuls les petits coffrets « Rex et Dino avec sons » à 19,99 € y sont)."},
+ "qg-dino": {"prix": 65.99, "url": "https://www.amazon.fr/dp/B0FR9JJQNF"},
+ "chase-dino": {"prix": 16.9, "url": "https://www.amazon.fr/dp/B0FR9B3JSF"},
+ "pup-squad": {"prix": 21.42, "url": "https://www.amazon.fr/dp/B0CM8Q7WX5"},
+ "ruben": {"prix": 17.99, "url": "https://www.amazon.fr/dp/B0FR9KDY34"},
+ "kit-aventure-pp": {"prix": null, "url": null, "note": "Le kit complet Lexibook (RPTW12PA) n'est pas sur Amazon.fr ; seuls les talkie-walkies seuls y sont (24,89 €)."},
+ "pat-patrouilleur": {"prix": null, "url": null, "note": "Pack exclusif King Jouet, pas d'équivalent sur Amazon."},
+ "bubble-science": {"prix": 36.99, "url": "https://www.amazon.fr/dp/B0GXGHPC9C"},
+ "flipper-minecraft": {"prix": null, "url": "https://www.amazon.fr/dp/B0FWRSMTG4", "note": "Fiche Amazon (Ambassador x Minecraft Overworld) sans offre le 07/11."},
+ "telescope": {"prix": null, "url": null, "note": "Marque propre King Jouet (Microplanet), pas sur Amazon."},
+ "police": {"prix": 21.71, "url": "https://www.amazon.fr/dp/B073V8QYJ9", "approx": true, "note": "Modèle équivalent Guirca 5-6 ans (veste + pantalon), pas la référence du catalogue."},
+ "epee-mira": {"prix": null, "url": null, "note": "L'épée Nerf de Mira n'apparaît pas sur Amazon.fr le 07/11."},
+ "jinu": {"prix": 19.99, "url": "https://www.amazon.fr/dp/B0GC41KX8K", "note": "Fiche Amazon annoncée 17 cm (King Jouet : 15 cm), même figurine Mattel."},
+ "gecko": {"prix": 21.41, "url": "https://www.amazon.fr/dp/B0F677X53D"},
+ "kinetic": {"prix": 29.99, "url": "https://www.amazon.fr/dp/B0GMVMV9RZ"},
+ "hypergel": {"prix": 48.09, "url": "https://www.amazon.fr/dp/B0DFL8XXQC"},
+ "genius-xl": {"prix": 69.99, "url": "https://www.amazon.fr/dp/B0DT19RTQL"},
+ "cible-xshot": {"prix": 28.76, "url": "https://www.amazon.fr/dp/B0G2T3Q73V"},
+ "dr-doom": {"prix": 9.99, "url": "https://www.amazon.fr/dp/B0FDWW5P4D", "approx": true, "note": "Figurine Titan Series 29 cm simple (sans projectiles ni lumières) : pas le même modèle que « Puissance radiante »."},
+ "hulk-camion": {"prix": 43.4, "url": "https://www.amazon.fr/dp/B0DK7S9VGK", "note": "Vendeur tiers, beaucoup plus cher que King Jouet."},
+ "hulk-coffret": {"prix": null, "url": null, "note": "Coffret exclusif King Jouet, pas d'équivalent sur Amazon."},
+ "pokemon-ceinture": {"prix": 27.99, "url": "https://www.amazon.fr/dp/B0F8R4QTY2"},
+ "titans": {"prix": 49.99, "url": "https://www.amazon.fr/dp/B07TFNDNVX"},
+ "lego-garp": {"prix": 129.79, "url": "https://www.amazon.fr/dp/B0GGSFQR8L"},
+ "lego-xwing": {"prix": null, "url": null, "note": "Set 75460 introuvable sur Amazon.fr (exclusivité King Jouet)."},
+ "funko-mini": {"prix": 7.0, "url": "https://www.amazon.fr/dp/B0D1K13RF6"},
+ "lego-razor": {"prix": 99.79, "url": "https://www.amazon.fr/dp/B0FPXFTQ9S"},
+ "4d-droides": {"prix": 31.82, "url": "https://www.amazon.fr/dp/B0FF3RPG1P"},
+ "lego-ironman": {"prix": null, "url": "https://www.amazon.fr/dp/B0FPXDNJ1T", "note": "Fiche Amazon sans offre le 07/11."},
+ "lego-prison": {"prix": 34.99, "url": "https://www.amazon.fr/dp/B0FRSMF77X"},
+ "lego-spider-hulk": {"prix": 64.79, "url": "https://www.amazon.fr/dp/B0FTFSDHK7"},
+ "lego-falcon": {"prix": 54.99, "url": "https://www.amazon.fr/dp/B0CFW29DZX"},
+ "lego-anzellans": {"prix": 51.26, "url": "https://www.amazon.fr/dp/B0FPXBTTHZ"},
+ "kit-aventure-spider": {"prix": 28.99, "url": "https://www.amazon.fr/dp/B09G6Q6DX8"},
+ "montre-led": {"prix": 11.73, "url": "https://www.amazon.fr/dp/B0B7P2PSL5", "approx": true, "note": "Montre LED Spider-Man Kids Licensing (vendeur tiers), modèle proche de celui de King Jouet."},
+ "coffret-spiderman": {"prix": 24.99, "url": "https://www.amazon.fr/dp/B0G4N7YC1V", "approx": true, "note": "Titan Series « Ultime arsenal d'araignée » (figurine 30 cm + accessoires) : probablement le même coffret, à confirmer."},
+ "mandalorian-deguisement": {"prix": 19.99, "url": "https://www.amazon.fr/dp/B0BJL5SM4Z", "note": "Rubie's modèle classique. Une version « taille unique 5-8 ans » existe à 13,11 €."},
+ "mandalorian-figurine": {"prix": 27.99, "url": "https://www.amazon.fr/dp/B0FDFKXLFC"},
+ "buggy-spider": {"prix": 29.99, "url": "https://www.amazon.fr/dp/B0FJR5Y3QS"},
+ "cars-rc": {"prix": null, "url": null, "note": "Le pack de 2 voitures radiocommandées 1/32 n'a pas été trouvé sur Amazon.fr."},
+ "cars-155": {"prix": null, "url": null, "note": "Pas d'assortiment 1/55 au même prix sur Amazon ; les modèles vendus à l'unité y sont à 20 € et plus."},
+ "cars-color": {"prix": null, "url": null, "note": "Assortiment Color Changers introuvable sur Amazon.fr le 07/11."},
+ "monster-jam": {"prix": 19.99, "url": "https://www.amazon.fr/dp/B0CWLLGRH2", "approx": true, "note": "Coffret 5 véhicules Marvel 1:64 : version proche, pas forcément la série Spider-Man du catalogue."}
+};
+
+// ── Liste de Capucine (Noël 2026) — découpages du catalogue King Jouet, numéros au stylo = ordre de préférence de Capucine
+const ITEMS_CAPUCINE = [
+ {id:"kitty-life", pref:1, nom:"Kitty Life", sub:"Animal virtuel chat · écran couleur 2,4\", plus de 30 activités et missions · existe en gris/orange (1034743)", marque:"VTech", age:5, ref:"1034742", prixCat:44.99, prixWeb:44.99, prixWebOrig:59.99, url:KJ+"/jeu-jouet/jeux-jouets-educatifs/ordinateurs-jeux-interactifs/ref-1034742-kitty-life-rose.htm", img:"img/1034742.jpg", noteKJ:"Indisponible en ligne le 07/11 (magasin uniquement)."},
+ {id:"dj-furby", pref:2, nom:"DJ Furby", sub:"5 modes et plus de 1 000 combinaisons de jeu, effets sonores et lumineux", marque:"Hasbro", age:6, ref:"995976", prixCat:69.99, prixWeb:69.99, prixWebOrig:null, url:KJ+"/jeu-jouet/peluches/peluches-interactives/ref-995976-dj-furby-arc-en-ciel.htm", img:"img/995976.jpg"},
+ {id:"miniverse-vending", pref:3, nom:"Miniverse · Vending Machine", sub:"Mini distributeur automatique fonctionnel (Make It Mini Real Brands)", marque:"MGA", age:8, ref:"1033340", prixCat:24.99, prixWeb:24.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-imitation-mondes-imaginaires/figurines-cartes-a-collectionner/ref-1033340-miniverse-make-it-mini-real-brands-distributeur.htm", img:"img/1033340.jpg"},
+ {id:"sac-perso", pref:4, nom:"Sac personnalisable", sub:"Kit Cha Cha Cha · 1 porte-monnaie, 1 porte-clés charm, 1 chaîne de caractères, lipgloss · modèles assortis", marque:"Zuru", age:3, ref:"1031352", prixCat:29.99, prixWeb:29.99, prixWebOrig:null, url:KJ+"/jeu-jouet/fetes-deco-mode-enfants/porte-cles/ref-1031352-kit-cha-cha-cha-panier-rouge-a-levres-et-porte-cle.htm", img:"img/1031352.jpg"},
+ {id:"mama-capybara", pref:5, nom:"Mama Surprise Capybara", sub:"Pets Alive · maman capybara et ses bébés surprises, baignoire et petit canard inclus", marque:"Zuru", age:3, ref:"1027758", prixCat:24.99, prixWeb:24.99, prixWebOrig:null, url:KJ+"/jeu-jouet/peluches/peluches-interactives/ref-1027758-maman-capybara-et-bebes-surprises-pets-alive-modele-aleatoire.htm", img:"img/1027758.jpg"},
+ {id:"scruff-a-luvs", pref:6, nom:"Boule de poils maman bébé · Scruff-a-Luvs", sub:"Révèle une peluche surprise chien à laver et pomponner", marque:"Moose Toys", age:2, ref:"1034164", prixCat:29.99, prixWeb:29.99, prixWebOrig:36.99, url:KJ+"/jeu-jouet/peluches/peluches-animaux/ref-1034164-maman-et-bebe-scruff-a-luvs-pomponne-ton-animal.htm", img:"img/1034164.jpg"},
+ {id:"elo-yeno", pref:7, nom:"Elo Yeno", sub:"Peluche ours interactive à intelligence artificielle : parle, apprend et s'adapte à l'enfant, yeux écran LCD", marque:"Lexibook", age:3, ref:"1034710", prixCat:99.99, prixWeb:94.99, prixWebOrig:null, url:KJ+"/jeu-jouet/peluches/peluches-interactives/ref-1034710-peluche-interactive-avec-ia-elo-yeno.htm", img:"img/1034710.jpg"},
+ {id:"chauffe-main", pref:8, nom:"Chauffe-main capybara 35 cm", sub:"Peluche chauffe-mains · modèles assortis", marque:"Ami Plush", age:0, ref:"992910", prixCat:14.99, prixWeb:14.99, prixWebOrig:null, url:KJ+"/jeu-jouet/peluches/ref-992910-peluche-chauffe-main-35-cm.htm", img:"img/992910.jpg"},
+ {id:"squishmallows", pref:9, nom:"Squishmallows 30 cm", sub:"Peluche · modèles assortis (modèle aléatoire en ligne)", marque:"Jazwares", age:3, ref:"983579", prixCat:19.99, prixWeb:19.99, prixWebOrig:null, url:KJ+"/jeu-jouet/peluches/peluches-animaux/ref-983579-peluche-squishmallows-30cm-modele-aleatoire.htm", img:"img/983579.jpg"},
+ {id:"mama-chat", pref:10, nom:"Mama Surprise Chat", sub:"Little Live Pets · maman chat qui réagit aux caresses, assistez à la naissance des chatons", marque:"Moose Toys", age:4, ref:"1034160", prixCat:29.99, prixWeb:29.99, prixWebOrig:36.99, url:KJ+"/jeu-jouet/peluches/peluches-interactives/ref-1034160-mama-surprise-little-live-pets-chatons.htm", img:"img/1034160.jpg"},
+ {id:"manucure-stitch", pref:11, nom:"Kit de manucure Stitch", sub:"Aquabeads 35121 · les ongles qui collent à l'eau, accessoires inclus", marque:"Aquabeads", age:4, ref:"996213", prixCat:19.99, prixWeb:19.99, prixWebOrig:21.99, url:KJ+"/jeu-jouet/jeux-creatifs/perles/ref-996213-aquabeads-35121-le-kit-manucure-stitch.htm", img:"img/996213.jpg"},
+ {id:"miniverse-appliances", pref:12, nom:"Miniverse · Make It Mini Appliances", sub:"Pour créer de vrais aliments miniatures comme des bubble tea ou des muffins · modèles assortis", marque:"MGA", age:8, ref:"959476", prixCat:14.99, prixWeb:14.99, prixWebOrig:16.99, url:KJ+"/jeu-jouet/jeux-creatifs/pate-a-modeler-modelage-gravure/ref-959476-miniverse-make-it-mini-appareils-electromenagers.htm", img:"img/959476.jpg"},
+ {id:"bubble-science", pref:13, nom:"Super labo d'expériences Bubble Science", sub:"20 expériences scientifiques, nombreux accessoires", marque:"Canal Toys", age:8, ref:"1034668", prixCat:39.99, prixWeb:39.99, prixWebOrig:44.99, url:KJ+"/jeu-jouet/jeux-jouets-educatifs/jeux-scientifiques/ref-1034668-super-labo-d-experiences-bubble-science.htm", img:"img/1034668.jpg"},
+ {id:"suzanne", pref:14, nom:"Suzanne forêt enchantée 36 cm", sub:"Poupon Corolle édition limitée · assise, yeux dormeurs, senteur vanille, vêtements inclus", marque:"Corolle", age:2, ref:"1035628", prixCat:69.99, prixWeb:69.99, prixWebOrig:null, url:KJ+"/jeu-jouet/poupees-poupons/poupons/ref-1035628-poupon-suzanne-foret-enchantee-36cm-dition-limitee.htm", img:"img/1035628.jpg"},
+ {id:"epee-mira", pref:15, nom:"L'épée lunaire incurvée de Mira", sub:"KPop Demon Hunters · 91 cm, lame en mousse, finition nacrée", marque:"Nerf", age:4, ref:"1032624", prixCat:19.99, prixWeb:19.99, prixWebOrig:24.99, url:KJ+"/jeu-jouet/fetes-deco-mode-enfants/accessoires-deguisements/ref-1032624-epee-courbe-de-la-lune-de-mira.htm", img:"img/1032624.jpg", noteKJ:"Indisponible en ligne le 07/11 (magasin uniquement)."},
+ {id:"yumo", pref:16, nom:"Peluche Yumo zodiac", sub:"Peluche porte-clés surprise, série Zodiaque · modèles assortis", marque:"Hubtoys", age:3, ref:"1042741", prixCat:19.99, prixWeb:19.99, prixWebOrig:null, url:KJ+"/jeu-jouet/peluches/mini-peluches/ref-1042741-peluche-porte-cle-suprise-yumo-serie-zodiaque.htm", img:"img/1042741.jpg"},
+ {id:"boite-bijoux", pref:17, nom:"Ma boîte à bijoux", sub:"Coffret premium · 70 breloques, perles et nombreux accessoires", marque:"Creamania", age:5, ref:"1013768", prixCat:19.99, prixWeb:19.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-creatifs/mode-bijoux-decoration-cosmetiques/ref-1013768-coffret-premium-de-perles-et-breloques.htm", img:"img/1013768.jpg"},
+ {id:"hello-kitty", pref:18, nom:"Peluche Hello Kitty 30 cm", sub:"Modèles assortis (modèle aléatoire en ligne)", marque:"Jemini", age:0, ref:"1034179", prixCat:19.99, prixWeb:19.99, prixWebOrig:null, url:KJ+"/jeu-jouet/peluches/peluches-super-heros/ref-1034179-peluche-hello-kitty-30cm-modele-aleatoire-.htm", img:"img/1034179.jpg"},
+ {id:"loopdedoo", pref:19, nom:"Loopdedoo", sub:"Métier à tisser rotatif breveté avec tiroir de rangement et accessoires", marque:"Goliath", age:8, ref:"999256", prixCat:29.99, prixWeb:29.99, prixWebOrig:32.99, url:KJ+"/jeu-jouet/jeux-creatifs/mode-bijoux-decoration-cosmetiques/ref-999256-metier-a-tisser-loopdedoo.htm", img:"img/999256.jpg"},
+ {id:"buggy-toy-story", nom:"Buggy radiocommandé Toy Story 20 cm", sub:"2,4 GHz, 2 canaux, mode turbo, suspensions · figurine Buzz l'Éclair incluse", marque:"Jada", age:4, ref:"975584", prixCat:34.99, prixCatOrig:39.99, prixWeb:35.99, prixWebOrig:null, url:KJ+"/jeu-jouet/vehicules-circuits-jouets-radiocommandes/voitures-radiocommandees/ref-975584-buggy-toy-story.htm", img:"img/975584.jpg"},
+ {id:"ordi-stitch", nom:"Ordinateur éducatif Stitch", sub:"Lexibook bilingue · 124 activités amusantes et interactives en français et en anglais", marque:"Lexibook", age:3, ref:"952647", prixCat:44.99, prixWeb:46.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-jouets-educatifs/ordinateurs-jeux-interactifs/ref-952647-ordinateur-educatif-bilingue-5-disney-stitch.htm", img:"img/952647.jpg"},
+ {id:"figurine-stitch", nom:"Figurine Stitch 10 cm", sub:"Stitch dans sa noix de coco · Disney", marque:"Abysse", age:7, ref:"1005744", prixCat:29.99, prixWeb:24.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-imitation-mondes-imaginaires/figurines-cartes-a-collectionner/ref-1005744-figurine-stitch-10-cm.htm", img:"img/1005744.jpg"},
+ {id:"coquillages", nom:"Coquillages surprises", sub:"Disney Princesses · 1 ou 2 figurines, du sable à modeler, des moules pour créer une île", marque:"Mattel", age:3, ref:"1008689", prixCat:12.99, prixWeb:14.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-imitation-mondes-imaginaires/figurines-cartes-a-collectionner/ref-1008689-coquillage-surprise-avec-figurine-et-accessoires-disney-princesses.htm", img:"img/1008689.jpg"},
+ {id:"reveil-angel", nom:"Réveil veilleuse 3-en-1 Angel", sub:"Lilo & Stitch · réveil digital et veilleuse Lexibook", marque:"Lexibook", age:6, ref:"969695", prixCat:34.99, prixWeb:36.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-electroniques/radios-reveil/ref-969695-reveil-digital-et-veilleuse-angel-lilo-stitch.htm", img:"img/969695.jpg"},
+ {id:"lego-valise", nom:"LEGO Friends 42697 · La maison de poupée dans la valise créative", sub:"355 pièces, 8 espaces personnalisables, accessoires et 2 mini-poupées", marque:"LEGO", age:6, ref:"1029293", prixCat:49.99, prixWeb:49.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-constructions/lego-planchettes/ref-1029293-42697-lego-friends-maison-poupee-valise-creative.htm", img:"img/1029293.jpg"},
+ {id:"funko-vaiana", nom:"Figurine Vaiana · Funko Pop", sub:"Figurine en vinyle Disney", marque:"Funko", age:3, ref:"862348", prixCat:17.99, prixWeb:17.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-imitation-mondes-imaginaires/figurines-cartes-a-collectionner/ref-862348-figurine-vaiana-funko-pop.htm", img:"img/862348.jpg"},
+];
+const AILLEURS_CAPUCINE = {};
+const AMAZON_CAPUCINE = {
+ "kitty-life": {"prix": 39.99, "url": "https://www.amazon.fr/dp/B0GX7CS966"},
+ "dj-furby": {"prix": 47.5, "url": "https://www.amazon.fr/dp/B0DNNQ2X1S"},
+ "miniverse-vending": {"prix": null, "url": null, "note": "Le distributeur Miniverse Make It Mini n'apparaît pas sur Amazon.fr le 07/11."},
+ "sac-perso": {"prix": null, "url": null, "note": "Kit Cha Cha Cha (exclusivité King Jouet) introuvable sur Amazon.fr."},
+ "mama-capybara": {"prix": 26.99, "url": "https://www.amazon.fr/dp/B0HKNSK1CH"},
+ "scruff-a-luvs": {"prix": 34.99, "url": "https://www.amazon.fr/dp/B0GBYVXRTQ", "note": "Version Teckel (King Jouet : modèle assorti)."},
+ "elo-yeno": {"prix": 99.99, "url": "https://www.amazon.fr/dp/B0GPXFQGG1"},
+ "chauffe-main": {"prix": null, "url": null, "note": "Pas de chauffe-main capybara équivalent sur Amazon.fr (coussins chauffants à 30 € et plus)."},
+ "squishmallows": {"prix": 15.99, "url": "https://www.amazon.fr/dp/B0G26RFSX5", "approx": true, "note": "Modèle précis (Faine l'ours rose) ; King Jouet vend un modèle aléatoire. Beaucoup de Squishmallows 30 cm entre 10 et 16 € sur Amazon."},
+ "mama-chat": {"prix": 29.99, "url": "https://www.amazon.fr/dp/B0GBY1S3VG"},
+ "manucure-stitch": {"prix": 13.68, "url": "https://www.amazon.fr/dp/B0F4LWTQ9X"},
+ "miniverse-appliances": {"prix": 14.04, "url": "https://www.amazon.fr/dp/B0D972DYZR", "note": "Série 2 (modèles assortis)."},
+ "bubble-science": {"prix": 36.99, "url": "https://www.amazon.fr/dp/B0GXGHPC9C"},
+ "suzanne": {"prix": 59.99, "url": "https://www.amazon.fr/dp/B0G48PG494", "approx": true, "note": "Poupée « Ma Élise Forêt Enchantée » 36 cm (Corolle) : même collection mais pas le poupon Suzanne."},
+ "epee-mira": {"prix": null, "url": null, "note": "L'épée Nerf de Mira n'apparaît pas sur Amazon.fr le 07/11."},
+ "yumo": {"prix": null, "url": null, "note": "Pas de peluche Yumo officielle identifiée sur Amazon.fr."},
+ "boite-bijoux": {"prix": null, "url": null, "note": "Coffret Creamania introuvable ; les kits de perles Amazon sont d'autres marques."},
+ "hello-kitty": {"prix": 18.99, "url": "https://www.amazon.fr/dp/B0D4D8XLRV", "approx": true, "note": "Peluche Hello Kitty Jemini 22 cm (King Jouet : 30 cm, modèle aléatoire)."},
+ "loopdedoo": {"prix": 23.9, "url": "https://www.amazon.fr/dp/B0FFK56B1B"},
+ "buggy-toy-story": {"prix": 48.78, "url": "https://www.amazon.fr/dp/B0D9YSXCZ3", "note": "Buggy RC Toy Story avec Buzz 1:24 (Dickie/Jada), vendeur non vérifié."},
+ "ordi-stitch": {"prix": null, "url": null, "note": "L'ordinateur Lexibook Stitch n'apparaît pas sur Amazon.fr le 07/11."},
+ "figurine-stitch": {"prix": 24.99, "url": "https://www.amazon.fr/dp/B0G3Q98TV9"},
+ "coquillages": {"prix": null, "url": null, "note": "Coquillage surprise Disney Princesses introuvable sur Amazon.fr."},
+ "reveil-angel": {"prix": 22.99, "url": "https://www.amazon.fr/dp/B0DHGQKRBN", "note": "Lexibook RL800D1 Stitch & Angel réveil veilleuse."},
+ "lego-valise": {"prix": 39.99, "url": "https://www.amazon.fr/dp/B0FPXDC9M4"},
+ "funko-vaiana": {"prix": 14.9, "url": "https://www.amazon.fr/dp/B08P5YC75P", "approx": true, "note": "Funko Pop Disney Princesses Moana : vérifier que c'est le même modèle que la réf. King Jouet."}
+};
+
+// Les 4 listes du site. Les cadeaux ajoutés par les parents (mode parents) sont stockés en ligne, pas ici.
+const LISTS = [
+ {id:"louis", prenom:"Louis", titre:"La liste de Louis", eyebrow:"Anniversaire le 3 décembre · Noël 2026", photo:"img/louis.jpg",
+  intro:"Louis a découpé ses envies dans le catalogue King Jouet. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche), le prix Amazon et, quand on en a trouvé un, le meilleur prix ailleurs.",
+  items:ITEMS_LOUIS, ailleurs:AILLEURS_LOUIS, amazon:AMAZON_LOUIS, boutique:"King Jouet"},
+ {id:"capucine", prenom:"Capucine", titre:"La liste de Capucine", eyebrow:"Noël 2026", photo:"img/capucine.jpg",
+  intro:"Capucine a découpé ses envies dans le catalogue King Jouet et les a numérotées par ordre de préférence (le n°1 est son grand favori). Pour chaque cadeau : le prix King Jouet, le prix Amazon et le meilleur prix ailleurs.", items:ITEMS_CAPUCINE, ailleurs:AILLEURS_CAPUCINE, amazon:AMAZON_CAPUCINE, boutique:"King Jouet"},
+ {id:"clementine", prenom:"Clémentine", titre:"La liste de Clémentine", eyebrow:"Noël 2026", photo:"img/clementine.jpg",
+  intro:"Les idées de cadeaux de Clémentine pour Noël.", items:[], ailleurs:{}, amazon:{}, boutique:"Boutique"},
+ {id:"charles", prenom:"Charles", titre:"La liste de Charles", eyebrow:"Noël 2026", photo:"img/charles.jpg",
+  intro:"Les idées de cadeaux de Charles pour Noël.", items:[], ailleurs:{}, amazon:{}, boutique:"Boutique"},
+];
