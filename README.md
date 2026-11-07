@@ -1,4 +1,4 @@
-# Liste de cadeaux 2026
+# La liste de Louis — cadeaux 2026
 
 Page statique (GitHub Pages) : liste de cadeaux anniversaire (03/12) & Noël 2026, issue du catalogue King Jouet.
 

@@ -3,46 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Liste de cadeaux 2026</title>
-<meta name="description" content="Liste de cadeaux pour l'anniversaire du 3 décembre et Noël : prix King Jouet, meilleur prix ailleurs, réservation en un clic.">
+<title>La liste de Louis</title>
+<meta name="description" content="La liste de cadeaux de Louis pour son anniversaire du 3 décembre et Noël : prix King Jouet, meilleur prix ailleurs, réservation en un clic.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Mountains+of+Christmas:wght@700&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <style>
 /* Layout : une table de 5 colonnes sur grand écran, des cartes empilées sur téléphone. */
 :root{
   --bg:#f2f5fa; --paper:#ffffff; --ink:#17233a; --muted:#5d6c86; --line:#d9e1ec;
-  --accent:#cf2f3f; --accent-ink:#ffffff; --green:#1d7a4c; --green-bg:#e3f4ea; --gold:#e0a83a;
+  --accent:#c8232f; --accent-ink:#ffffff; --green:#1d7a4c; --green-bg:#e3f4ea; --gold:#e8b541; --pine:#123d2b; --pine-2:#1b5a3f; --snow:#ffffff;
   --soft:#eef3f9; --shadow:0 1px 2px rgba(23,35,58,.06),0 8px 24px rgba(23,35,58,.06);
   --display:"Baloo 2","Nunito",system-ui,sans-serif; --body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
   --bg:#111826; --paper:#1a2334; --ink:#e8edf6; --muted:#9fb0c9; --line:#2a3650;
-  --accent:#e4505f; --green:#5fc68f; --green-bg:#173327; --gold:#e6b65c; --soft:#212c40;
+  --accent:#e4505f; --green:#5fc68f; --green-bg:#173327; --gold:#e6b65c; --soft:#212c40; --pine:#0c2a1e; --pine-2:#14422e;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark; } }
 :root[data-theme="dark"]{
   --bg:#111826; --paper:#1a2334; --ink:#e8edf6; --muted:#9fb0c9; --line:#2a3650;
-  --accent:#e4505f; --green:#5fc68f; --green-bg:#173327; --gold:#e6b65c; --soft:#212c40;
+  --accent:#e4505f; --green:#5fc68f; --green-bg:#173327; --gold:#e6b65c; --soft:#212c40; --pine:#0c2a1e; --pine-2:#14422e;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark; }
 
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;
-  padding-block:0 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;padding-block:0 48px}
+.gutter{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 a{color:inherit}
 img{max-width:100%}
 button{font:inherit}
 .wrap{max-width:1180px;margin:0 auto}
 
-header.hero{padding-block:34px 18px;display:grid;gap:10px}
-.eyebrow{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:var(--accent)}
-h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,5vw,46px);line-height:1.05;margin:0;text-wrap:balance}
-.lead{max-width:62ch;color:var(--muted);margin:0;font-size:16px}
-.lead b{color:var(--ink)}
+.band{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--pine) 0%,var(--pine-2) 100%);color:var(--snow);
+  border-bottom:6px solid var(--accent)}
+.band::after{content:"";position:absolute;inset:auto 0 0 0;height:18px;background:
+  radial-gradient(circle at 10px -4px,var(--bg) 14px,transparent 15px) 0 0/40px 18px repeat-x;pointer-events:none}
+.band canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+header.hero{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto;gap:18px 32px;align-items:center;padding-block:36px 40px;max-width:1180px;margin:0 auto}
+.eyebrow{font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:12px;color:var(--gold)}
+h1{font-family:"Mountains of Christmas",var(--display);font-weight:700;font-size:clamp(44px,7vw,74px);line-height:.95;margin:6px 0 10px;text-wrap:balance;color:var(--snow);text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.lead{max-width:62ch;color:rgba(255,255,255,.82);margin:0;font-size:16px}
+.lead b{color:var(--snow)}
+.photo{position:relative;width:min(240px,46vw);aspect-ratio:3/4;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35);border:5px solid var(--snow);transform:rotate(3deg);background:var(--pine-2)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo .tag{position:absolute;left:50%;bottom:10px;transform:translateX(-50%) rotate(-2deg);background:var(--accent);color:#fff;font-family:var(--display);font-weight:800;padding:4px 12px;border-radius:999px;font-size:14px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.photo .bow{position:absolute;top:-6px;right:-8px;width:54px;height:54px}
 
-.stats{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:14px;color:var(--muted);padding-block:6px 14px}
+.stats{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:14px;color:var(--muted);padding-block:22px 14px}
 .stats b{color:var(--ink);font-variant-numeric:tabular-nums}
 .pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;background:var(--paper)}
 .pill .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
@@ -88,7 +97,7 @@ details.note summary::after{content:" ▾"}
 details.note[open] summary::after{content:" ▴"}
 details.note p{margin:4px 0 0;max-width:36ch}
 
-.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer;background:var(--accent);color:var(--accent-ink);font-size:14px}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer;background:var(--accent);color:var(--accent-ink);font-size:14px;box-shadow:0 2px 0 rgba(0,0,0,.18)}
 .btn:hover{filter:brightness(1.06)}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:700}
 .btn.small{padding:6px 10px;font-size:13px}
@@ -113,6 +122,8 @@ footer p{margin:6px 0}
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:var(--shadow);max-width:calc(100vw - 32px)}
 
 @media (max-width:860px){
+  header.hero{grid-template-columns:1fr;padding-block:28px 34px}
+  .photo{justify-self:start;transform:rotate(-2deg)}
   thead{display:none}
   table,tbody,tr,td{display:block;width:100%}
   tbody tr{border-bottom:1px solid var(--line);padding:6px 0}
@@ -126,12 +137,21 @@ footer p{margin:6px 0}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="band"><canvas id="snow" aria-hidden="true"></canvas><div class="gutter">
 <header class="hero">
-  <div class="eyebrow">Anniversaire le 3 décembre · Noël 2026</div>
-  <h1>Liste de cadeaux</h1>
-  <p class="lead">Les idées viennent du catalogue King Jouet. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche) et, quand on en a trouvé un, le meilleur prix ailleurs. <b>Pour offrir un jouet, cliquez sur Réserver et indiquez votre prénom</b> : tout le monde verra qu'il est pris, et personne n'achètera deux fois la même chose.</p>
+  <div>
+    <div class="eyebrow">Anniversaire le 3 décembre · Noël 2026</div>
+    <h1>La liste de Louis</h1>
+    <p class="lead">Louis a découpé ses envies dans le catalogue King Jouet. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche) et, quand on en a trouvé un, le meilleur prix ailleurs. <b>Pour lui offrir un jouet, cliquez sur Réserver et indiquez votre prénom</b> : tout le monde verra qu'il est pris, et personne n'achètera deux fois la même chose.</p>
+  </div>
+  <figure class="photo" style="margin:0">
+    <img src="img/louis.jpg" alt="Louis" onerror="this.closest('.photo').hidden=true">
+    <svg class="bow" viewBox="0 0 54 54" aria-hidden="true"><g fill="var(--accent)" stroke="#fff" stroke-width="2"><ellipse cx="17" cy="20" rx="12" ry="8" transform="rotate(-25 17 20)"/><ellipse cx="37" cy="20" rx="12" ry="8" transform="rotate(25 37 20)"/><path d="M22 27l-8 20h10l3-16zM32 27l8 20H30l-3-16z"/><circle cx="27" cy="25" r="6"/></g></svg>
+    <figcaption class="tag">Louis</figcaption>
+  </figure>
 </header>
+</div></div>
+<div class="wrap gutter">
 
 <div class="stats" id="stats"></div>
 
@@ -166,7 +186,20 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=2"></script>
+<script src="data.js?v=3"></script>
+<script>
+/* Neige légère dans le bandeau (désactivée si l'utilisateur préfère moins d'animations) */
+(function(){
+  const c=document.getElementById("snow"); if(!c) return;
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ctx=c.getContext("2d"); let W,H,flakes=[];
+  function size(){const r=c.parentElement.getBoundingClientRect();W=c.width=Math.max(1,Math.floor(r.width));H=c.height=Math.max(1,Math.floor(r.height));
+    flakes=Array.from({length:Math.min(90,Math.floor(W/12))},()=>({x:Math.random()*W,y:Math.random()*H,r:1+Math.random()*2.4,s:.25+Math.random()*.7,w:Math.random()*6.28}));}
+  function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle="rgba(255,255,255,.85)";for(const f of flakes){ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,6.28);ctx.fill();}}
+  function tick(){for(const f of flakes){f.y+=f.s;f.w+=.01;f.x+=Math.sin(f.w)*.3;if(f.y>H+4){f.y=-4;f.x=Math.random()*W;}}draw();requestAnimationFrame(tick);}
+  size(); addEventListener("resize",size); draw(); if(!reduce) requestAnimationFrame(tick);
+})();
+</script>
 <script>
 /* ───── Stockage partagé des réservations (Supabase, lecture/écriture avec la clé publique) ───── */
 const SB_URL="https://vhhmageufrcenruywawg.supabase.co";
