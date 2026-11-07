@@ -111,6 +111,9 @@ tr.cat-row:first-child td{border-top:0}
 tr.cat-row.drop-target td{box-shadow:inset 0 0 0 2px var(--accent);background:color-mix(in srgb,var(--gold) 30%,var(--soft))}
 .drag-handle{flex:0 0 auto;align-self:center;font-size:26px;line-height:1;color:var(--muted);cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;padding:6px 4px;border-radius:8px}
 .drag-handle:hover{background:var(--soft);color:var(--ink)}
+.cat-handle{font-size:22px;padding:2px 6px;margin-right:8px;vertical-align:middle}
+tr.cat-row.drop-before td{box-shadow:inset 0 3px 0 var(--accent)}
+tr.cat-row.drop-after td{box-shadow:inset 0 -3px 0 var(--accent)}
 body.dragging-row{cursor:grabbing;user-select:none;-webkit-user-select:none}
 tr.dragging{opacity:.35}
 tr.drop-before td{box-shadow:inset 0 3px 0 var(--accent)}
@@ -281,7 +284,7 @@ footer p{margin:6px 0}
 <div class="wrap gutter">
 <div class="pbar" id="pbar" hidden>
   <span>Mode parents</span>
-  <span class="small" style="margin:0;color:#2b1d00;font-weight:600">Priorité : 1 étoile = J'aimerais, 2 = Je veux vraiment, 3 = Coup de Cœur. Prenez un cadeau par sa poignée ⠿ pour le réordonner ou le déposer dans une autre catégorie, cliquez sur ✎ pour renommer une catégorie.</span>
+  <span class="small" style="margin:0;color:#2b1d00;font-weight:600">Priorité : 1 étoile = J'aimerais, 2 = Je veux vraiment, 3 = Coup de Cœur. Prenez un cadeau ou une catégorie par sa poignée ⠿ pour les réordonner (un cadeau peut être déposé dans une autre catégorie), cliquez sur ✎ pour renommer une catégorie.</span>
   <span class="sp"></span>
   <button class="btn small" id="p-add" type="button">+ Ajouter un cadeau</button>
   <button class="btn ghost small" id="p-bilan" type="button">Bilan</button>
@@ -375,7 +378,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=13"></script>
+<script src="data.js?v=14"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -404,6 +407,7 @@ footer p{margin:6px 0}
    cadeau-item:<liste>:<id>   → cadeau ajouté par les parents, voter = JSON
    cadeau-cat:<liste>:<id>    → catégorie choisie par les parents (remplace le champ cat de data.js)
    cadeau-order:<liste>:all   → ordre manuel des cadeaux (JSON, tableau d'ids) fixé par glisser-déposer
+   cadeau-catorder:<liste>:all → ordre manuel des catégories (JSON, tableau de noms)
    (la valeur "0" d'un avis annule l'étoile par défaut donnée dans data.js) */
 const SB_URL="https://vhhmageufrcenruywawg.supabase.co";
 const SB_KEY="sb_publishable_NuRpgtxqVQ87R6K8txw57Q_oBUt4qay";
@@ -412,7 +416,7 @@ const H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"applic
 const PARENTS_CODE="0312";   // code de l'espace parents (à changer ici si besoin)
 const AVIS_LABEL=["","J'aimerais","Je veux vraiment","Coup de Cœur"];
 
-const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, cat:{}, order:{}, catFilter:"", renameCat:null, showAnniv:false, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
+const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, cat:{}, order:{}, catOrder:{}, catFilter:"", renameCat:null, showAnniv:false, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
 const eur=n=>n==null?"":Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
 const key=(prefix,i)=>prefix+":"+state.list.id+":"+i.id;
 const OURS="__nous__";   // réservation « acheté par nous » (parents), affichée sans prénom
@@ -429,18 +433,19 @@ async function sbDelete(block_id){const r=await fetch(`${SB_URL}/rest/v1/${TABLE
 async function loadAll(){
   try{
     const rows=await sbGet("block_id=like."+encodeURIComponent("cadeau*"));
-    const res={},avis={},hide={},custom={},cat={},order={};
+    const res={},avis={},hide={},custom={},cat={},order={},catOrderS={};
     for(const row of rows){
-      const m=/^(cadeau(?:-avis|-hide|-item|-cat|-order)?):([^:]+):(.+)$/.exec(row.block_id); if(!m) continue;
+      const m=/^(cadeau(?:-avis|-hide|-item|-cat|-order|-catorder)?):([^:]+):(.+)$/.exec(row.block_id); if(!m) continue;
       const [,kind,list,id]=m; const k=list+":"+id;
       if(kind==="cadeau"){ if(!res[k]) res[k]=row; }
       else if(kind==="cadeau-avis"){ avis[k]=row.voter; }
       else if(kind==="cadeau-hide"){ hide[k]=true; }
       else if(kind==="cadeau-cat"){ cat[k]=row.voter; }
       else if(kind==="cadeau-order"){ try{ order[list]=JSON.parse(row.voter); }catch(e){} }
+      else if(kind==="cadeau-catorder"){ try{ catOrderS[list]=JSON.parse(row.voter); }catch(e){} }
       else if(kind==="cadeau-item"){ try{ const o=JSON.parse(row.voter); o.id=id; o.custom=true; (custom[list]=custom[list]||[]).push(o); }catch(e){} }
     }
-    state.res=res; state.avis=avis; state.hide=hide; state.custom=custom; state.cat=cat; state.order=order; state.online=true;
+    state.res=res; state.avis=avis; state.hide=hide; state.custom=custom; state.cat=cat; state.order=order; state.catOrder=catOrderS; state.online=true;
   }catch(e){ state.online=false; }
   renderTabs(); render();
 }
@@ -454,12 +459,13 @@ const khide=i=>!!state.hide[scopeId()+":"+i.id];
 const AUTRES="Autres";
 const hasCats=()=>(state.list.cats&&state.list.cats.length>0)||Object.keys(state.cat).some(k=>k.startsWith(state.list.id+":"));
 const kcat=i=>{ if(!hasCats()) return null; const v=state.cat[state.list.id+":"+i.id]; return (v!=null&&v!=="")?v:(i.cat||AUTRES); };
-function catOrder(items){ const order=[...(state.list.cats||[])]; for(const i of items){ const c=kcat(i); if(c&&c!==AUTRES&&!order.includes(c)) order.push(c); } if(items.some(i=>kcat(i)===AUTRES)) order.push(AUTRES); return order; }
+function catOrder(items){ const order=[]; for(const c of (state.catOrder[state.list.id]||[])) if(c!==AUTRES&&!order.includes(c)) order.push(c); for(const c of (state.list.cats||[])) if(!order.includes(c)) order.push(c); for(const i of items){ const c=kcat(i); if(c&&c!==AUTRES&&!order.includes(c)) order.push(c); } if(items.some(i=>kcat(i)===AUTRES)) order.push(AUTRES); return order; }
+async function saveCatOrder(names){ const bid="cadeau-catorder:"+state.list.id+":all"; await sbDelete(bid); await sbInsert(bid,JSON.stringify(names)); }
 async function setCat(i,name){ const bid="cadeau-cat:"+state.list.id+":"+i.id; await sbDelete(bid); if(name&&name!==(i.cat||AUTRES)) await sbInsert(bid,name); }
 function applyOrder(items){ const o=state.order[state.list.id]; if(!o||!o.length) return items; const pos=new Map(o.map((id,k)=>[id,k])); return items.map((it,k)=>({it,k})).sort((a,b)=>{const pa=pos.has(a.it.id)?pos.get(a.it.id):1e6+a.k, pb=pos.has(b.it.id)?pos.get(b.it.id):1e6+b.k; return pa-pb;}).map(x=>x.it); }
 async function saveOrder(ids){ const bid="cadeau-order:"+state.list.id+":all"; await sbDelete(bid); await sbInsert(bid,JSON.stringify(ids)); }
 async function moveCat(i,name){ await setCat(i,name); await loadAll(); toast(i.nom+" → "+name); }
-async function renameCat(oldName,newName){ newName=(newName||"").trim(); if(!newName||newName===oldName) return; const items=baseItems().filter(i=>kcat(i)===oldName); for(const i of items) await setCat(i,newName); await loadAll(); toast("Catégorie renommée : "+newName); }
+async function renameCat(oldName,newName){ newName=(newName||"").trim(); if(!newName||newName===oldName) return; const items=baseItems().filter(i=>kcat(i)===oldName); for(const i of items) await setCat(i,newName); const o=catOrder(baseItems()).map(c=>c===oldName?newName:c).filter(c=>c!==AUTRES); await saveCatOrder(o); await loadAll(); toast("Catégorie renommée : "+newName); }
 const isAnnivGift=i=>{const r=kres(i); if(!r) return false; return splitVoter(r.voter).occ==="Anniversaire";};
 
 async function reserve(i,name){
@@ -668,6 +674,7 @@ function render(){
         td.append(el("span",{class:"cat-form"},inp,ok,el("button",{class:"btn ghost small",type:"button",text:"Annuler",onclick:()=>{state.renameCat=null;render();}})));
         setTimeout(()=>inp.focus(),0);
       }else{
+        if(dragOK&&i.header!==AUTRES) td.append(el("span",{class:"drag-handle cat-handle",title:"Maintenez et glissez pour déplacer la catégorie","aria-label":"Déplacer la catégorie "+i.header,role:"button",tabindex:"0"},"⠿"));
         td.append(el("span",{class:"cat-name",text:i.header}),el("span",{class:"cat-n",text:"("+i.n+")"}));
         if(state.parents&&i.header!==AUTRES) td.append(el("button",{class:"cat-edit",type:"button",title:"Renommer la catégorie","aria-label":"Renommer "+i.header,onclick:()=>{state.renameCat=i.header;render();}},"✎"));
         if(dragOK) td.append(el("span",{class:"small",style:"display:inline;margin-left:10px",text:"glissez un cadeau ici (poignée ⠿)"}));
@@ -707,10 +714,15 @@ function render(){
 (function(){
   const tb=document.getElementById("rows"); let drag=null;
   const clear=()=>{ for(const r of tb.querySelectorAll(".drop-before,.drop-after,.drop-target")) r.classList.remove("drop-before","drop-after","drop-target"); };
-  function targetAt(x,y){ const e=document.elementFromPoint(x,y); const tr=e&&e.closest&&e.closest("#rows > tr"); if(!tr) return null; if(tr.classList.contains("cat-row")) return {header:tr,cat:tr.dataset.cat}; if(tr.dataset.id&&tr.dataset.id!==drag.id){ const b=tr.getBoundingClientRect(); return {row:tr,before:(y-b.top)<b.height/2}; } return null; }
+  function headerOfRow(tr){ let p=tr.previousElementSibling; while(p&&!p.classList.contains("cat-row")) p=p.previousElementSibling; return p; }
+  function targetAt(x,y){ const e=document.elementFromPoint(x,y); const tr=e&&e.closest&&e.closest("#rows > tr"); if(!tr) return null;
+    if(drag.kind==="cat"){ const h=tr.classList.contains("cat-row")?tr:headerOfRow(tr); if(!h||h.dataset.cat===drag.cat||h.dataset.cat===AUTRES) return null; const g=[h,...(function(){const a=[];let n=h.nextElementSibling;while(n&&!n.classList.contains("cat-row")){a.push(n);n=n.nextElementSibling;}return a;})()]; const top=h.getBoundingClientRect().top, bottom=g[g.length-1].getBoundingClientRect().bottom; return {header:h,cat:h.dataset.cat,before:(y-top)<(bottom-top)/2}; }
+    if(tr.classList.contains("cat-row")) return {header:tr,cat:tr.dataset.cat}; if(tr.dataset.id&&tr.dataset.id!==drag.id){ const b=tr.getBoundingClientRect(); return {row:tr,before:(y-b.top)<b.height/2}; } return null; }
   function autoscroll(y){ const m=70; if(y<m) window.scrollBy(0,-12); else if(y>innerHeight-m) window.scrollBy(0,12); }
   tb.addEventListener("pointerdown",e=>{
-    const h=e.target.closest&&e.target.closest(".drag-handle"); if(!h) return; const tr=h.closest("tr[data-id]"); if(!tr) return;
+    const h=e.target.closest&&e.target.closest(".drag-handle"); if(!h) return;
+    if(h.classList.contains("cat-handle")){ const ch=h.closest("tr.cat-row"); if(!ch) return; e.preventDefault(); drag={kind:"cat",cat:ch.dataset.cat,row:ch,ghost:el("div",{class:"drag-ghost",text:"Catégorie : "+ch.dataset.cat}),target:null,moved:false}; document.body.append(drag.ghost); drag.ghost.style.left=e.clientX+"px"; drag.ghost.style.top=e.clientY+"px"; ch.classList.add("dragging"); document.body.classList.add("dragging-row"); try{h.setPointerCapture(e.pointerId);}catch(_){} return; }
+    const tr=h.closest("tr[data-id]"); if(!tr) return;
     e.preventDefault(); const it=baseItems().find(i=>i.id===tr.dataset.id); if(!it) return;
     drag={id:it.id,item:it,row:tr,ghost:el("div",{class:"drag-ghost",text:it.nom}),target:null,moved:false};
     document.body.append(drag.ghost); drag.ghost.style.left=e.clientX+"px"; drag.ghost.style.top=e.clientY+"px";
@@ -719,11 +731,13 @@ function render(){
   tb.addEventListener("pointermove",e=>{
     if(!drag) return; e.preventDefault(); drag.moved=true; drag.ghost.style.left=e.clientX+"px"; drag.ghost.style.top=e.clientY+"px"; autoscroll(e.clientY);
     const t=targetAt(e.clientX,e.clientY); clear(); drag.target=t; if(!t) return;
+    if(drag.kind==="cat"){ t.header.classList.add(t.before?"drop-before":"drop-after"); return; }
     if(t.header) t.header.classList.add("drop-target"); else t.row.classList.add(t.before?"drop-before":"drop-after");
   });
   async function finish(e){
     if(!drag) return; const d=drag; drag=null; clear(); d.ghost.remove(); d.row.classList.remove("dragging"); document.body.classList.remove("dragging-row");
     const t=d.target; if(!t||!d.moved) return;
+    if(d.kind==="cat"){ const names=catOrder(baseItems()).filter(c=>c!==AUTRES&&c!==d.cat); let at=names.indexOf(t.cat); if(at<0) return; if(!t.before) at++; names.splice(at,0,d.cat); await saveCatOrder(names); await loadAll(); toast("Ordre des catégories mis à jour"); return; }
     // séquence affichée (ids), hors ligne déplacée
     const rows=[...tb.querySelectorAll("tr[data-id]")].map(r=>r.dataset.id).filter(id=>id!==d.id);
     let at, newCat=null;
@@ -743,7 +757,9 @@ function render(){
   }
   tb.addEventListener("pointerup",finish); tb.addEventListener("pointercancel",finish);
   // clavier : flèches haut/bas sur la poignée
-  tb.addEventListener("keydown",async e=>{ const h=e.target.closest&&e.target.closest(".drag-handle"); if(!h||!(e.key==="ArrowUp"||e.key==="ArrowDown")) return; e.preventDefault(); const tr=h.closest("tr[data-id]"); const rows=[...tb.querySelectorAll("tr[data-id]")]; const k=rows.indexOf(tr); const j=e.key==="ArrowUp"?k-1:k+1; if(j<0||j>=rows.length) return; const ids=rows.map(r=>r.dataset.id); ids.splice(k,1); ids.splice(j,0,tr.dataset.id); const it=baseItems().find(i=>i.id===tr.dataset.id); const nb=baseItems().find(i=>i.id===rows[j].dataset.id); if(hasCats()&&nb&&kcat(nb)!==kcat(it)) await setCat(it,kcat(nb)); const rest=applyOrder(baseItems()).map(i=>i.id).filter(id=>!ids.includes(id)); await saveOrder(ids.concat(rest)); await loadAll(); });
+  tb.addEventListener("keydown",async e=>{ const h=e.target.closest&&e.target.closest(".drag-handle"); if(!h||!(e.key==="ArrowUp"||e.key==="ArrowDown")) return; e.preventDefault();
+    if(h.classList.contains("cat-handle")){ const c=h.closest("tr.cat-row").dataset.cat; const names=catOrder(baseItems()).filter(x=>x!==AUTRES); const k=names.indexOf(c); const j=e.key==="ArrowUp"?k-1:k+1; if(j<0||j>=names.length) return; names.splice(k,1); names.splice(j,0,c); await saveCatOrder(names); await loadAll(); return; }
+    const tr=h.closest("tr[data-id]"); const rows=[...tb.querySelectorAll("tr[data-id]")]; const k=rows.indexOf(tr); const j=e.key==="ArrowUp"?k-1:k+1; if(j<0||j>=rows.length) return; const ids=rows.map(r=>r.dataset.id); ids.splice(k,1); ids.splice(j,0,tr.dataset.id); const it=baseItems().find(i=>i.id===tr.dataset.id); const nb=baseItems().find(i=>i.id===rows[j].dataset.id); if(hasCats()&&nb&&kcat(nb)!==kcat(it)) await setCat(it,kcat(nb)); const rest=applyOrder(baseItems()).map(i=>i.id).filter(id=>!ids.includes(id)); await saveOrder(ids.concat(rest)); await loadAll(); });
 })();
 
 /* ───── Onglets ───── */
