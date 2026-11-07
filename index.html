@@ -108,8 +108,13 @@ tr.cat-row:first-child td{border-top:0}
 .cat-form{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}
 .cat-form input{border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:14px;background:var(--paper);color:var(--ink);width:min(260px,60vw)}
 tr.cat-row.drop-target td{box-shadow:inset 0 0 0 2px var(--accent);background:color-mix(in srgb,var(--gold) 30%,var(--soft))}
-tr.draggable{cursor:grab}
-tr.dragging{opacity:.45}
+.drag-handle{flex:0 0 auto;align-self:center;font-size:26px;line-height:1;color:var(--muted);cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none;padding:6px 4px;border-radius:8px}
+.drag-handle:hover{background:var(--soft);color:var(--ink)}
+body.dragging-row{cursor:grabbing;user-select:none;-webkit-user-select:none}
+tr.dragging{opacity:.35}
+tr.drop-before td{box-shadow:inset 0 3px 0 var(--accent)}
+tr.drop-after td{box-shadow:inset 0 -3px 0 var(--accent)}
+.drag-ghost{position:fixed;z-index:60;pointer-events:none;background:var(--paper);color:var(--ink);border:2px solid var(--accent);border-radius:12px;padding:8px 12px;font-weight:800;box-shadow:var(--shadow);max-width:60vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform:translate(-20px,-50%)}
 .toy .catsel{margin-top:8px;border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-size:12.5px;background:var(--paper);color:var(--ink);max-width:100%}
 .empty b{color:var(--ink)}
 
@@ -275,7 +280,7 @@ footer p{margin:6px 0}
 <div class="wrap gutter">
 <div class="pbar" id="pbar" hidden>
   <span>Mode parents</span>
-  <span class="small" style="margin:0;color:#2b1d00;font-weight:600">Priorité : 1 étoile = J'aimerais, 2 = Je veux vraiment, 3 = Coup de Cœur. Glissez une ligne sur une catégorie pour la déplacer, cliquez sur ✎ pour renommer une catégorie.</span>
+  <span class="small" style="margin:0;color:#2b1d00;font-weight:600">Priorité : 1 étoile = J'aimerais, 2 = Je veux vraiment, 3 = Coup de Cœur. Prenez un cadeau par sa poignée ⠿ pour le réordonner ou le déposer dans une autre catégorie, cliquez sur ✎ pour renommer une catégorie.</span>
   <span class="sp"></span>
   <button class="btn small" id="p-add" type="button">+ Ajouter un cadeau</button>
   <button class="btn ghost small" id="p-bilan" type="button">Bilan</button>
@@ -369,7 +374,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=12"></script>
+<script src="data.js?v=13"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -397,6 +402,7 @@ footer p{margin:6px 0}
    cadeau-hide:<liste>:<id>   → ligne retirée par les parents
    cadeau-item:<liste>:<id>   → cadeau ajouté par les parents, voter = JSON
    cadeau-cat:<liste>:<id>    → catégorie choisie par les parents (remplace le champ cat de data.js)
+   cadeau-order:<liste>:all   → ordre manuel des cadeaux (JSON, tableau d'ids) fixé par glisser-déposer
    (la valeur "0" d'un avis annule l'étoile par défaut donnée dans data.js) */
 const SB_URL="https://vhhmageufrcenruywawg.supabase.co";
 const SB_KEY="sb_publishable_NuRpgtxqVQ87R6K8txw57Q_oBUt4qay";
@@ -405,7 +411,7 @@ const H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"applic
 const PARENTS_CODE="0312";   // code de l'espace parents (à changer ici si besoin)
 const AVIS_LABEL=["","J'aimerais","Je veux vraiment","Coup de Cœur"];
 
-const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, cat:{}, catFilter:"", renameCat:null, showAnniv:false, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
+const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, cat:{}, order:{}, catFilter:"", renameCat:null, showAnniv:false, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
 const eur=n=>n==null?"":Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
 const key=(prefix,i)=>prefix+":"+state.list.id+":"+i.id;
 const OURS="__nous__";   // réservation « acheté par nous » (parents), affichée sans prénom
@@ -422,17 +428,18 @@ async function sbDelete(block_id){const r=await fetch(`${SB_URL}/rest/v1/${TABLE
 async function loadAll(){
   try{
     const rows=await sbGet("block_id=like."+encodeURIComponent("cadeau*"));
-    const res={},avis={},hide={},custom={},cat={};
+    const res={},avis={},hide={},custom={},cat={},order={};
     for(const row of rows){
-      const m=/^(cadeau(?:-avis|-hide|-item|-cat)?):([^:]+):(.+)$/.exec(row.block_id); if(!m) continue;
+      const m=/^(cadeau(?:-avis|-hide|-item|-cat|-order)?):([^:]+):(.+)$/.exec(row.block_id); if(!m) continue;
       const [,kind,list,id]=m; const k=list+":"+id;
       if(kind==="cadeau"){ if(!res[k]) res[k]=row; }
       else if(kind==="cadeau-avis"){ avis[k]=row.voter; }
       else if(kind==="cadeau-hide"){ hide[k]=true; }
       else if(kind==="cadeau-cat"){ cat[k]=row.voter; }
+      else if(kind==="cadeau-order"){ try{ order[list]=JSON.parse(row.voter); }catch(e){} }
       else if(kind==="cadeau-item"){ try{ const o=JSON.parse(row.voter); o.id=id; o.custom=true; (custom[list]=custom[list]||[]).push(o); }catch(e){} }
     }
-    state.res=res; state.avis=avis; state.hide=hide; state.custom=custom; state.cat=cat; state.online=true;
+    state.res=res; state.avis=avis; state.hide=hide; state.custom=custom; state.cat=cat; state.order=order; state.online=true;
   }catch(e){ state.online=false; }
   renderTabs(); render();
 }
@@ -448,6 +455,8 @@ const hasCats=()=>(state.list.cats&&state.list.cats.length>0)||Object.keys(state
 const kcat=i=>{ if(!hasCats()) return null; const v=state.cat[state.list.id+":"+i.id]; return (v!=null&&v!=="")?v:(i.cat||AUTRES); };
 function catOrder(items){ const order=[...(state.list.cats||[])]; for(const i of items){ const c=kcat(i); if(c&&c!==AUTRES&&!order.includes(c)) order.push(c); } if(items.some(i=>kcat(i)===AUTRES)) order.push(AUTRES); return order; }
 async function setCat(i,name){ const bid="cadeau-cat:"+state.list.id+":"+i.id; await sbDelete(bid); if(name&&name!==(i.cat||AUTRES)) await sbInsert(bid,name); }
+function applyOrder(items){ const o=state.order[state.list.id]; if(!o||!o.length) return items; const pos=new Map(o.map((id,k)=>[id,k])); return items.map((it,k)=>({it,k})).sort((a,b)=>{const pa=pos.has(a.it.id)?pos.get(a.it.id):1e6+a.k, pb=pos.has(b.it.id)?pos.get(b.it.id):1e6+b.k; return pa-pb;}).map(x=>x.it); }
+async function saveOrder(ids){ const bid="cadeau-order:"+state.list.id+":all"; await sbDelete(bid); await sbInsert(bid,JSON.stringify(ids)); }
 async function moveCat(i,name){ await setCat(i,name); await loadAll(); toast(i.nom+" → "+name); }
 async function renameCat(oldName,newName){ newName=(newName||"").trim(); if(!newName||newName===oldName) return; const items=baseItems().filter(i=>kcat(i)===oldName); for(const i of items) await setCat(i,newName); await loadAll(); toast("Catégorie renommée : "+newName); }
 const isAnnivGift=i=>{const r=kres(i); if(!r) return false; return splitVoter(r.voter).occ==="Anniversaire";};
@@ -488,6 +497,7 @@ function visibleItems(){
   if(state.filter==="deal") list=list.filter(i=>isDeal(i,bestElsewhere(i)));
   if(state.filter==="top") list=list.filter(i=>kavis(i)>=3);
   if(state.catFilter&&hasCats()) list=list.filter(i=>kcat(i)===state.catFilter);
+  if(state.sort==="list") list=applyOrder(list);
   const sp=i=>{const p=shopPrice(i);return p==null?Infinity:p;};
   if(state.sort==="priceAsc") list.sort((a,b)=>sp(a)-sp(b));
   if(state.sort==="priceDesc") list.sort((a,b)=>(sp(b)===Infinity?-1:sp(b))-(sp(a)===Infinity?-1:sp(a)));
@@ -644,7 +654,7 @@ function render(){
     tb.append(el("tr",{},el("td",{colspan:"7",class:"empty"},...msg)));
   }
   const grouped=hasCats()&&state.sort==="list"&&!state.showHidden&&!state.showAnniv;
-  const dragOK=grouped&&state.parents;
+  const dragOK=state.parents&&state.sort==="list"&&!state.showHidden&&!state.showAnniv&&!state.q.trim()&&state.filter==="all"&&!state.catFilter;
   const order=grouped?catOrder(list):[];
   const seq=grouped?order.flatMap(c=>[{header:c,n:list.filter(i=>kcat(i)===c).length},...list.filter(i=>kcat(i)===c)]).filter(x=>x.header?x.n>0:true):list;
   for(const i of seq){
@@ -659,15 +669,16 @@ function render(){
       }else{
         td.append(el("span",{class:"cat-name",text:i.header}),el("span",{class:"cat-n",text:"("+i.n+")"}));
         if(state.parents&&i.header!==AUTRES) td.append(el("button",{class:"cat-edit",type:"button",title:"Renommer la catégorie","aria-label":"Renommer "+i.header,onclick:()=>{state.renameCat=i.header;render();}},"✎"));
-        if(dragOK) td.append(el("span",{class:"small",style:"display:inline;margin-left:10px",text:"déposez une ligne ici"}));
+        if(dragOK) td.append(el("span",{class:"small",style:"display:inline;margin-left:10px",text:"glissez un cadeau ici (poignée ⠿)"}));
       }
       tb.append(el("tr",{class:"cat-row","data-cat":i.header},td)); continue;
     }
     const tr=el("tr",{class:(kres(i)?"reserved":"")+(khide(i)?" hiddenrow":""),"data-id":i.id,id:"c-"+i.id});
-    if(dragOK){ tr.draggable=true; tr.classList.add("draggable"); }
+    if(dragOK) tr.classList.add("draggable");
     const img=i.img||"img/placeholder.svg";
     const toy=el("td",{class:"col-toy"},el("div",{class:"toy"},
-      el("button",{class:"zoom",type:"button","aria-label":"Voir "+i.nom+" en grand",onclick:()=>openLightbox(i)},el("img",{src:img,alt:"",loading:"lazy",width:"128",height:"128",onerror:e=>{e.target.onerror=null;e.target.src="img/placeholder.svg";}})),
+      dragOK?el("span",{class:"drag-handle",title:"Maintenez et glissez pour déplacer ce cadeau","aria-label":"Déplacer "+i.nom,role:"button",tabindex:"0"},"⠿"):null,
+      el("button",{class:"zoom",type:"button","aria-label":"Voir "+i.nom+" en grand",onclick:()=>openLightbox(i)},el("img",{src:img,alt:"",loading:"lazy",width:"128",height:"128",draggable:"false",onerror:e=>{e.target.onerror=null;e.target.src="img/placeholder.svg";}})),
       el("div",{style:"min-width:0"},el("p",{class:"name",text:i.nom}),i.sub?el("p",{class:"sub",text:i.sub}):null,
         i.marque?el("span",{class:"brand",text:i.marque}):null,i.custom?el("span",{class:"custom",text:"ajouté par les parents"}):null,i.aCompleter?el("span",{class:"todo",text:"fiche en cours de complétion"}):null,
         el("div",{},el("button",{class:"share",type:"button",title:"Copier le lien direct vers ce cadeau",onclick:()=>copyLink(i)},"🔗 copier le lien")),
@@ -691,16 +702,47 @@ function render(){
   const cs=document.getElementById("catsel"); cs.hidden=!hasCats(); if(hasCats()){ const cur=state.catFilter; const names=catOrder(baseItems().filter(i=>!khide(i))); cs.replaceChildren(el("option",{value:"",text:"Toutes les catégories"}),...names.map(c=>el("option",{value:c,text:c}))); cs.value=names.includes(cur)?cur:""; if(!names.includes(cur)) state.catFilter=""; }
 }
 
-/* ───── Glisser-déposer entre catégories (mode parents) ───── */
+/* ───── Glisser-déposer par poignée (souris et tactile, mode parents) : réordonne dans une catégorie et déplace entre catégories ───── */
 (function(){
-  const tb=document.getElementById("rows"); let dragId=null;
-  const rowOf=e=>e.target.closest&&e.target.closest("tr.draggable");
-  const targetOf=e=>{ const t=e.target.closest&&e.target.closest("tr"); if(!t) return null; if(t.classList.contains("cat-row")) return t; if(t.dataset.id&&t.dataset.id!==dragId){ let p=t.previousElementSibling; while(p&&!p.classList.contains("cat-row")) p=p.previousElementSibling; return p; } return null; };
-  const clear=()=>{ for(const r of tb.querySelectorAll(".drop-target")) r.classList.remove("drop-target"); };
-  tb.addEventListener("dragstart",e=>{ const r=rowOf(e); if(!r) return; dragId=r.dataset.id; r.classList.add("dragging"); try{e.dataTransfer.setData("text/plain",dragId);e.dataTransfer.effectAllowed="move";}catch(_){} });
-  tb.addEventListener("dragover",e=>{ if(!dragId) return; const t=targetOf(e); if(!t) return; e.preventDefault(); clear(); t.classList.add("drop-target"); });
-  tb.addEventListener("drop",async e=>{ if(!dragId) return; const t=targetOf(e); clear(); const id=dragId; dragId=null; tb.querySelector(".dragging")?.classList.remove("dragging"); if(!t) return; e.preventDefault(); const name=t.dataset.cat; const it=baseItems().find(i=>i.id===id); if(it&&name&&kcat(it)!==name) await moveCat(it,name); });
-  tb.addEventListener("dragend",()=>{ dragId=null; clear(); tb.querySelector(".dragging")?.classList.remove("dragging"); });
+  const tb=document.getElementById("rows"); let drag=null;
+  const clear=()=>{ for(const r of tb.querySelectorAll(".drop-before,.drop-after,.drop-target")) r.classList.remove("drop-before","drop-after","drop-target"); };
+  function targetAt(x,y){ const e=document.elementFromPoint(x,y); const tr=e&&e.closest&&e.closest("#rows > tr"); if(!tr) return null; if(tr.classList.contains("cat-row")) return {header:tr,cat:tr.dataset.cat}; if(tr.dataset.id&&tr.dataset.id!==drag.id){ const b=tr.getBoundingClientRect(); return {row:tr,before:(y-b.top)<b.height/2}; } return null; }
+  function autoscroll(y){ const m=70; if(y<m) window.scrollBy(0,-12); else if(y>innerHeight-m) window.scrollBy(0,12); }
+  tb.addEventListener("pointerdown",e=>{
+    const h=e.target.closest&&e.target.closest(".drag-handle"); if(!h) return; const tr=h.closest("tr[data-id]"); if(!tr) return;
+    e.preventDefault(); const it=baseItems().find(i=>i.id===tr.dataset.id); if(!it) return;
+    drag={id:it.id,item:it,row:tr,ghost:el("div",{class:"drag-ghost",text:it.nom}),target:null,moved:false};
+    document.body.append(drag.ghost); drag.ghost.style.left=e.clientX+"px"; drag.ghost.style.top=e.clientY+"px";
+    tr.classList.add("dragging"); document.body.classList.add("dragging-row"); try{h.setPointerCapture(e.pointerId);}catch(_){}
+  });
+  tb.addEventListener("pointermove",e=>{
+    if(!drag) return; e.preventDefault(); drag.moved=true; drag.ghost.style.left=e.clientX+"px"; drag.ghost.style.top=e.clientY+"px"; autoscroll(e.clientY);
+    const t=targetAt(e.clientX,e.clientY); clear(); drag.target=t; if(!t) return;
+    if(t.header) t.header.classList.add("drop-target"); else t.row.classList.add(t.before?"drop-before":"drop-after");
+  });
+  async function finish(e){
+    if(!drag) return; const d=drag; drag=null; clear(); d.ghost.remove(); d.row.classList.remove("dragging"); document.body.classList.remove("dragging-row");
+    const t=d.target; if(!t||!d.moved) return;
+    // séquence affichée (ids), hors ligne déplacée
+    const rows=[...tb.querySelectorAll("tr[data-id]")].map(r=>r.dataset.id).filter(id=>id!==d.id);
+    let at, newCat=null;
+    if(t.header){ // à la fin de la catégorie visée
+      const catRows=[...tb.querySelectorAll("tr[data-id]")].filter(r=>{let p=r.previousElementSibling;while(p&&!p.classList.contains("cat-row"))p=p.previousElementSibling;return p&&p.dataset.cat===t.cat&&r.dataset.id!==d.id;});
+      at=catRows.length?rows.indexOf(catRows[catRows.length-1].dataset.id)+1:rows.length; newCat=t.cat;
+      if(!catRows.length){ // catégorie vide : se placer juste après l'en-tête, avant la suite
+        const after=[...tb.querySelectorAll("tr")].slice([...tb.querySelectorAll("tr")].indexOf(t.header)+1).find(r=>r.dataset.id); at=after?rows.indexOf(after.dataset.id):rows.length; }
+    }else{
+      at=rows.indexOf(t.row.dataset.id)+(t.before?0:1);
+      if(hasCats()){ const other=baseItems().find(i=>i.id===t.row.dataset.id); newCat=kcat(other); }
+    }
+    rows.splice(at,0,d.id);
+    const rest=applyOrder(baseItems()).map(i=>i.id).filter(id=>!rows.includes(id));
+    if(newCat&&kcat(d.item)!==newCat) await setCat(d.item,newCat);
+    await saveOrder(rows.concat(rest)); await loadAll(); toast("Ordre mis à jour"+(newCat&&newCat!==(d.item.cat||AUTRES)&&newCat!==kcat(d.item)?"":""));
+  }
+  tb.addEventListener("pointerup",finish); tb.addEventListener("pointercancel",finish);
+  // clavier : flèches haut/bas sur la poignée
+  tb.addEventListener("keydown",async e=>{ const h=e.target.closest&&e.target.closest(".drag-handle"); if(!h||!(e.key==="ArrowUp"||e.key==="ArrowDown")) return; e.preventDefault(); const tr=h.closest("tr[data-id]"); const rows=[...tb.querySelectorAll("tr[data-id]")]; const k=rows.indexOf(tr); const j=e.key==="ArrowUp"?k-1:k+1; if(j<0||j>=rows.length) return; const ids=rows.map(r=>r.dataset.id); ids.splice(k,1); ids.splice(j,0,tr.dataset.id); const it=baseItems().find(i=>i.id===tr.dataset.id); const nb=baseItems().find(i=>i.id===rows[j].dataset.id); if(hasCats()&&nb&&kcat(nb)!==kcat(it)) await setCat(it,kcat(nb)); const rest=applyOrder(baseItems()).map(i=>i.id).filter(id=>!ids.includes(id)); await saveOrder(ids.concat(rest)); await loadAll(); });
 })();
 
 /* ───── Onglets ───── */
