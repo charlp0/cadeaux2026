@@ -235,7 +235,7 @@ footer p{margin:6px 0}
     <button class="chip" data-f="all" aria-pressed="true">Tous</button>
     <button class="chip" data-f="free" aria-pressed="false">À réserver</button>
     <button class="chip" data-f="taken" aria-pressed="false">Réservés</button>
-    <button class="chip" data-f="deal" aria-pressed="false">Moins cher ailleurs</button>
+    <button class="chip" data-f="deal" aria-pressed="false">Moins cher qu'à King Jouet</button>
     <button class="chip" data-f="top" aria-pressed="false">Coups de cœur des parents</button>
   </div>
   <select id="sort" aria-label="Trier">
@@ -252,7 +252,7 @@ footer p{margin:6px 0}
 <div class="tablewrap">
 <table>
   <thead><tr>
-    <th class="col-avis">Avis parents</th><th class="col-pref" id="th-pref" hidden>Choix</th><th class="col-toy">Cadeau</th><th class="col-age">Âge</th><th class="col-kj" id="th-shop">King Jouet</th><th class="col-amz">Amazon</th><th class="col-else">Moins cher ailleurs</th><th class="col-res">Réservation</th>
+    <th class="col-avis">Avis parents</th><th class="col-pref" id="th-pref" hidden>Choix</th><th class="col-toy">Cadeau</th><th class="col-age">Âge</th><th class="col-kj" id="th-shop">King Jouet</th><th class="col-amz">Amazon</th><th class="col-else">Le moins cher du web</th><th class="col-res">Réservation</th>
   </tr></thead>
   <tbody id="rows"></tbody>
 </table>
@@ -456,21 +456,30 @@ function amazonCell(i){
   return c;
 }
 function elseCell(i){
-  const c=el("td",{class:"col-else","data-label":"Moins cher ailleurs"});
-  const a=ailleursOf(i);
-  if(!a){ c.append(el("span",{class:"nobetter",text:"—"})); return c; }
-  if(a.vendeur==null){ c.append(el("span",{class:"nobetter",text:"Pas trouvé chez un autre vendeur"})); }
-  else if(isDeal(i,a)){
-    c.append(a.url?el("a",{class:"price",href:a.url,target:"_blank",rel:"noopener",text:eur(a.prix)}):el("span",{class:"price",text:eur(a.prix)}));
-    c.append(el("span",{class:"small"},el("span",{class:"vendor",text:a.vendeur})));
-    const diff=shopPrice(i)-a.prix;
-    if(diff>0.001) c.append(el("span",{class:"save",text:"−"+eur(diff)+" vs "+state.list.boutique}));
-    if(!a.verifie) c.append(el("span",{class:"small"},el("span",{class:"unverified",text:"à vérifier"})));
+  const c=el("td",{class:"col-else","data-label":"Le moins cher du web"});
+  const shop=i.custom?(i.boutique||"la boutique"):state.list.boutique;
+  const b=shopPrice(i);
+  const a=amazonOf(i), o=ailleursOf(i);
+  const best=bestElsewhere(i);
+  if(best&&b!=null&&best.prix<b-0.001){
+    // un autre vendeur bat la boutique
+    c.append(best.url?el("a",{class:"price",href:best.url,target:"_blank",rel:"noopener",text:eur(best.prix)}):el("span",{class:"price",text:eur(best.prix)}));
+    c.append(el("span",{class:"small"},el("span",{class:"vendor",text:best.vendeur})));
+    c.append(el("span",{class:"save",text:"−"+eur(b-best.prix)+" vs "+shop}));
+    if(best.vendeur!=="Amazon.fr"&&!best.verifie) c.append(el("span",{class:"small"},el("span",{class:"unverified",text:"à vérifier"})));
+    if(best.vendeur!=="Amazon.fr"&&best.note) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:best.note})));
+  }else if(b!=null){
+    // la boutique est la moins chère (ou seule)
+    c.append(i.url?el("a",{class:"price",href:i.url,target:"_blank",rel:"noopener",text:eur(b)}):el("span",{class:"price",text:eur(b)}));
+    c.append(el("span",{class:"small"},el("span",{class:"vendor",text:shop})));
+    if(best) c.append(el("span",{class:"small",text:"le moins cher ; ensuite "+best.vendeur+" "+eur(best.prix)}));
+    else if(o&&o.vendeur==null) c.append(el("span",{class:"small",text:"seul vendeur trouvé"}));
+    else c.append(el("span",{class:"small",text:"le moins cher"}));
+    if(o&&o.note&&o.vendeur!=null&&!(best&&best.vendeur===o.vendeur)) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:o.note})));
   }else{
-    c.append(el("span",{class:"nobetter",text:"Pas moins cher trouvé"}));
-    c.append(el("span",{class:"small"},"meilleur ailleurs : ",a.url?el("a",{href:a.url,target:"_blank",rel:"noopener",text:a.vendeur+" "+eur(a.prix)}):el("span",{text:a.vendeur+" "+eur(a.prix)})));
+    if(best){ c.append(best.url?el("a",{class:"price",href:best.url,target:"_blank",rel:"noopener",text:eur(best.prix)}):el("span",{class:"price",text:eur(best.prix)})); c.append(el("span",{class:"small"},el("span",{class:"vendor",text:best.vendeur}))); }
+    else c.append(el("span",{class:"nobetter",text:"—"}));
   }
-  if(a.note) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:a.note})));
   return c;
 }
 function resCell(i){
@@ -566,7 +575,7 @@ function render(){
     el("span",{},el("b",{text:String(n)})," cadeau"+(n>1?"x":"")),
     el("span",{},el("b",{text:String(taken)})," réservé"+(taken>1?"s":"")),
     el("span",{},el("b",{text:String(n-taken)})," encore à réserver"),
-    el("span",{},el("b",{text:String(deals)})," moins cher"+(deals>1?"s":"")+" ailleurs"),
+    el("span",{},el("b",{text:String(deals)})," moins cher"+(deals>1?"s":"")+" ailleurs qu'à King Jouet"),
     el("span",{},el("b",{text:String(tops)})," coup"+(tops>1?"s":"")+" de cœur des parents"),
     el("span",{class:"pill"+(state.online===false?" off":"")},el("span",{class:"dot"}),state.online===false?"Hors ligne":state.online?"À jour":"Chargement…"));
   const hid=allItems().filter(i=>khide(i)).length;
