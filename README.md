@@ -17,3 +17,8 @@ Supabase (projet familial), table `corse_votes` (block_id, voter), lecture/écri
 - `cadeau-item:<liste>:<id>` → cadeau ajouté par les parents (JSON)
 
 Déploiement : éditer → commit → push (Pages sur `main`).
+
+## Relevé de prix hebdomadaire
+Tâche planifiée Claude (app de bureau) « Relevé des prix des listes de Noël », le lundi à 7 h. Elle enchaîne :
+`node scripts/prix_refs.js` → `scripts/browser_kj.js` et `scripts/browser_amazon.js` exécutés dans le navigateur intégré (King Jouet et Amazon bloquent curl) → `node scripts/compare_prix.js kj.json amazon.json`.
+Le comparateur met à jour `data.js`, écrit `~/Documents/Claude/Outbox/Cadeaux/prix-AAAA-MM-JJ.md` et, s'il y a des changements, `~/Documents/Claude/Inbox/cadeaux-prix-alerte.md` (repris dans le briefing du matin). La tâche commit et pousse ensuite data.js.

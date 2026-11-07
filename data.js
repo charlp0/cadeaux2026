@@ -145,7 +145,7 @@ const AMAZON_LOUIS = {
  "megasaurus": {"prix": 49.99, "url": "https://www.amazon.fr/dp/B0FR9B3J29"},
  "timmy": {"prix": null, "url": null, "note": "Timmy le dino explorateur non trouvé sur Amazon.fr (seuls les petits coffrets « Rex et Dino avec sons » à 19,99 € y sont)."},
  "qg-dino": {"prix": 65.99, "url": "https://www.amazon.fr/dp/B0FR9JJQNF"},
- "chase-dino": {"prix": 16.9, "url": "https://www.amazon.fr/dp/B0FR9B3JSF"},
+ "chase-dino": {"prix":17.99, "url": "https://www.amazon.fr/dp/B0FR9B3JSF"},
  "pup-squad": {"prix": 21.42, "url": "https://www.amazon.fr/dp/B0CM8Q7WX5"},
  "ruben": {"prix": 17.99, "url": "https://www.amazon.fr/dp/B0FR9KDY34"},
  "kit-aventure-pp": {"prix": null, "url": null, "note": "Le kit complet Lexibook (RPTW12PA) n'est pas sur Amazon.fr ; seuls les talkie-walkies seuls y sont (24,89 €)."},
