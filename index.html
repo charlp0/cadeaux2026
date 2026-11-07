@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Liste de cadeaux 2026</title>
+<meta name="description" content="Liste de cadeaux pour l'anniversaire du 3 décembre et Noël : prix King Jouet, meilleur prix ailleurs, réservation en un clic.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout : une table de 5 colonnes sur grand écran, des cartes empilées sur téléphone. */
+:root{
+  --bg:#f2f5fa; --paper:#ffffff; --ink:#17233a; --muted:#5d6c86; --line:#d9e1ec;
+  --accent:#cf2f3f; --accent-ink:#ffffff; --green:#1d7a4c; --green-bg:#e3f4ea; --gold:#e0a83a;
+  --soft:#eef3f9; --shadow:0 1px 2px rgba(23,35,58,.06),0 8px 24px rgba(23,35,58,.06);
+  --display:"Baloo 2","Nunito",system-ui,sans-serif; --body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#111826; --paper:#1a2334; --ink:#e8edf6; --muted:#9fb0c9; --line:#2a3650;
+  --accent:#e4505f; --green:#5fc68f; --green-bg:#173327; --gold:#e6b65c; --soft:#212c40;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#111826; --paper:#1a2334; --ink:#e8edf6; --muted:#9fb0c9; --line:#2a3650;
+  --accent:#e4505f; --green:#5fc68f; --green-bg:#173327; --gold:#e6b65c; --soft:#212c40;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark; }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;
+  padding-block:0 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+a{color:inherit}
+img{max-width:100%}
+button{font:inherit}
+.wrap{max-width:1180px;margin:0 auto}
+
+header.hero{padding-block:34px 18px;display:grid;gap:10px}
+.eyebrow{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:var(--accent)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,5vw,46px);line-height:1.05;margin:0;text-wrap:balance}
+.lead{max-width:62ch;color:var(--muted);margin:0;font-size:16px}
+.lead b{color:var(--ink)}
+
+.stats{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:14px;color:var(--muted);padding-block:6px 14px}
+.stats b{color:var(--ink);font-variant-numeric:tabular-nums}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;background:var(--paper)}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.pill.off .dot{background:var(--accent)}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:4px 18px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:7px 13px;font-weight:700;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.controls select,.controls input[type=search]{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 10px;font-size:14px;min-width:0}
+.controls input[type=search]{flex:1 1 180px}
+.controls .grow{flex:1 1 auto}
+
+.tablewrap{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead th{text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line);background:var(--soft);font-weight:700}
+tbody td{padding:14px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.reserved{background:color-mix(in srgb,var(--green-bg) 55%,var(--paper))}
+.col-toy{width:40%}
+.col-age{width:8%;white-space:nowrap}
+.col-kj{width:16%}
+.col-else{width:18%}
+.col-res{width:18%}
+
+.toy{display:flex;gap:14px;align-items:flex-start;min-width:0}
+.toy img{width:84px;height:84px;object-fit:contain;border-radius:10px;background:#fff;border:1px solid var(--line);flex:0 0 auto}
+.toy .name{font-weight:700;font-size:15.5px;line-height:1.25;margin:0}
+.toy .sub{color:var(--muted);font-size:13px;margin:4px 0 0}
+.toy .brand{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+
+.price{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.1;font-variant-numeric:tabular-nums;text-decoration:none;display:inline-block}
+.price:hover{text-decoration:underline}
+.strike{color:var(--muted);text-decoration:line-through;font-size:13px;margin-left:6px;font-weight:400;font-family:var(--body)}
+.small{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
+.vendor{font-weight:700;font-size:13px}
+.save{display:inline-block;background:var(--green-bg);color:var(--green);font-weight:800;font-size:12.5px;border-radius:6px;padding:2px 7px;margin-top:5px;font-variant-numeric:tabular-nums}
+.nobetter{color:var(--muted);font-size:13.5px}
+.unverified{color:var(--gold);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em}
+details.note{margin-top:4px;font-size:12.5px;color:var(--muted)}
+details.note summary{cursor:pointer;color:var(--muted);font-weight:700;list-style:none;display:inline}
+details.note summary::after{content:" ▾"}
+details.note[open] summary::after{content:" ▴"}
+details.note p{margin:4px 0 0;max-width:36ch}
+
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer;background:var(--accent);color:var(--accent-ink);font-size:14px}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:700}
+.btn.small{padding:6px 10px;font-size:13px}
+.btn:disabled{opacity:.6;cursor:default}
+.taken{display:grid;gap:4px}
+.taken .who{font-weight:800;color:var(--green);display:flex;align-items:flex-start;gap:6px;line-height:1.3}
+.taken .who svg{width:16px;height:16px;flex:0 0 auto;margin-top:2px}
+.taken .occ{font-size:12.5px;color:var(--muted)}
+.linkbtn{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:12.5px;text-align:left}
+.form{display:grid;gap:8px;max-width:240px}
+.form label{font-size:12.5px;color:var(--muted);font-weight:700}
+.form input[type=text]{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px;background:var(--paper);color:var(--ink);width:100%}
+.form .occs{display:flex;flex-wrap:wrap;gap:6px}
+.form .occs label{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:4px 9px;font-weight:700;font-size:12.5px;color:var(--ink);cursor:pointer}
+.form .occs input{margin:0}
+.form .row{display:flex;gap:6px;flex-wrap:wrap}
+.err{color:var(--accent);font-size:12.5px;font-weight:700}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+footer{color:var(--muted);font-size:12.5px;padding-block:22px 0;max-width:80ch}
+footer p{margin:6px 0}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:var(--shadow);max-width:calc(100vw - 32px)}
+
+@media (max-width:860px){
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tbody tr{border-bottom:1px solid var(--line);padding:6px 0}
+  tbody td{border:0;padding:8px 14px}
+  tbody td[data-label]::before{content:attr(data-label);display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
+  .col-toy,.col-age,.col-kj,.col-else,.col-res{width:auto}
+  .toy img{width:72px;height:72px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0}
+}
+@media (prefers-reduced-motion:no-preference){ .btn{transition:filter .15s} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Anniversaire le 3 décembre · Noël 2026</div>
+  <h1>Liste de cadeaux</h1>
+  <p class="lead">Les idées viennent du catalogue King Jouet. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche) et, quand on en a trouvé un, le meilleur prix ailleurs. <b>Pour offrir un jouet, cliquez sur Réserver et indiquez votre prénom</b> : tout le monde verra qu'il est pris, et personne n'achètera deux fois la même chose.</p>
+</header>
+
+<div class="stats" id="stats"></div>
+
+<div class="controls">
+  <div class="chips" id="filters">
+    <button class="chip" data-f="all" aria-pressed="true">Tous</button>
+    <button class="chip" data-f="free" aria-pressed="false">À réserver</button>
+    <button class="chip" data-f="taken" aria-pressed="false">Réservés</button>
+    <button class="chip" data-f="deal" aria-pressed="false">Moins cher ailleurs</button>
+  </div>
+  <select id="sort" aria-label="Trier">
+    <option value="list">Ordre de la liste</option>
+    <option value="priceAsc">Prix croissant</option>
+    <option value="priceDesc">Prix décroissant</option>
+    <option value="age">Âge</option>
+  </select>
+  <input type="search" id="q" placeholder="Chercher un jouet (Pat' Patrouille, LEGO, Cars…)" aria-label="Chercher">
+</div>
+
+<div class="tablewrap">
+<table>
+  <thead><tr>
+    <th class="col-toy">Jouet</th><th class="col-age">Âge</th><th class="col-kj">King Jouet</th><th class="col-else">Moins cher ailleurs</th><th class="col-res">Réservation</th>
+  </tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+</div>
+
+<footer>
+  <p>Prix relevés le 07/11/2026, hors frais de port. Le prix « catalogue » est celui du catalogue de Noël King Jouet, valable en magasin du 14/10 au 01/12/2026 (certains prix réservés aux membres King Premium). Le prix « web » est celui de king-jouet.com le jour du relevé. Les prix « ailleurs » marqués <span class="unverified">à vérifier</span> viennent de comparateurs ou d'extraits de recherche et n'ont pas pu être confirmés sur la page du vendeur.</p>
+  <p>Les réservations sont partagées entre tous ceux qui ont le lien. Une erreur ? Cliquez sur « Annuler la réservation » sous le prénom.</p>
+</footer>
+</div>
+
+<script src="data.js?v=2"></script>
+<script>
+/* ───── Stockage partagé des réservations (Supabase, lecture/écriture avec la clé publique) ───── */
+const SB_URL="https://vhhmageufrcenruywawg.supabase.co";
+const SB_KEY="sb_publishable_NuRpgtxqVQ87R6K8txw57Q_oBUt4qay";
+const TABLE="corse_votes";          // colonnes : block_id (text), voter (text), created_at
+const PREFIX="cadeau:";
+const H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"};
+
+const state={res:{}, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null};
+const eur=n=>n==null?"":n.toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
+const byId=Object.fromEntries(ITEMS.map(i=>[i.id,i]));
+const bestKJ=i=>i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb);
+const isDeal=(i,a)=>!!(a&&a.prix!=null&&a.prix<bestKJ(i)-0.001);
+
+async function loadRes(){
+  try{
+    const r=await fetch(`${SB_URL}/rest/v1/${TABLE}?select=block_id,voter,created_at&block_id=like.${encodeURIComponent(PREFIX+"*")}&order=created_at.asc`,{headers:H});
+    if(!r.ok) throw new Error(r.status);
+    const rows=await r.json();
+    const res={};
+    for(const row of rows){ const id=row.block_id.slice(PREFIX.length); if(!res[id]) res[id]=row; }
+    state.res=res; state.online=true;
+  }catch(e){ state.online=false; }
+  render();
+}
+async function reserve(id,name,occ){
+  const voter=name+(occ?" · "+occ:"");
+  // Vérifie qu'il n'est pas déjà pris (petite fenêtre de course acceptable pour une liste familiale)
+  const chk=await fetch(`${SB_URL}/rest/v1/${TABLE}?select=voter&block_id=eq.${encodeURIComponent(PREFIX+id)}&limit=1`,{headers:H});
+  const ex=chk.ok?await chk.json():[];
+  if(ex.length){ await loadRes(); return {ok:false,msg:"Déjà réservé par "+splitVoter(ex[0].voter).name}; }
+  const r=await fetch(`${SB_URL}/rest/v1/${TABLE}`,{method:"POST",headers:{...H,"Prefer":"return=minimal"},body:JSON.stringify({block_id:PREFIX+id,voter})});
+  if(!r.ok) return {ok:false,msg:"Impossible d'enregistrer (réessayez dans un instant)."};
+  try{localStorage.setItem("cadeaux.nom",name)}catch(e){}
+  await loadRes(); return {ok:true};
+}
+async function unreserve(id){
+  const r=await fetch(`${SB_URL}/rest/v1/${TABLE}?block_id=eq.${encodeURIComponent(PREFIX+id)}`,{method:"DELETE",headers:{...H,"Prefer":"return=minimal"}});
+  await loadRes(); return r.ok;
+}
+function splitVoter(v){ const m=/^(.*?)(?: · (Anniversaire|Noël))?$/.exec(v||""); return {name:m?m[1]:v, occ:m&&m[2]?m[2]:""}; }
+
+/* ───── Rendu ───── */
+const el=(t,a={},...kids)=>{const n=document.createElement(t);for(const[k,v]of Object.entries(a)){if(k==="class")n.className=v;else if(k==="text")n.textContent=v;else if(k.startsWith("on"))n.addEventListener(k.slice(2),v);else if(v!=null)n.setAttribute(k,v);}for(const k of kids){if(k==null)continue;n.append(k.nodeType?k:document.createTextNode(k));}return n;};
+
+function visibleItems(){
+  let list=ITEMS.slice();
+  const q=state.q.trim().toLowerCase();
+  if(q) list=list.filter(i=>(i.nom+" "+i.sub+" "+i.marque).toLowerCase().includes(q));
+  if(state.filter==="free") list=list.filter(i=>!state.res[i.id]);
+  if(state.filter==="taken") list=list.filter(i=>state.res[i.id]);
+  if(state.filter==="deal") list=list.filter(i=>isDeal(i,AILLEURS[i.id]));
+  if(state.sort==="priceAsc") list.sort((a,b)=>bestKJ(a)-bestKJ(b));
+  if(state.sort==="priceDesc") list.sort((a,b)=>bestKJ(b)-bestKJ(a));
+  if(state.sort==="age") list.sort((a,b)=>a.age-b.age);
+  return list;
+}
+
+function kjCell(i){
+  const c=el("td",{class:"col-kj","data-label":"King Jouet"});
+  if(i.prixWeb!=null){
+    c.append(el("a",{class:"price",href:i.url,target:"_blank",rel:"noopener",text:eur(i.prixWeb)}));
+    if(i.prixWebOrig) c.append(el("span",{class:"strike",text:eur(i.prixWebOrig)}));
+    c.append(el("span",{class:"small",text:"prix web · voir la fiche"}));
+    if(Math.abs(i.prixCat-i.prixWeb)>0.001) c.append(el("span",{class:"small",text:"catalogue magasin : "+eur(i.prixCat)+(i.prixCatOrig?" (au lieu de "+eur(i.prixCatOrig)+")":"")}));
+  }else{
+    c.append(el("span",{class:"price",text:eur(i.prixCat)}));
+    c.append(el("span",{class:"small",text:"prix catalogue (magasin)"}));
+    c.append(el("a",{class:"small",href:i.url,target:"_blank",rel:"noopener",text:"voir sur king-jouet.com"}));
+  }
+  if(i.noteKJ) c.append(el("details",{class:"note"},el("summary",{text:"précision"}),el("p",{text:i.noteKJ})));
+  return c;
+}
+function elseCell(i){
+  const c=el("td",{class:"col-else","data-label":"Moins cher ailleurs"});
+  const a=AILLEURS[i.id];
+  if(!a){ c.append(el("span",{class:"nobetter",text:"Comparaison en cours…"})); return c; }
+  if(a.vendeur==null){ c.append(el("span",{class:"nobetter",text:"Pas trouvé chez un autre vendeur"})); }
+  else if(isDeal(i,a)){
+    c.append(a.url?el("a",{class:"price",href:a.url,target:"_blank",rel:"noopener",text:eur(a.prix)}):el("span",{class:"price",text:eur(a.prix)}));
+    c.append(el("span",{class:"small"},el("span",{class:"vendor",text:a.vendeur})));
+    const diff=bestKJ(i)-a.prix;
+    if(diff>0.001) c.append(el("span",{class:"save",text:"−"+eur(diff)+" vs King Jouet"}));
+    if(!a.verifie) c.append(el("span",{class:"small"},el("span",{class:"unverified",text:"à vérifier"})));
+  }else{
+    c.append(el("span",{class:"nobetter",text:"Pas moins cher trouvé"}));
+    c.append(el("span",{class:"small"},"meilleur ailleurs : ",a.url?el("a",{href:a.url,target:"_blank",rel:"noopener",text:a.vendeur+" "+eur(a.prix)}):el("span",{text:a.vendeur+" "+eur(a.prix)})));
+  }
+  if(a.note) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:a.note})));
+  return c;
+}
+function resCell(i){
+  const c=el("td",{class:"col-res","data-label":"Réservation"});
+  const r=state.res[i.id];
+  if(r){
+    const v=splitVoter(r.voter);
+    const box=el("div",{class:"taken"});
+    const who=el("div",{class:"who"}); who.innerHTML='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>';
+    who.append("Réservé par "+v.name); box.append(who);
+    if(v.occ) box.append(el("div",{class:"occ",text:"pour "+(v.occ==="Noël"?"Noël":"l'anniversaire")}));
+    if(state.confirmCancel===i.id){
+      box.append(el("div",{class:"occ",text:"Annuler la réservation de "+v.name+" ?"}));
+      box.append(el("div",{class:"row",style:"display:flex;gap:6px"},
+        el("button",{class:"btn small",text:"Oui, annuler",onclick:async e=>{e.target.disabled=true;const ok=await unreserve(i.id);state.confirmCancel=null;toast(ok?"Réservation annulée":"Échec de l'annulation");render();}}),
+        el("button",{class:"btn ghost small",text:"Non",onclick:()=>{state.confirmCancel=null;render();}})));
+    }else{
+      box.append(el("button",{class:"linkbtn",text:"Annuler la réservation",onclick:()=>{state.confirmCancel=i.id;state.open=null;render();}}));
+    }
+    c.append(box); return c;
+  }
+  if(state.open===i.id){
+    let saved=""; try{saved=localStorage.getItem("cadeaux.nom")||""}catch(e){}
+    const inp=el("input",{type:"text",id:"nom-"+i.id,maxlength:"30",placeholder:"Votre prénom",value:saved,autocomplete:"given-name"});
+    const occs=el("div",{class:"occs"});
+    for(const o of ["Anniversaire","Noël"]) occs.append(el("label",{},el("input",{type:"radio",name:"occ-"+i.id,value:o}),o));
+    const err=el("div",{class:"err"});
+    const confirm=el("button",{class:"btn small",text:"Confirmer",onclick:async()=>{
+      const name=inp.value.trim().replace(/\s+/g," ");
+      if(name.length<2){err.textContent="Indiquez votre prénom.";inp.focus();return;}
+      if(/[|·]/.test(name)){err.textContent="Prénom invalide.";return;}
+      confirm.disabled=true; err.textContent="";
+      const occ=(occs.querySelector("input:checked")||{}).value||"";
+      const out=await reserve(i.id,name,occ);
+      if(out.ok){state.open=null;toast("Réservé : "+i.nom);render();}
+      else{confirm.disabled=false;err.textContent=out.msg;}
+    }});
+    const form=el("div",{class:"form"},
+      el("label",{for:"nom-"+i.id,text:"Qui offre ce cadeau ?"}),inp,
+      el("div",{class:"small",text:"Pour quelle occasion ? (facultatif)"}),occs,
+      el("div",{class:"row"},confirm,el("button",{class:"btn ghost small",text:"Annuler",onclick:()=>{state.open=null;render();}})),err);
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter")confirm.click();});
+    c.append(form); setTimeout(()=>inp.focus(),0); return c;
+  }
+  const b=el("button",{class:"btn",text:"Réserver",onclick:()=>{state.open=i.id;state.confirmCancel=null;render();}});
+  if(state.online===false) b.disabled=true;
+  c.append(b);
+  if(state.online===false) c.append(el("span",{class:"small",text:"Réservations inaccessibles pour le moment."}));
+  return c;
+}
+function render(){
+  const tb=document.getElementById("rows"); tb.replaceChildren();
+  const list=visibleItems();
+  if(!list.length){ tb.append(el("tr",{},el("td",{colspan:"5",class:"nobetter",style:"padding:24px",text:"Aucun jouet ne correspond."}))); }
+  for(const i of list){
+    const tr=el("tr",{class:state.res[i.id]?"reserved":""});
+    const toy=el("td",{class:"col-toy"},el("div",{class:"toy"},
+      el("img",{src:i.img,alt:"",loading:"lazy",width:"84",height:"84"}),
+      el("div",{style:"min-width:0"},el("p",{class:"name",text:i.nom}),el("p",{class:"sub",text:i.sub}),el("span",{class:"brand",text:i.marque}))));
+    const age=el("td",{class:"col-age","data-label":"Âge",text:"Dès "+i.age+" ans"});
+    tr.append(toy,age,kjCell(i),elseCell(i),resCell(i)); tb.append(tr);
+  }
+  const n=ITEMS.length, taken=Object.keys(state.res).filter(id=>byId[id]).length;
+  const deals=ITEMS.filter(i=>isDeal(i,AILLEURS[i.id])).length;
+  const s=document.getElementById("stats"); s.replaceChildren(
+    el("span",{},el("b",{text:String(n)})," jouets"),
+    el("span",{},el("b",{text:String(taken)})," réservé"+(taken>1?"s":"")),
+    el("span",{},el("b",{text:String(n-taken)})," encore à réserver"),
+    el("span",{},el("b",{text:String(deals)})," moins cher"+(deals>1?"s":"")+" ailleurs"),
+    el("span",{class:"pill"+(state.online===false?" off":"")},el("span",{class:"dot"}),state.online===false?"Hors ligne":state.online?"Réservations à jour":"Chargement…"));
+}
+let toastT; function toast(msg){ let t=document.getElementById("toast"); if(!t){t=el("div",{id:"toast",class:"toast",role:"status"});document.body.append(t);} t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>{t.hidden=true},2600); }
+
+document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;state.filter=b.dataset.f;for(const c of e.currentTarget.children)c.setAttribute("aria-pressed",c===b);render();});
+document.getElementById("sort").addEventListener("change",e=>{state.sort=e.target.value;render();});
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value;render();});
+render(); loadRes();
+setInterval(loadRes,45000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")loadRes();});
+</script>
+</body>
+</html>
