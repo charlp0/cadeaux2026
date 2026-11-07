@@ -22,6 +22,9 @@ Supabase (projet familial), table `corse_votes` (block_id, voter), lecture/écri
 
 Déploiement : éditer → commit → push (Pages sur `main`).
 
+## Catégories
+Chaque cadeau peut porter un champ `cat` dans data.js ; l'ordre des catégories d'une liste est dans `CATEGORIES_<LISTE>` (`cats` dans `LISTS`). La table se regroupe par catégorie en tri « Ordre de la liste », avec un sélecteur de catégorie. En mode parents : glisser une ligne sur un en-tête de catégorie, ou choisir dans le menu déroulant sous le cadeau (dont « Nouvelle catégorie… »), et ✎ pour renommer une catégorie. Les choix des parents sont stockés en ligne (`cadeau-cat:<liste>:<id>` = nom de catégorie) et priment sur data.js. Priorité 3 étoiles = « Coup de Cœur ».
+
 ## Idées ajoutées par lien
 En mode parents, « Ajouter une idée de cadeau » accepte un simple lien : la ligne apparaît aussitôt « fiche en cours de complétion » (stockée en ligne, `cadeau-item`, champ `aCompleter`). La complétion (nom, photo dans `img/custom/`, prix, Amazon, moins cher du web) se fait avec `scripts/idees.js` (`list` / `done <liste> <id> fiche.json` / `drop`), qui intègre la fiche dans `data.js` et supprime l'idée en ligne, en gardant le même id (réservations et étoiles conservées). Consigne de la tâche planifiée matin et soir : `scripts/TACHE-completer-idees.md`.
 

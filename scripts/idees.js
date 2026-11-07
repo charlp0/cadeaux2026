@@ -4,7 +4,7 @@
 //   node scripts/idees.js list                      → JSON des idées en attente (aCompleter) : [{liste, id, nom, url, boutique, prix, img, age, sub, ajoute}]
 //   node scripts/idees.js done <liste> <id> <fiche.json>
 //        intègre la fiche complétée dans data.js (ITEMS_<LISTE> + AMAZON_<LISTE> + AILLEURS_<LISTE>) et supprime l'idée en ligne.
-//        fiche.json : {nom, sub, marque, age, boutique, prix, url, img, amazon:{prix,url,note,approx}, ailleurs:{vendeur,prix,url,verifie,note}}
+//        fiche.json : {nom, cat, sub, marque, age, boutique, prix, url, img, amazon:{prix,url,note,approx}, ailleurs:{vendeur,prix,url,verifie,note}}
 //        img = chemin relatif dans le dépôt (ex. "img/custom/c1abc.jpg"), déjà téléchargé.
 //   node scripts/idees.js drop <liste> <id>         → supprime l'idée en ligne sans l'intégrer (lien mort, doublon…)
 //
@@ -21,6 +21,7 @@ function pending(all){ const out=[]; for(const row of all){ const m=/^cadeau-ite
 const esc=v=>JSON.stringify(v==null?null:v);
 function line(it){ // une ligne d'item au format de data.js
   const f=[`id:${esc(it.id)}`,`nom:${esc(it.nom)}`,`sub:${esc(it.sub||'')}`,`marque:${esc(it.marque||'')}`,`age:${it.age!=null?Number(it.age):0}`,`boutique:${esc(it.boutique||'Boutique')}`,`prix:${it.prix!=null?Number(it.prix):null}`,`url:${esc(it.url||null)}`,`img:${esc(it.img||null)}`];
+  if(it.cat) f.splice(1,0,`cat:${esc(it.cat)}`);
   if(it.note) f.push(`noteKJ:${esc(it.note)}`);
   return ' {'+f.join(', ')+'},';
 }
