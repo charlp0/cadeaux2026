@@ -78,7 +78,22 @@ tbody tr.reserved{background:color-mix(in srgb,var(--green-bg) 55%,var(--paper))
 .col-res{width:18%}
 
 .toy{display:flex;gap:14px;align-items:flex-start;min-width:0}
-.toy img{width:84px;height:84px;object-fit:contain;border-radius:10px;background:#fff;border:1px solid var(--line);flex:0 0 auto}
+.toy .zoom{flex:0 0 auto;border:0;padding:0;background:none;cursor:zoom-in;border-radius:10px;display:block}
+.toy .zoom img{width:84px;height:84px;object-fit:contain;border-radius:10px;background:#fff;border:1px solid var(--line);display:block;transition:transform .15s}
+.toy .zoom:hover img{transform:scale(1.04)}
+dialog.lightbox{border:0;padding:0;background:transparent;max-width:min(92vw,900px);width:auto;overflow:visible}
+dialog.lightbox::backdrop{background:rgba(10,18,30,.72);backdrop-filter:blur(2px)}
+.lb{background:var(--paper);color:var(--ink);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;max-height:90vh}
+.lb .lb-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px 10px}
+.lb .lb-title{font-weight:800;font-size:16px;margin:0;line-height:1.25}
+.lb .lb-sub{color:var(--muted);font-size:13px;margin:3px 0 0}
+.lb .lb-close{border:0;background:var(--soft);color:var(--ink);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;flex:0 0 auto}
+.lb .lb-close:hover{background:var(--line)}
+.lb .lb-body{background:#fff;display:flex;align-items:center;justify-content:center;padding:8px;min-height:200px;overflow:hidden}
+.lb .lb-body img{max-width:min(88vw,860px);max-height:62vh;width:auto;height:auto;object-fit:contain;display:block}
+.lb .lb-foot{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--line);font-size:14px}
+.lb .lb-foot .price{font-size:18px}
+@media (prefers-reduced-motion:no-preference){ dialog.lightbox[open]{animation:lbin .18s ease-out} @keyframes lbin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}} }
 .toy .name{font-weight:700;font-size:15.5px;line-height:1.25;margin:0}
 .toy .sub{color:var(--muted);font-size:13px;margin:4px 0 0}
 .toy .brand{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
@@ -180,6 +195,13 @@ footer p{margin:6px 0}
 </table>
 </div>
 
+<dialog class="lightbox" id="lightbox" aria-labelledby="lb-title">
+  <div class="lb">
+    <div class="lb-head"><div><p class="lb-title" id="lb-title"></p><p class="lb-sub" id="lb-sub"></p></div><button class="lb-close" id="lb-close" type="button" aria-label="Fermer">×</button></div>
+    <div class="lb-body"><img id="lb-img" alt=""></div>
+    <div class="lb-foot"><span id="lb-price"></span><a id="lb-link" href="#" target="_blank" rel="noopener">Voir la fiche King Jouet</a></div>
+  </div>
+</dialog>
 <footer>
   <p>Prix relevés le 07/11/2026, hors frais de port. Le prix « catalogue » est celui du catalogue de Noël King Jouet, valable en magasin du 14/10 au 01/12/2026 (certains prix réservés aux membres King Premium). Le prix « web » est celui de king-jouet.com le jour du relevé. Les prix « ailleurs » marqués <span class="unverified">à vérifier</span> viennent de comparateurs ou d'extraits de recherche et n'ont pas pu être confirmés sur la page du vendeur.</p>
   <p>Les réservations sont partagées entre tous ceux qui ont le lien. Une erreur ? Cliquez sur « Annuler la réservation » sous le prénom.</p>
@@ -346,7 +368,7 @@ function render(){
   for(const i of list){
     const tr=el("tr",{class:state.res[i.id]?"reserved":""});
     const toy=el("td",{class:"col-toy"},el("div",{class:"toy"},
-      el("img",{src:i.img,alt:"",loading:"lazy",width:"84",height:"84"}),
+      el("button",{class:"zoom",type:"button","aria-label":"Voir "+i.nom+" en grand",onclick:()=>openLightbox(i)},el("img",{src:i.img,alt:"",loading:"lazy",width:"84",height:"84"})),
       el("div",{style:"min-width:0"},el("p",{class:"name",text:i.nom}),el("p",{class:"sub",text:i.sub}),el("span",{class:"brand",text:i.marque}))));
     const age=el("td",{class:"col-age","data-label":"Âge",text:"Dès "+i.age+" ans"});
     tr.append(toy,age,kjCell(i),elseCell(i),resCell(i)); tb.append(tr);
@@ -360,6 +382,21 @@ function render(){
     el("span",{},el("b",{text:String(deals)})," moins cher"+(deals>1?"s":"")+" ailleurs"),
     el("span",{class:"pill"+(state.online===false?" off":"")},el("span",{class:"dot"}),state.online===false?"Hors ligne":state.online?"Réservations à jour":"Chargement…"));
 }
+/* ───── Visionneuse (popup centrée) ───── */
+const LB=document.getElementById("lightbox");
+function openLightbox(i){
+  const img=document.getElementById("lb-img");
+  img.onerror=()=>{img.onerror=null;img.src=i.img;};
+  img.src=i.img.replace("img/","img/large/"); img.alt=i.nom;
+  document.getElementById("lb-title").textContent=i.nom;
+  document.getElementById("lb-sub").textContent=i.sub+" · dès "+i.age+" ans";
+  const pr=document.getElementById("lb-price"); pr.replaceChildren(el("span",{class:"price",text:eur(i.prixWeb!=null?i.prixWeb:i.prixCat)})," chez King Jouet");
+  document.getElementById("lb-link").href=i.url;
+  if(typeof LB.showModal==="function"){LB.showModal();} else {LB.setAttribute("open","");}
+}
+document.getElementById("lb-close").addEventListener("click",()=>LB.close());
+LB.addEventListener("click",e=>{ if(e.target===LB) LB.close(); });
+LB.addEventListener("close",()=>{ document.getElementById("lb-img").src=""; });
 let toastT; function toast(msg){ let t=document.getElementById("toast"); if(!t){t=el("div",{id:"toast",class:"toast",role:"status"});document.body.append(t);} t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>{t.hidden=true},2600); }
 
 document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;state.filter=b.dataset.f;for(const c of e.currentTarget.children)c.setAttribute("aria-pressed",c===b);render();});
