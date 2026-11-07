@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-mode="noel">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -55,6 +55,10 @@ h1{font-family:"Mountains of Christmas",var(--display);font-weight:700;font-size
 .countdown{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .countdown span{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 12px;font-weight:700;font-size:13px;color:var(--snow)}
 .countdown b{font-family:var(--display);font-size:16px;color:var(--gold)}
+.countdown.big span{font-size:18px;padding:10px 18px;border-width:2px}
+.countdown.big b{font-size:44px;line-height:1}
+.notice{margin-top:16px;background:rgba(255,255,255,.1);border:1px dashed rgba(255,255,255,.4);border-radius:12px;padding:10px 14px;font-size:14px;color:rgba(255,255,255,.9);max-width:62ch}
+.notice b{color:var(--snow)}
 .photo{position:relative;width:min(220px,44vw);aspect-ratio:3/4;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35);border:5px solid var(--snow);transform:rotate(3deg);background:var(--pine-2);margin:0}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
 .photo .tag{position:absolute;left:50%;bottom:10px;transform:translateX(-50%) rotate(-2deg);background:var(--accent);color:#fff;font-family:var(--display);font-weight:800;padding:4px 12px;border-radius:999px;font-size:14px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3)}
@@ -151,9 +155,6 @@ details.note p{margin:4px 0 0;max-width:36ch}
 .form{display:grid;gap:8px;max-width:240px}
 .form label{font-size:12.5px;color:var(--muted);font-weight:700}
 .form input[type=text]{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px;background:var(--paper);color:var(--ink);width:100%}
-.form .occs{display:flex;flex-wrap:wrap;gap:6px}
-.form .occs label{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:4px 9px;font-weight:700;font-size:12.5px;color:var(--ink);cursor:pointer}
-.form .occs input{margin:0}
 .row{display:flex;gap:6px;flex-wrap:wrap}
 .err{color:var(--accent);font-size:12.5px;font-weight:700}
 .pactions{display:grid;gap:6px;margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
@@ -221,6 +222,7 @@ footer p{margin:6px 0}
       <h1 id="title"></h1>
       <p class="lead" id="lead"></p>
       <div class="countdown" id="countdown"></div>
+      <div class="notice" id="notice" hidden></div>
     </div>
     <figure class="photo" id="photo">
       <img id="photo-img" src="" alt="">
@@ -238,6 +240,7 @@ footer p{margin:6px 0}
   <button class="btn small" id="p-add" type="button">+ Ajouter un cadeau</button>
   <button class="btn ghost small" id="p-bilan" type="button">Bilan</button>
   <button class="btn ghost small" id="p-hidden" type="button" aria-pressed="false">Retirés (0)</button>
+  <button class="btn ghost small" id="p-anniv" type="button" aria-pressed="false" hidden>Offerts à l'anniversaire (0)</button>
   <button class="btn ghost small" id="p-quit" type="button">Quitter</button>
 </div>
 
@@ -319,12 +322,12 @@ footer p{margin:6px 0}
 </dialog>
 
 <footer>
-  <p>Prix relevés le 07/11/2026, hors frais de port. Le prix « catalogue » est celui du catalogue de Noël King Jouet, valable en magasin du 14/10 au 01/12/2026 (certains prix réservés aux membres King Premium). Le prix « web » est celui de king-jouet.com le jour du relevé. Le prix Amazon est celui affiché sur Amazon.fr le jour du relevé, vendeur non vérifié. Les prix « ailleurs » marqués <span class="unverified">à vérifier</span> viennent de comparateurs et n'ont pas pu être confirmés sur la page du vendeur.</p>
+  <p>Prix relevés le 07/11/2026, hors frais de port. Le prix « catalogue » est celui du catalogue King Jouet, valable en magasin du 14/10 au 01/12/2026 (certains prix réservés aux membres King Premium). Le prix « web » est celui de king-jouet.com le jour du relevé. Le prix Amazon est celui affiché sur Amazon.fr le jour du relevé, vendeur non vérifié. Les prix « ailleurs » marqués <span class="unverified">à vérifier</span> viennent de comparateurs et n'ont pas pu être confirmés sur la page du vendeur.</p>
   <p>Les réservations sont partagées entre tous ceux qui ont le lien. Une erreur ? Cliquez sur « Annuler la réservation » sous le prénom. <button class="linkbtn" id="open-parents" type="button">Espace parents</button></p>
 </footer>
 </div>
 
-<script src="data.js?v=9"></script>
+<script src="data.js?v=10"></script>
 <script>
 /* Neige légère dans le bandeau (désactivée si l'utilisateur préfère moins d'animations) */
 (function(){
@@ -353,10 +356,13 @@ const H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"applic
 const PARENTS_CODE="0312";   // code de l'espace parents (à changer ici si besoin)
 const AVIS_LABEL=["","J'aimerais","Je veux vraiment","Je veux absolument"];
 
-const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
+const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, showAnniv:false, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
 const eur=n=>n==null?"":Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
 const key=(prefix,i)=>prefix+":"+state.list.id+":"+i.id;
 const OURS="__nous__";   // réservation « acheté par nous » (parents), affichée sans prénom
+const MODE=document.documentElement.dataset.mode||"noel"; const ANNIV=MODE==="anniv";   // index.html = Noël, anniversaire.html = anniversaire de Louis (généré par scripts/build_anniv.js)
+const PAGE_LISTS=ANNIV?LISTS.filter(l=>l.id==="louis"):LISTS;
+const scopeId=()=>state.list.id+(ANNIV?"-anniv":"");   // étoiles et retraits distincts entre la page anniversaire et la page Noël
 const DATES={anniv:new Date("2026-12-03T00:00:00+01:00"), noel:new Date("2026-12-25T00:00:00+01:00")};
 const daysTo=d=>Math.ceil((d-new Date())/86400000);
 
@@ -380,16 +386,17 @@ async function loadAll(){
   }catch(e){ state.online=false; }
   renderTabs(); render();
 }
-function splitVoter(v){ if(v===OURS) return {name:"",occ:"",ours:true}; const m=/^(.*?)(?: · (Anniversaire|Noël))?$/.exec(v||""); return {name:m?m[1]:v, occ:m&&m[2]?m[2]:"", ours:false}; }
-async function markOurs(i){ const bid=key("cadeau",i); const ex=await sbGet("block_id=eq."+encodeURIComponent(bid)+"&limit=1").catch(()=>[]); if(ex.length){ await loadAll(); return false; } const ok=await sbInsert(bid,OURS); await loadAll(); return ok; }
+function splitVoter(v){ const m=/^(.*?)(?: · (Anniversaire|Noël))?$/.exec(v||""); const name=m?m[1]:v; return {name:name===OURS?"":name, occ:m&&m[2]?m[2]:"", ours:name===OURS}; }
+async function markOurs(i){ const bid=key("cadeau",i); const ex=await sbGet("block_id=eq."+encodeURIComponent(bid)+"&limit=1").catch(()=>[]); if(ex.length){ await loadAll(); return false; } const ok=await sbInsert(bid,OURS+(ANNIV?" · Anniversaire":"")); await loadAll(); return ok; }
 function shareLink(i){ return location.origin+location.pathname+"#"+state.list.id+"/"+i.id; }
 async function copyLink(i){ const t=shareLink(i); try{ await navigator.clipboard.writeText(t); toast("Lien copié : "+i.nom); }catch(e){ const inp=el("input",{type:"text",value:t,style:"position:fixed;top:-100px"}); document.body.append(inp); inp.select(); try{document.execCommand("copy"); toast("Lien copié : "+i.nom);}catch(_){ toast(t); } inp.remove(); } }
 const kres=i=>state.res[state.list.id+":"+i.id];
-const kavis=i=>{const v=state.avis[state.list.id+":"+i.id]; return v==null?Number(i.avisDefaut||0):Number(v)||0;};
-const khide=i=>!!state.hide[state.list.id+":"+i.id];
+const kavis=i=>{const v=state.avis[scopeId()+":"+i.id]; return v==null?Number(i.avisDefaut||0):Number(v)||0;};
+const khide=i=>!!state.hide[scopeId()+":"+i.id];
+const isAnnivGift=i=>{const r=kres(i); if(!r) return false; return splitVoter(r.voter).occ==="Anniversaire";};
 
-async function reserve(i,name,occ){
-  const voter=name+(occ?" · "+occ:""); const bid=key("cadeau",i);
+async function reserve(i,name){
+  const occ=ANNIV?"Anniversaire":""; const voter=name+(occ?" · "+occ:""); const bid=key("cadeau",i);
   const ex=await sbGet("block_id=eq."+encodeURIComponent(bid)+"&limit=1").catch(()=>[]);
   if(ex.length){ await loadAll(); return {ok:false,msg:"Déjà réservé par "+splitVoter(ex[0].voter).name}; }
   if(!await sbInsert(bid,voter)) return {ok:false,msg:"Impossible d'enregistrer (réessayez dans un instant)."};
@@ -397,15 +404,16 @@ async function reserve(i,name,occ){
   await loadAll(); return {ok:true};
 }
 async function unreserve(i){ const ok=await sbDelete(key("cadeau",i)); await loadAll(); return ok; }
-async function setAvis(i,n){ const bid=key("cadeau-avis",i); await sbDelete(bid); if(n>0||i.avisDefaut) await sbInsert(bid,String(n)); await loadAll(); }
-async function setHidden(i,on){ const bid=key("cadeau-hide",i); if(on){ await sbInsert(bid,"1"); } else { await sbDelete(bid); } await loadAll(); }
-async function removeCustom(i){ await sbDelete(key("cadeau-item",i)); await sbDelete(key("cadeau",i)); await sbDelete(key("cadeau-avis",i)); await loadAll(); }
+async function setAvis(i,n){ const bid="cadeau-avis:"+scopeId()+":"+i.id; await sbDelete(bid); if(n>0||i.avisDefaut) await sbInsert(bid,String(n)); await loadAll(); }
+async function setHidden(i,on){ const bid="cadeau-hide:"+scopeId()+":"+i.id; if(on){ await sbInsert(bid,"1"); } else { await sbDelete(bid); } await loadAll(); }
+async function removeCustom(i){ await sbDelete(key("cadeau-item",i)); await sbDelete(key("cadeau",i)); await sbDelete(key("cadeau-avis",i)); await sbDelete("cadeau-avis:"+state.list.id+"-anniv:"+i.id); await loadAll(); }
 async function addCustom(o){ const id="c"+Date.now().toString(36); const ok=await sbInsert("cadeau-item:"+state.list.id+":"+id,JSON.stringify(o)); await loadAll(); return ok; }
 
 /* ───── Rendu ───── */
 const el=(t,a={},...kids)=>{const n=document.createElement(t);for(const[k,v]of Object.entries(a)){if(k==="class")n.className=v;else if(k==="text")n.textContent=v;else if(k.startsWith("on"))n.addEventListener(k.slice(2),v);else if(v!=null)n.setAttribute(k,v);}for(const k of kids){if(k==null)continue;n.append(k.nodeType?k:document.createTextNode(k));}return n;};
 
-function allItems(){ return state.list.items.concat(state.custom[state.list.id]||[]); }
+function baseItems(){ return state.list.items.concat(state.custom[state.list.id]||[]); }
+function allItems(){ const all=baseItems(); if(ANNIV||state.list.id!=="louis") return all; return all.filter(i=>state.showAnniv?isAnnivGift(i):!isAnnivGift(i)); }
 function shopPrice(i){ if(i.custom) return i.prix!=null?Number(i.prix):null; return i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb); }
 function amazonOf(i){ if(i.custom) return (i.amazonPrix!=null||i.amazonUrl)?{prix:i.amazonPrix!=null?Number(i.amazonPrix):null,url:i.amazonUrl||null}:null; return state.list.amazon[i.id]||null; }
 function ailleursOf(i){ return i.custom?null:(state.list.ailleurs[i.id]||null); }
@@ -515,7 +523,7 @@ function resCell(i){
     const box=el("div",{class:"taken"+(v.ours?" ours":"")});
     const who=el("div",{class:"who"}); who.innerHTML='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>';
     who.append(v.ours?(state.parents?"Acheté par nous":"Déjà pris"):"Réservé par "+v.name); box.append(who);
-    if(v.occ) box.append(el("div",{class:"occ",text:"pour "+(v.occ==="Noël"?"Noël":"l'anniversaire")}));
+    if(!ANNIV&&v.occ==="Anniversaire"&&state.parents) box.append(el("div",{class:"occ",text:"offert pour l'anniversaire"}));
     if(v.ours&&!state.parents){ c.append(box); return c; }
     if(state.confirmCancel===i.id){
       box.append(el("div",{class:"occ",text:v.ours?"Annuler « acheté par nous » ?":"Annuler la réservation de "+v.name+" ?"}));
@@ -529,23 +537,17 @@ function resCell(i){
   }else if(state.open===i.id){
     let saved=""; try{saved=localStorage.getItem("cadeaux.nom")||""}catch(e){}
     const inp=el("input",{type:"text",id:"nom-"+i.id,maxlength:"30",placeholder:"Votre prénom",value:saved,autocomplete:"given-name"});
-    const occs=el("div",{class:"occs"});
-    const withOcc=state.list.id==="louis";
-    if(withOcc) for(const o of ["Anniversaire","Noël"]) occs.append(el("label",{},el("input",{type:"radio",name:"occ-"+i.id,value:o}),o));
     const err=el("div",{class:"err"});
     const confirm=el("button",{class:"btn small",text:"Confirmer",onclick:async()=>{
       const name=inp.value.trim().replace(/\s+/g," ");
       if(name.length<2){err.textContent="Indiquez votre prénom.";inp.focus();return;}
       if(/[|·]/.test(name)){err.textContent="Prénom invalide.";return;}
       confirm.disabled=true; err.textContent="";
-      const occ=withOcc?((occs.querySelector("input:checked")||{}).value||""):"";
-      if(withOcc&&!occ){err.textContent="Dites-nous si c'est pour l'anniversaire ou pour Noël.";confirm.disabled=false;return;}
-      const out=await reserve(i,name,occ);
+      const out=await reserve(i,name);
       if(out.ok){state.open=null;toast("Réservé : "+i.nom);render();}
       else{confirm.disabled=false;err.textContent=out.msg;}
     }});
     const form=el("div",{class:"form"},el("label",{for:"nom-"+i.id,text:"Qui offre ce cadeau ?"}),inp);
-    if(withOcc) form.append(el("div",{class:"small",text:"Pour quelle occasion ? (obligatoire pour Louis)"}),occs);
     form.append(el("div",{class:"row"},confirm,el("button",{class:"btn ghost small",text:"Annuler",onclick:()=>{state.open=null;render();}})),err);
     inp.addEventListener("keydown",e=>{if(e.key==="Enter")confirm.click();});
     c.append(form); setTimeout(()=>inp.focus(),0);
@@ -570,16 +572,17 @@ function resCell(i){
 function render(){
   const L=state.list;
   document.getElementById("th-shop").textContent=L.boutique;
-  const cd=document.getElementById("countdown"); cd.replaceChildren();
+  const cd=document.getElementById("countdown"); cd.replaceChildren(); cd.classList.toggle("big",ANNIV);
   const dn=daysTo(DATES.noel), da=daysTo(DATES.anniv);
   const fmt=(n,label)=>n>1?[el("b",{text:String(n)})," jours avant "+label]:n===1?[el("b",{text:"1"})," jour avant "+label]:n===0?["C'est aujourd'hui : "+label+" !"]:[label+", c'est passé"];
-  if(L.id==="louis"&&da>=-1) cd.append(el("span",{},...fmt(da,"l'anniversaire (3 décembre)")));
-  cd.append(el("span",{},...fmt(dn,"Noël")));
+  if(ANNIV) cd.append(el("span",{},...fmt(da,"l'anniversaire de Louis"))); else cd.append(el("span",{},...fmt(dn,"Noël")));
+  const nt=document.getElementById("notice"); nt.hidden=!ANNIV; if(ANNIV){ nt.replaceChildren(el("b",{text:"Et pour Noël ?"})," Les listes de Noël de Louis, Capucine, Clémentine et Charles seront partagées plus tard, dans un autre lien."); }
+  const pa=document.getElementById("p-anniv"); const annivN=(!ANNIV&&L.id==="louis")?baseItems().filter(i=>isAnnivGift(i)).length:0; pa.hidden=ANNIV||L.id!=="louis"; pa.textContent=(state.showAnniv?"Revenir à la liste de Noël":"Offerts à l'anniversaire")+" ("+annivN+")"; pa.setAttribute("aria-pressed",String(state.showAnniv));
   const tb=document.getElementById("rows"); tb.replaceChildren();
   const list=visibleItems();
   if(!list.length){
     const total=allItems().filter(i=>!khide(i)).length;
-    const msg= state.showHidden ? ["Aucun cadeau retiré."] : total===0 ? [el("b",{text:L.prenom+" n'a pas encore fait sa liste."})," ",state.parents?"Ajoutez des cadeaux avec le bouton « Ajouter un cadeau ».":"Les idées arrivent bientôt."] : ["Aucun cadeau ne correspond."];
+    const msg= state.showAnniv ? ["Aucun cadeau réservé sur la page anniversaire pour l'instant."] : state.showHidden ? ["Aucun cadeau retiré."] : total===0 ? [el("b",{text:L.prenom+" n'a pas encore fait sa liste."})," ",state.parents?"Ajoutez des cadeaux avec le bouton « Ajouter un cadeau ».":"Les idées arrivent bientôt."] : ["Aucun cadeau ne correspond."];
     tb.append(el("tr",{},el("td",{colspan:"7",class:"empty"},...msg)));
   }
   for(const i of list){
@@ -610,15 +613,16 @@ function render(){
 
 /* ───── Onglets ───── */
 function renderTabs(){
-  const t=document.getElementById("tabs"); t.replaceChildren();
-  for(const L of LISTS){
+  const t=document.getElementById("tabs"); t.replaceChildren(); t.hidden=ANNIV; if(ANNIV) return;
+  for(const L of PAGE_LISTS){
     const n=L.items.length+(state.custom[L.id]||[]).length;
     t.append(el("button",{class:"tab",role:"tab","aria-selected":String(L===state.list),onclick:()=>selectList(L.id,true)},el("img",{src:L.photo,alt:""}),L.prenom,el("span",{class:"n",text:n?String(n):""})));
   }
 }
 function selectList(id,push){
-  const L=LISTS.find(x=>x.id===id)||LISTS[0]; state.list=L; state.open=null; state.confirmCancel=null; state.confirmRemove=null; state.showHidden=false;
-  document.getElementById("eyebrow").textContent=L.eyebrow; document.getElementById("title").textContent=L.titre; document.getElementById("lead").textContent=L.intro;
+  const L=PAGE_LISTS.find(x=>x.id===id)||PAGE_LISTS[0]; state.list=L; state.open=null; state.confirmCancel=null; state.confirmRemove=null; state.showHidden=false; state.showAnniv=false;
+  if(ANNIV){ document.getElementById("eyebrow").textContent="Jeudi 3 décembre 2026 · Louis fête son anniversaire"; document.getElementById("title").textContent="L'anniversaire de Louis"; document.getElementById("lead").textContent="Louis a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 je veux absolument. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche), le prix Amazon et le moins cher trouvé sur le web. Pour lui offrir un jouet, cliquez sur Réserver et indiquez votre prénom : tout le monde verra qu'il est pris."; }
+  else { document.getElementById("eyebrow").textContent=L.eyebrow; document.getElementById("title").textContent=L.titre; document.getElementById("lead").textContent=L.intro; }
   const pi=document.getElementById("photo-img"); pi.src=L.photo; pi.alt=L.prenom; document.getElementById("photo-tag").textContent=L.prenom;
   document.getElementById("q").placeholder="Chercher dans la liste de "+L.prenom+"…";
   if(push){ try{history.replaceState(null,"","#"+L.id);}catch(e){} window.scrollTo({top:0,behavior:"smooth"}); }
@@ -657,25 +661,30 @@ document.getElementById("p-bilan").addEventListener("click",()=>{ renderBilan();
 function renderBilan(){
   const body=document.getElementById("bilan-body"); body.replaceChildren();
   let grandTotal=0, grandN=0;
-  for(const L of LISTS){
-    const items=L.items.concat(state.custom[L.id]||[]).filter(i=>!state.hide[L.id+":"+i.id]);
+  for(const L of PAGE_LISTS){
+    const sc=L.id+(ANNIV?"-anniv":"");
+    const annivOf=i=>{const r=state.res[L.id+":"+i.id]; return !!r&&splitVoter(r.voter).occ==="Anniversaire";};
+    const items=L.items.concat(state.custom[L.id]||[]).filter(i=>!state.hide[sc+":"+i.id]).filter(i=>ANNIV?true:(L.id==="louis"?!annivOf(i):true));
     const priceOf=i=>i.custom?(i.prix!=null?Number(i.prix):null):(i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb));
     const givers={}; let nRes=0,nOurs=0,total=0;
     for(const i of items){ const r=state.res[L.id+":"+i.id]; if(!r) continue; const v=splitVoter(r.voter); const p=priceOf(i)||0; nRes++; total+=p; if(v.ours){nOurs++; (givers["Nous (parents)"]=givers["Nous (parents)"]||{n:0,t:0,items:[]}); givers["Nous (parents)"].n++; givers["Nous (parents)"].t+=p; givers["Nous (parents)"].items.push(i.nom);} else { const g=givers[v.name]=givers[v.name]||{n:0,t:0,items:[]}; g.n++; g.t+=p; g.items.push(i.nom+(v.occ?" ("+v.occ+")":"")); } }
-    const tops=items.filter(i=>Number(state.avis[L.id+":"+i.id]||0)>=3&&!state.res[L.id+":"+i.id]);
+    const av=i=>{const v=state.avis[sc+":"+i.id]; return v==null?Number(i.avisDefaut||0):Number(v)||0;};
+    const tops=items.filter(i=>av(i)>=3&&!state.res[L.id+":"+i.id]);
     grandTotal+=total; grandN+=nRes;
     const sec=el("div",{class:"bl"},el("h3",{},el("img",{src:L.photo,alt:""}),L.prenom));
     sec.append(el("div",{class:"kpis"},el("span",{},el("b",{text:String(items.length)})," cadeau"+(items.length>1?"x":"")),el("span",{},el("b",{text:String(nRes)})," réservé"+(nRes>1?"s":"")+(nOurs?" dont "+nOurs+" par nous":"")),el("span",{},el("b",{text:String(items.length-nRes)})," sans preneur"),el("span",{},"total réservé ",el("b",{text:eur(total)}))));
     const names=Object.keys(givers).sort((a,b)=>givers[b].t-givers[a].t);
     if(names.length){ const t=el("table",{},el("thead",{},el("tr",{},el("th",{text:"Qui offre"}),el("th",{class:"num",text:"Cadeaux"}),el("th",{class:"num",text:"Montant"}),el("th",{text:"Détail"})))); const tb=el("tbody"); for(const n of names){ const g=givers[n]; tb.append(el("tr",{},el("td",{text:n}),el("td",{class:"num",text:String(g.n)}),el("td",{class:"num",text:eur(g.t)}),el("td",{text:g.items.join(", ")}))); } t.append(tb); sec.append(t); }
     if(tops.length) sec.append(el("div",{class:"small",style:"margin-top:8px",text:"« Je veux absolument » sans preneur :"}),el("ul",{},...tops.map(i=>el("li",{text:i.nom+(priceOf(i)!=null?" · "+eur(priceOf(i)):"")}))));
-    else if(items.some(i=>Number(state.avis[L.id+":"+i.id]||0)>=3)) sec.append(el("div",{class:"small",style:"margin-top:8px",text:"Tous les « Je veux absolument » ont un preneur."}));
+    else if(items.some(i=>av(i)>=3)) sec.append(el("div",{class:"small",style:"margin-top:8px",text:"Tous les « Je veux absolument » ont un preneur."}));
+    if(!ANNIV&&L.id==="louis"){ const ag=L.items.concat(state.custom[L.id]||[]).filter(annivOf); if(ag.length){ const t=ag.reduce((a,i)=>a+(priceOf(i)||0),0); sec.append(el("div",{class:"small",style:"margin-top:8px",text:"Déjà offerts pour l'anniversaire (hors liste de Noël) : "+ag.length+" cadeau"+(ag.length>1?"x":"")+", "+eur(t)})); } }
     body.append(sec);
   }
   body.append(el("div",{class:"bl tot"},"Total famille : "+grandN+" cadeau"+(grandN>1?"x":"")+" réservé"+(grandN>1?"s":"")+", "+eur(grandTotal)));
 }
 document.getElementById("p-quit").addEventListener("click",()=>{ setParents(false); toast("Mode parents quitté"); });
-document.getElementById("p-hidden").addEventListener("click",()=>{ state.showHidden=!state.showHidden; render(); });
+document.getElementById("p-hidden").addEventListener("click",()=>{ state.showHidden=!state.showHidden; state.showAnniv=false; render(); });
+document.getElementById("p-anniv").addEventListener("click",()=>{ state.showAnniv=!state.showAnniv; state.showHidden=false; render(); });
 document.getElementById("p-add").addEventListener("click",()=>{ document.getElementById("add-form").reset(); document.getElementById("add-err").textContent=""; document.getElementById("add-help").textContent="Ce cadeau sera ajouté à la liste de "+state.list.prenom+", visible par tout le monde."; ADD.showModal(); setTimeout(()=>document.getElementById("a-nom").focus(),50); });
 document.getElementById("add-cancel").addEventListener("click",()=>ADD.close());
 document.getElementById("add-form").addEventListener("submit",async e=>{
@@ -694,7 +703,7 @@ let toastT; function toast(msg){ let t=document.getElementById("toast"); if(!t){
 document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;state.filter=b.dataset.f;for(const c of e.currentTarget.children)c.setAttribute("aria-pressed",c===b);render();});
 document.getElementById("sort").addEventListener("change",e=>{state.sort=e.target.value;render();});
 document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value;render();});
-function parseHash(){ const h=location.hash.replace("#",""); const [l,id]=h.split("/"); return {list:LISTS.some(x=>x.id===l)?l:null, item:id||null}; }
+function parseHash(){ const h=location.hash.replace("#",""); const [l,id]=h.split("/"); return {list:PAGE_LISTS.some(x=>x.id===l)?l:null, item:id||null}; }
 function focusItem(id){ if(!id) return; const tr=document.querySelector('tr[data-id="'+CSS.escape(id)+'"]'); if(!tr) return; tr.scrollIntoView({behavior:"smooth",block:"center"}); tr.classList.remove("flash"); void tr.offsetWidth; tr.classList.add("flash"); }
 window.addEventListener("hashchange",()=>{ const h=parseHash(); if(h.list&&h.list!==state.list.id) selectList(h.list,false); if(h.item) setTimeout(()=>focusItem(h.item),50); });
 

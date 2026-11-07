@@ -1,0 +1,719 @@
+<!-- Fichier généré par scripts/build_anniv.js : modifier index.html puis relancer le script. -->
+<!doctype html>
+<html lang="fr" data-mode="anniv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L'anniversaire de Louis</title>
+<meta name="description" content="La liste d'anniversaire de Louis (3 décembre) : prix, meilleur prix ailleurs, réservation en un clic.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Mountains+of+Christmas:wght@700&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout : bandeau de Noël avec 4 onglets (une liste par personne), puis une table de 7 colonnes sur grand écran, des cartes sur téléphone. */
+:root{
+  --bg:#f2f5fa; --paper:#ffffff; --ink:#17233a; --muted:#5d6c86; --line:#d9e1ec;
+  --accent:#c8232f; --accent-ink:#ffffff; --green:#1d7a4c; --green-bg:#e3f4ea; --gold:#e8b541; --pine:#123d2b; --pine-2:#1b5a3f; --snow:#ffffff;
+  --soft:#eef3f9; --shadow:0 1px 2px rgba(23,35,58,.06),0 8px 24px rgba(23,35,58,.06);
+  --display:"Baloo 2","Nunito",system-ui,sans-serif; --body:"Nunito",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --bg:#111826; --paper:#1a2334; --ink:#e8edf6; --muted:#9fb0c9; --line:#2a3650;
+  --accent:#e4505f; --green:#5fc68f; --green-bg:#173327; --gold:#e6b65c; --soft:#212c40; --pine:#0c2a1e; --pine-2:#14422e;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --bg:#111826; --paper:#1a2334; --ink:#e8edf6; --muted:#9fb0c9; --line:#2a3650;
+  --accent:#e4505f; --green:#5fc68f; --green-bg:#173327; --gold:#e6b65c; --soft:#212c40; --pine:#0c2a1e; --pine-2:#14422e;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark; }
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;padding-block:0 48px}
+.gutter{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+img{max-width:100%}
+button{font:inherit}
+.wrap{max-width:1280px;margin:0 auto}
+[hidden]{display:none!important}
+
+/* ── Bandeau ── */
+.band{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--pine) 0%,var(--pine-2) 100%);color:var(--snow);border-bottom:6px solid var(--accent)}
+.band::after{content:"";position:absolute;inset:auto 0 0 0;height:18px;background:radial-gradient(circle at 10px -4px,var(--bg) 14px,transparent 15px) 0 0/40px 18px repeat-x;pointer-events:none}
+.band canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.band-inner{position:relative;z-index:1;max-width:1280px;margin:0 auto}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;padding-block:18px 0}
+.tab{display:inline-flex;align-items:center;gap:9px;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:var(--snow);border-radius:999px;padding:5px 14px 5px 5px;font-weight:800;font-size:14px;cursor:pointer}
+.tab img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--snow);background:var(--pine-2)}
+.tab[aria-selected="true"]{background:var(--snow);color:var(--pine);border-color:var(--snow)}
+.tab .n{font-size:11px;font-weight:700;opacity:.75;margin-left:2px}
+header.hero{display:grid;grid-template-columns:1fr auto;gap:18px 32px;align-items:center;padding-block:26px 40px}
+.eyebrow{font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:12px;color:var(--gold)}
+h1{font-family:"Mountains of Christmas",var(--display);font-weight:700;font-size:clamp(44px,7vw,74px);line-height:.95;margin:6px 0 10px;text-wrap:balance;color:var(--snow);text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.lead{max-width:62ch;color:rgba(255,255,255,.82);margin:0;font-size:16px}
+.lead b{color:var(--snow)}
+.countdown{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.countdown span{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 12px;font-weight:700;font-size:13px;color:var(--snow)}
+.countdown b{font-family:var(--display);font-size:16px;color:var(--gold)}
+.countdown.big span{font-size:18px;padding:10px 18px;border-width:2px}
+.countdown.big b{font-size:44px;line-height:1}
+.notice{margin-top:16px;background:rgba(255,255,255,.1);border:1px dashed rgba(255,255,255,.4);border-radius:12px;padding:10px 14px;font-size:14px;color:rgba(255,255,255,.9);max-width:62ch}
+.notice b{color:var(--snow)}
+.photo{position:relative;width:min(220px,44vw);aspect-ratio:3/4;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35);border:5px solid var(--snow);transform:rotate(3deg);background:var(--pine-2);margin:0}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo .tag{position:absolute;left:50%;bottom:10px;transform:translateX(-50%) rotate(-2deg);background:var(--accent);color:#fff;font-family:var(--display);font-weight:800;padding:4px 12px;border-radius:999px;font-size:14px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.photo .bow{position:absolute;top:-6px;right:-8px;width:54px;height:54px}
+
+/* ── Barre parents ── */
+.pbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--gold);color:#2b1d00;border-radius:12px;padding:10px 14px;margin-top:18px;font-weight:700;font-size:14px}
+.pbar .sp{flex:1 1 auto}
+.pbar .btn{background:#2b1d00;color:#fff;box-shadow:none}
+.pbar .btn.ghost{background:transparent;color:#2b1d00;border-color:rgba(43,29,0,.4)}
+
+.stats{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:14px;color:var(--muted);padding-block:22px 14px}
+.stats b{color:var(--ink);font-variant-numeric:tabular-nums}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;background:var(--paper)}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.pill.off .dot{background:var(--accent)}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:4px 18px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:7px 13px;font-weight:700;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.controls select,.controls input[type=search]{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:8px 10px;font-size:14px;min-width:0}
+.controls input[type=search]{flex:1 1 180px}
+
+/* ── Table ── */
+.tablewrap{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead th{text-align:left;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 12px;border-bottom:1px solid var(--line);background:var(--soft);font-weight:700}
+tbody td{padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.reserved{background:color-mix(in srgb,var(--green-bg) 55%,var(--paper))}
+tbody tr.hiddenrow{opacity:.55}
+.col-avis{width:10%;white-space:nowrap}
+.col-toy{width:33%;min-width:280px}
+.col-age{width:7%;white-space:nowrap}
+.col-kj{width:13%}
+.col-amz{width:12%}
+.col-else{width:13%}
+.col-res{width:13%}
+.empty{padding:34px 20px;text-align:center;color:var(--muted)}
+.empty b{color:var(--ink)}
+
+.toy{display:flex;gap:14px;align-items:flex-start;min-width:0}
+.toy .zoom{flex:0 0 auto;border:0;padding:0;background:none;cursor:zoom-in;border-radius:12px;display:block}
+.toy .zoom img{width:128px;height:128px;object-fit:contain;border-radius:12px;background:#fff;border:1px solid var(--line);display:block;transition:transform .15s}
+.toy .zoom:hover img{transform:scale(1.03)}
+.toy .name{font-weight:700;font-size:15.5px;line-height:1.25;margin:0}
+.toy .sub{color:var(--muted);font-size:13px;margin:4px 0 0}
+.toy .brand{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-right:4px}
+.toy .custom{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:6px;padding:1px 6px}
+.toy .share{display:inline-flex;align-items:center;gap:4px;margin-top:8px;border:0;background:none;padding:0;color:var(--muted);font-size:12.5px;cursor:pointer;text-decoration:underline}
+.toy .share:hover{color:var(--ink)}
+tr.flash td{animation:flash 2.4s ease-out}
+@keyframes flash{0%{background:color-mix(in srgb,var(--gold) 45%,var(--paper))}100%{background:transparent}}
+
+.price{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.1;font-variant-numeric:tabular-nums;text-decoration:none;display:inline-block}
+a.price:hover{text-decoration:underline}
+.strike{color:var(--muted);text-decoration:line-through;font-size:13px;margin-left:6px;font-weight:400;font-family:var(--body)}
+.small{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
+.vendor{font-weight:700;font-size:13px}
+.save{display:inline-block;background:var(--green-bg);color:var(--green);font-weight:800;font-size:12.5px;border-radius:6px;padding:2px 7px;margin-top:5px;font-variant-numeric:tabular-nums}
+.more{display:inline-block;background:var(--soft);color:var(--muted);font-weight:700;font-size:12px;border-radius:6px;padding:2px 7px;margin-top:5px;font-variant-numeric:tabular-nums}
+.nobetter{color:var(--muted);font-size:13.5px}
+.unverified{color:var(--gold);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em}
+.approx{color:var(--muted);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em}
+details.note{margin-top:4px;font-size:12.5px;color:var(--muted)}
+details.note summary{cursor:pointer;color:var(--muted);font-weight:700;list-style:none;display:inline}
+details.note summary::after{content:" ▾"}
+details.note[open] summary::after{content:" ▴"}
+details.note p{margin:4px 0 0;max-width:36ch}
+
+/* ── Étoiles (avis parents) ── */
+.stars{display:inline-flex;gap:2px;font-size:22px;line-height:1}
+.stars .s{color:var(--line)}
+.stars .s.on{color:var(--gold);text-shadow:0 1px 0 rgba(0,0,0,.15)}
+.stars button{border:0;background:none;padding:0 1px;cursor:pointer;font-size:24px;line-height:1;color:var(--line)}
+.stars button.on{color:var(--gold)}
+.stars button:hover{transform:scale(1.15)}
+.avis-label{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;font-weight:700}
+.avis-none{color:var(--muted);font-size:13px}
+
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:800;cursor:pointer;background:var(--accent);color:var(--accent-ink);font-size:14px;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:700;box-shadow:none}
+.btn.small{padding:6px 10px;font-size:13px}
+.btn.danger{background:transparent;color:var(--accent);border:1px solid var(--accent);box-shadow:none}
+.btn:disabled{opacity:.6;cursor:default}
+.taken{display:grid;gap:4px}
+.taken .who{font-weight:800;color:var(--green);display:flex;align-items:flex-start;gap:6px;line-height:1.3}
+.taken .who svg{width:16px;height:16px;flex:0 0 auto;margin-top:2px}
+.taken .occ{font-size:12.5px;color:var(--muted)}
+.taken.ours .who{color:var(--muted)}
+.linkbtn{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:12.5px;text-align:left}
+.form{display:grid;gap:8px;max-width:240px}
+.form label{font-size:12.5px;color:var(--muted);font-weight:700}
+.form input[type=text]{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px;background:var(--paper);color:var(--ink);width:100%}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+.err{color:var(--accent);font-size:12.5px;font-weight:700}
+.pactions{display:grid;gap:6px;margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ── Dialogs ── */
+dialog{border:0;padding:0;background:transparent;max-width:min(92vw,900px)}
+dialog::backdrop{background:rgba(10,18,30,.72);backdrop-filter:blur(2px)}
+.lb{background:var(--paper);color:var(--ink);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-rows:auto 1fr auto;max-height:90vh}
+.lb-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px 10px}
+.lb-title{font-weight:800;font-size:16px;margin:0;line-height:1.25}
+.lb-sub{color:var(--muted);font-size:13px;margin:3px 0 0}
+.lb-close{border:0;background:var(--soft);color:var(--ink);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:20px;line-height:1;flex:0 0 auto}
+.lb-close:hover{background:var(--line)}
+.lb-body{background:#fff;display:flex;align-items:center;justify-content:center;padding:8px;min-height:200px;overflow:hidden}
+.lb-body img{max-width:min(88vw,860px);max-height:62vh;width:auto;height:auto;object-fit:contain;display:block}
+.lb-foot{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--line);font-size:14px}
+.lb-foot .price{font-size:18px}
+.sheet{background:var(--paper);color:var(--ink);border-radius:18px;box-shadow:var(--shadow);padding:18px 20px;width:min(92vw,520px);max-height:90vh;overflow:auto}
+.sheet h2{font-family:var(--display);margin:0 0 4px;font-size:22px}
+.sheet p.help{color:var(--muted);font-size:13px;margin:0 0 14px}
+.sheet .field{display:grid;gap:4px;margin-bottom:10px}
+.sheet label{font-size:12.5px;color:var(--muted);font-weight:700}
+.sheet input,.sheet textarea,.sheet select{border:1px solid var(--line);border-radius:10px;padding:9px 10px;font-size:14px;background:var(--paper);color:var(--ink);width:100%;font-family:inherit}
+.sheet .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheet .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.bl{border-top:1px solid var(--line);padding:12px 0}
+.bl h3{font-family:var(--display);font-size:17px;margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.bl h3 img{width:28px;height:28px;border-radius:50%;object-fit:cover}
+.bl .kpis{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--muted);margin-bottom:6px}
+.bl .kpis b{color:var(--ink);font-variant-numeric:tabular-nums}
+.bl table{font-size:13.5px;width:100%;border-collapse:collapse}
+.bl td,.bl th{padding:4px 8px;border-bottom:1px solid var(--line);text-align:left}
+.bl td.num,.bl th.num{text-align:right;font-variant-numeric:tabular-nums}
+.bl ul{margin:4px 0 0;padding-left:18px;font-size:13.5px}
+.bl .tot{font-family:var(--display);font-size:18px;margin-top:10px}
+@media (prefers-reduced-motion:no-preference){ dialog[open]{animation:lbin .18s ease-out} @keyframes lbin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}} }
+
+footer{color:var(--muted);font-size:12.5px;padding-block:22px 0;max-width:80ch}
+footer p{margin:6px 0}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:var(--shadow);max-width:calc(100vw - 32px);z-index:50}
+
+@media (max-width:1120px){
+  .tablewrap thead{display:none}
+  .tablewrap table,.tablewrap tbody,.tablewrap tr,.tablewrap td{display:block;width:100%}
+  .tablewrap tbody tr{border-bottom:1px solid var(--line);padding:6px 0}
+  .tablewrap tbody td{border:0;padding:8px 14px}
+  .tablewrap tbody td[data-label]::before{content:attr(data-label);display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
+  .col-avis,.col-toy,.col-age,.col-kj,.col-amz,.col-else,.col-res{width:auto}
+  .toy .zoom img{width:110px;height:110px}
+}
+@media (max-width:860px){
+  header.hero{grid-template-columns:1fr;padding-block:22px 34px}
+  .photo{justify-self:start;transform:rotate(-2deg)}
+  .sheet .two{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="band"><canvas id="snow" aria-hidden="true"></canvas><div class="gutter band-inner">
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Listes"></nav>
+  <header class="hero">
+    <div>
+      <div class="eyebrow" id="eyebrow"></div>
+      <h1 id="title"></h1>
+      <p class="lead" id="lead"></p>
+      <div class="countdown" id="countdown"></div>
+      <div class="notice" id="notice" hidden></div>
+    </div>
+    <figure class="photo" id="photo">
+      <img id="photo-img" src="" alt="">
+      <svg class="bow" viewBox="0 0 54 54" aria-hidden="true"><g fill="var(--accent)" stroke="#fff" stroke-width="2"><ellipse cx="17" cy="20" rx="12" ry="8" transform="rotate(-25 17 20)"/><ellipse cx="37" cy="20" rx="12" ry="8" transform="rotate(25 37 20)"/><path d="M22 27l-8 20h10l3-16zM32 27l8 20H30l-3-16z"/><circle cx="27" cy="25" r="6"/></g></svg>
+      <figcaption class="tag" id="photo-tag"></figcaption>
+    </figure>
+  </header>
+</div></div>
+
+<div class="wrap gutter">
+<div class="pbar" id="pbar" hidden>
+  <span>Mode parents</span>
+  <span class="small" style="margin:0;color:#2b1d00;font-weight:600">Priorité : 1 étoile = J'aimerais, 2 = Je veux vraiment, 3 = Je veux absolument. Vous pouvez aussi retirer ou ajouter des lignes.</span>
+  <span class="sp"></span>
+  <button class="btn small" id="p-add" type="button">+ Ajouter un cadeau</button>
+  <button class="btn ghost small" id="p-bilan" type="button">Bilan</button>
+  <button class="btn ghost small" id="p-hidden" type="button" aria-pressed="false">Retirés (0)</button>
+  <button class="btn ghost small" id="p-anniv" type="button" aria-pressed="false" hidden>Offerts à l'anniversaire (0)</button>
+  <button class="btn ghost small" id="p-quit" type="button">Quitter</button>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="controls">
+  <div class="chips" id="filters">
+    <button class="chip" data-f="all" aria-pressed="true">Tous</button>
+    <button class="chip" data-f="free" aria-pressed="false">À réserver</button>
+    <button class="chip" data-f="taken" aria-pressed="false">Réservés</button>
+    <button class="chip" data-f="deal" aria-pressed="false">Moins cher qu'à King Jouet</button>
+    <button class="chip" data-f="top" aria-pressed="false">Je veux absolument</button>
+  </div>
+  <select id="sort" aria-label="Trier">
+    <option value="list">Ordre de la liste</option>
+    <option value="avis">Priorité</option>
+    <option value="priceAsc">Prix croissant</option>
+    <option value="priceDesc">Prix décroissant</option>
+    <option value="age">Âge</option>
+  </select>
+  <input type="search" id="q" placeholder="Chercher un cadeau…" aria-label="Chercher">
+</div>
+
+<div class="tablewrap">
+<table>
+  <thead><tr>
+    <th class="col-avis">Priorité</th><th class="col-toy">Cadeau</th><th class="col-age">Âge</th><th class="col-kj" id="th-shop">King Jouet</th><th class="col-amz">Amazon</th><th class="col-else">Le moins cher du web</th><th class="col-res">Réservation</th>
+  </tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+</div>
+
+<dialog id="lightbox" aria-labelledby="lb-title">
+  <div class="lb">
+    <div class="lb-head"><div><p class="lb-title" id="lb-title"></p><p class="lb-sub" id="lb-sub"></p></div><button class="lb-close" id="lb-close" type="button" aria-label="Fermer">×</button></div>
+    <div class="lb-body"><img id="lb-img" alt=""></div>
+    <div class="lb-foot"><span id="lb-price"></span><a id="lb-link" href="#" target="_blank" rel="noopener">Voir la fiche</a></div>
+  </div>
+</dialog>
+
+<dialog id="pin" aria-labelledby="pin-title">
+  <form class="sheet" method="dialog" id="pin-form">
+    <h2 id="pin-title">Espace parents</h2>
+    <p class="help">Entrez le code parents pour noter les cadeaux, en retirer ou en ajouter.</p>
+    <div class="field"><label for="pin-input">Code</label><input id="pin-input" type="password" inputmode="numeric" autocomplete="off" maxlength="8"></div>
+    <div class="err" id="pin-err"></div>
+    <div class="actions"><button class="btn ghost" type="button" id="pin-cancel">Annuler</button><button class="btn" type="submit">Entrer</button></div>
+  </form>
+</dialog>
+
+<dialog id="bilan" aria-labelledby="bilan-title">
+  <div class="sheet" style="width:min(92vw,720px)">
+    <div class="lb-head" style="padding:0 0 8px"><div><h2 id="bilan-title" style="margin:0">Bilan des listes</h2><p class="help" style="margin:4px 0 0">Totaux au prix King Jouet (ou de la boutique indiquée), hors frais de port.</p></div><button class="lb-close" id="bilan-close" type="button" aria-label="Fermer">×</button></div>
+    <div id="bilan-body"></div>
+  </div>
+</dialog>
+<dialog id="add" aria-labelledby="add-title">
+  <form class="sheet" method="dialog" id="add-form">
+    <h2 id="add-title">Ajouter un cadeau</h2>
+    <p class="help" id="add-help"></p>
+    <div class="field"><label for="a-nom">Nom du cadeau *</label><input id="a-nom" type="text" required maxlength="90"></div>
+    <div class="field"><label for="a-sub">Détails (taille, couleur, référence…)</label><input id="a-sub" type="text" maxlength="160"></div>
+    <div class="two">
+      <div class="field"><label for="a-boutique">Boutique</label><input id="a-boutique" type="text" maxlength="40" placeholder="Fnac, Decathlon…"></div>
+      <div class="field"><label for="a-prix">Prix (€)</label><input id="a-prix" type="number" step="0.01" min="0"></div>
+    </div>
+    <div class="field"><label for="a-url">Lien vers la fiche</label><input id="a-url" type="url" placeholder="https://…"></div>
+    <div class="two">
+      <div class="field"><label for="a-aprix">Prix Amazon (€)</label><input id="a-aprix" type="number" step="0.01" min="0"></div>
+      <div class="field"><label for="a-aurl">Lien Amazon</label><input id="a-aurl" type="url" placeholder="https://www.amazon.fr/…"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label for="a-img">Adresse d'une image</label><input id="a-img" type="url" placeholder="https://… (facultatif)"></div>
+      <div class="field"><label for="a-age">Âge mini</label><input id="a-age" type="number" min="0" max="99" placeholder="facultatif"></div>
+    </div>
+    <div class="err" id="add-err"></div>
+    <div class="actions"><button class="btn ghost" type="button" id="add-cancel">Annuler</button><button class="btn" type="submit" id="add-ok">Ajouter</button></div>
+  </form>
+</dialog>
+
+<footer>
+  <p>Prix relevés le 07/11/2026, hors frais de port. Le prix « catalogue » est celui du catalogue King Jouet, valable en magasin du 14/10 au 01/12/2026 (certains prix réservés aux membres King Premium). Le prix « web » est celui de king-jouet.com le jour du relevé. Le prix Amazon est celui affiché sur Amazon.fr le jour du relevé, vendeur non vérifié. Les prix « ailleurs » marqués <span class="unverified">à vérifier</span> viennent de comparateurs et n'ont pas pu être confirmés sur la page du vendeur.</p>
+  <p>Les réservations sont partagées entre tous ceux qui ont le lien. Une erreur ? Cliquez sur « Annuler la réservation » sous le prénom. <button class="linkbtn" id="open-parents" type="button">Espace parents</button></p>
+</footer>
+</div>
+
+<script src="data.js?v=10"></script>
+<script>
+/* Neige légère dans le bandeau (désactivée si l'utilisateur préfère moins d'animations) */
+(function(){
+  const c=document.getElementById("snow"); if(!c) return;
+  const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ctx=c.getContext("2d"); let W,H,flakes=[];
+  function size(){const r=c.parentElement.getBoundingClientRect();W=c.width=Math.max(1,Math.floor(r.width));H=c.height=Math.max(1,Math.floor(r.height));
+    flakes=Array.from({length:Math.min(90,Math.floor(W/12))},()=>({x:Math.random()*W,y:Math.random()*H,r:1+Math.random()*2.4,s:.25+Math.random()*.7,w:Math.random()*6.28}));}
+  function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle="rgba(255,255,255,.85)";for(const f of flakes){ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,6.28);ctx.fill();}}
+  function tick(){for(const f of flakes){f.y+=f.s;f.w+=.01;f.x+=Math.sin(f.w)*.3;if(f.y>H+4){f.y=-4;f.x=Math.random()*W;}}draw();requestAnimationFrame(tick);}
+  size(); addEventListener("resize",size); new ResizeObserver(size).observe(c.parentElement); draw(); if(!reduce) requestAnimationFrame(tick);
+})();
+</script>
+<script>
+/* ───── Stockage partagé (Supabase, lecture/écriture avec la clé publique) ─────
+   Une seule table de paires (block_id, voter) :
+   cadeau:<liste>:<id>        → réservation, voter = "Prénom · Occasion"
+   cadeau-avis:<liste>:<id>   → avis des parents, voter = "1" | "2" | "3"
+   cadeau-hide:<liste>:<id>   → ligne retirée par les parents
+   cadeau-item:<liste>:<id>   → cadeau ajouté par les parents, voter = JSON
+   (la valeur "0" d'un avis annule l'étoile par défaut donnée dans data.js) */
+const SB_URL="https://vhhmageufrcenruywawg.supabase.co";
+const SB_KEY="sb_publishable_NuRpgtxqVQ87R6K8txw57Q_oBUt4qay";
+const TABLE="corse_votes";
+const H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"};
+const PARENTS_CODE="0312";   // code de l'espace parents (à changer ici si besoin)
+const AVIS_LABEL=["","J'aimerais","Je veux vraiment","Je veux absolument"];
+
+const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, showAnniv:false, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
+const eur=n=>n==null?"":Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
+const key=(prefix,i)=>prefix+":"+state.list.id+":"+i.id;
+const OURS="__nous__";   // réservation « acheté par nous » (parents), affichée sans prénom
+const MODE=document.documentElement.dataset.mode||"noel"; const ANNIV=MODE==="anniv";   // index.html = Noël, anniversaire.html = anniversaire de Louis (généré par scripts/build_anniv.js)
+const PAGE_LISTS=ANNIV?LISTS.filter(l=>l.id==="louis"):LISTS;
+const scopeId=()=>state.list.id+(ANNIV?"-anniv":"");   // étoiles et retraits distincts entre la page anniversaire et la page Noël
+const DATES={anniv:new Date("2026-12-03T00:00:00+01:00"), noel:new Date("2026-12-25T00:00:00+01:00")};
+const daysTo=d=>Math.ceil((d-new Date())/86400000);
+
+async function sbGet(filter){const r=await fetch(`${SB_URL}/rest/v1/${TABLE}?select=block_id,voter,created_at&${filter}&order=created_at.asc`,{headers:H});if(!r.ok)throw new Error(r.status);return r.json();}
+async function sbInsert(block_id,voter){const r=await fetch(`${SB_URL}/rest/v1/${TABLE}`,{method:"POST",headers:{...H,"Prefer":"return=minimal"},body:JSON.stringify({block_id,voter})});return r.ok;}
+async function sbDelete(block_id){const r=await fetch(`${SB_URL}/rest/v1/${TABLE}?block_id=eq.${encodeURIComponent(block_id)}`,{method:"DELETE",headers:{...H,"Prefer":"return=minimal"}});return r.ok;}
+
+async function loadAll(){
+  try{
+    const rows=await sbGet("block_id=like."+encodeURIComponent("cadeau*"));
+    const res={},avis={},hide={},custom={};
+    for(const row of rows){
+      const m=/^(cadeau(?:-avis|-hide|-item)?):([^:]+):(.+)$/.exec(row.block_id); if(!m) continue;
+      const [,kind,list,id]=m; const k=list+":"+id;
+      if(kind==="cadeau"){ if(!res[k]) res[k]=row; }
+      else if(kind==="cadeau-avis"){ avis[k]=row.voter; }
+      else if(kind==="cadeau-hide"){ hide[k]=true; }
+      else if(kind==="cadeau-item"){ try{ const o=JSON.parse(row.voter); o.id=id; o.custom=true; (custom[list]=custom[list]||[]).push(o); }catch(e){} }
+    }
+    state.res=res; state.avis=avis; state.hide=hide; state.custom=custom; state.online=true;
+  }catch(e){ state.online=false; }
+  renderTabs(); render();
+}
+function splitVoter(v){ const m=/^(.*?)(?: · (Anniversaire|Noël))?$/.exec(v||""); const name=m?m[1]:v; return {name:name===OURS?"":name, occ:m&&m[2]?m[2]:"", ours:name===OURS}; }
+async function markOurs(i){ const bid=key("cadeau",i); const ex=await sbGet("block_id=eq."+encodeURIComponent(bid)+"&limit=1").catch(()=>[]); if(ex.length){ await loadAll(); return false; } const ok=await sbInsert(bid,OURS+(ANNIV?" · Anniversaire":"")); await loadAll(); return ok; }
+function shareLink(i){ return location.origin+location.pathname+"#"+state.list.id+"/"+i.id; }
+async function copyLink(i){ const t=shareLink(i); try{ await navigator.clipboard.writeText(t); toast("Lien copié : "+i.nom); }catch(e){ const inp=el("input",{type:"text",value:t,style:"position:fixed;top:-100px"}); document.body.append(inp); inp.select(); try{document.execCommand("copy"); toast("Lien copié : "+i.nom);}catch(_){ toast(t); } inp.remove(); } }
+const kres=i=>state.res[state.list.id+":"+i.id];
+const kavis=i=>{const v=state.avis[scopeId()+":"+i.id]; return v==null?Number(i.avisDefaut||0):Number(v)||0;};
+const khide=i=>!!state.hide[scopeId()+":"+i.id];
+const isAnnivGift=i=>{const r=kres(i); if(!r) return false; return splitVoter(r.voter).occ==="Anniversaire";};
+
+async function reserve(i,name){
+  const occ=ANNIV?"Anniversaire":""; const voter=name+(occ?" · "+occ:""); const bid=key("cadeau",i);
+  const ex=await sbGet("block_id=eq."+encodeURIComponent(bid)+"&limit=1").catch(()=>[]);
+  if(ex.length){ await loadAll(); return {ok:false,msg:"Déjà réservé par "+splitVoter(ex[0].voter).name}; }
+  if(!await sbInsert(bid,voter)) return {ok:false,msg:"Impossible d'enregistrer (réessayez dans un instant)."};
+  try{localStorage.setItem("cadeaux.nom",name)}catch(e){}
+  await loadAll(); return {ok:true};
+}
+async function unreserve(i){ const ok=await sbDelete(key("cadeau",i)); await loadAll(); return ok; }
+async function setAvis(i,n){ const bid="cadeau-avis:"+scopeId()+":"+i.id; await sbDelete(bid); if(n>0||i.avisDefaut) await sbInsert(bid,String(n)); await loadAll(); }
+async function setHidden(i,on){ const bid="cadeau-hide:"+scopeId()+":"+i.id; if(on){ await sbInsert(bid,"1"); } else { await sbDelete(bid); } await loadAll(); }
+async function removeCustom(i){ await sbDelete(key("cadeau-item",i)); await sbDelete(key("cadeau",i)); await sbDelete(key("cadeau-avis",i)); await sbDelete("cadeau-avis:"+state.list.id+"-anniv:"+i.id); await loadAll(); }
+async function addCustom(o){ const id="c"+Date.now().toString(36); const ok=await sbInsert("cadeau-item:"+state.list.id+":"+id,JSON.stringify(o)); await loadAll(); return ok; }
+
+/* ───── Rendu ───── */
+const el=(t,a={},...kids)=>{const n=document.createElement(t);for(const[k,v]of Object.entries(a)){if(k==="class")n.className=v;else if(k==="text")n.textContent=v;else if(k.startsWith("on"))n.addEventListener(k.slice(2),v);else if(v!=null)n.setAttribute(k,v);}for(const k of kids){if(k==null)continue;n.append(k.nodeType?k:document.createTextNode(k));}return n;};
+
+function baseItems(){ return state.list.items.concat(state.custom[state.list.id]||[]); }
+function allItems(){ const all=baseItems(); if(ANNIV||state.list.id!=="louis") return all; return all.filter(i=>state.showAnniv?isAnnivGift(i):!isAnnivGift(i)); }
+function shopPrice(i){ if(i.custom) return i.prix!=null?Number(i.prix):null; return i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb); }
+function amazonOf(i){ if(i.custom) return (i.amazonPrix!=null||i.amazonUrl)?{prix:i.amazonPrix!=null?Number(i.amazonPrix):null,url:i.amazonUrl||null}:null; return state.list.amazon[i.id]||null; }
+function ailleursOf(i){ return i.custom?null:(state.list.ailleurs[i.id]||null); }
+function isDeal(i,a){ const b=shopPrice(i); return !!(a&&a.prix!=null&&b!=null&&a.prix<b-0.001); }
+function bestElsewhere(i){ // le moins cher entre Amazon et « ailleurs »
+  const cands=[]; const a=amazonOf(i); if(a&&a.prix!=null&&!a.approx) cands.push({...a,vendeur:"Amazon.fr"}); const o=ailleursOf(i); if(o&&o.prix!=null) cands.push(o);
+  cands.sort((x,y)=>x.prix-y.prix); return cands[0]||null; }
+
+function visibleItems(){
+  let list=allItems().filter(i=>state.showHidden?khide(i):!khide(i));
+  const q=state.q.trim().toLowerCase();
+  if(q) list=list.filter(i=>((i.nom||"")+" "+(i.sub||"")+" "+(i.marque||i.boutique||"")).toLowerCase().includes(q));
+  if(state.filter==="free") list=list.filter(i=>!kres(i));
+  if(state.filter==="taken") list=list.filter(i=>kres(i));
+  if(state.filter==="deal") list=list.filter(i=>isDeal(i,bestElsewhere(i)));
+  if(state.filter==="top") list=list.filter(i=>kavis(i)>=3);
+  const sp=i=>{const p=shopPrice(i);return p==null?Infinity:p;};
+  if(state.sort==="priceAsc") list.sort((a,b)=>sp(a)-sp(b));
+  if(state.sort==="priceDesc") list.sort((a,b)=>(sp(b)===Infinity?-1:sp(b))-(sp(a)===Infinity?-1:sp(a)));
+  if(state.sort==="age") list.sort((a,b)=>(a.age||0)-(b.age||0));
+  if(state.sort==="avis") list.sort((a,b)=>kavis(b)-kavis(a));
+  return list;
+}
+
+function avisCell(i){
+  const c=el("td",{class:"col-avis","data-label":"Priorité"});
+  const n=kavis(i);
+  if(state.parents){
+    const box=el("div",{class:"stars",role:"group","aria-label":"Priorité"});
+    for(let k=1;k<=3;k++) box.append(el("button",{type:"button",class:k<=n?"on":"","aria-label":k+" étoile"+(k>1?"s":""),title:AVIS_LABEL[k],onclick:async e=>{e.currentTarget.disabled=true;await setAvis(i,k===n?0:k);}},"★"));
+    c.append(box); c.append(el("span",{class:"avis-label",text:n?AVIS_LABEL[n]:"cliquez pour noter"}));
+    if(n&&state.avis[state.list.id+":"+i.id]==null&&i.avisDefaut) c.append(el("span",{class:"small",text:"(d'après l'ordre de "+state.list.prenom+")"}));
+  }else if(n){
+    const box=el("div",{class:"stars","aria-label":n+" étoile"+(n>1?"s":"")+" sur 3"});
+    for(let k=1;k<=3;k++) box.append(el("span",{class:"s"+(k<=n?" on":""),text:"★"}));
+    c.append(box); c.append(el("span",{class:"avis-label",text:AVIS_LABEL[n]}));
+  }else c.append(el("span",{class:"avis-none",text:"—"}));
+  return c;
+}
+function shopCell(i){
+  const c=el("td",{class:"col-kj","data-label":i.custom?(i.boutique||"Boutique"):state.list.boutique});
+  if(i.custom){
+    if(i.prix!=null) c.append(i.url?el("a",{class:"price",href:i.url,target:"_blank",rel:"noopener",text:eur(i.prix)}):el("span",{class:"price",text:eur(i.prix)}));
+    else if(i.url) c.append(el("a",{class:"small",href:i.url,target:"_blank",rel:"noopener",text:"voir la fiche"}));
+    else c.append(el("span",{class:"nobetter",text:"—"}));
+    if(i.boutique&&i.prix!=null) c.append(el("span",{class:"small",text:i.boutique+(i.url?" · voir la fiche":"")}));
+    return c;
+  }
+  if(i.prixWeb!=null){
+    c.append(el("a",{class:"price",href:i.url,target:"_blank",rel:"noopener",text:eur(i.prixWeb)}));
+    if(i.prixWebOrig) c.append(el("span",{class:"strike",text:eur(i.prixWebOrig)}));
+    c.append(el("span",{class:"small",text:"prix web · voir la fiche"}));
+    if(i.prixCat!=null&&Math.abs(i.prixCat-i.prixWeb)>0.001) c.append(el("span",{class:"small",text:"catalogue magasin : "+eur(i.prixCat)+(i.prixCatOrig?" (au lieu de "+eur(i.prixCatOrig)+")":"")}));
+  }else{
+    c.append(el("span",{class:"price",text:eur(i.prixCat)}));
+    c.append(el("span",{class:"small",text:"prix catalogue (magasin)"}));
+    if(i.url) c.append(el("a",{class:"small",href:i.url,target:"_blank",rel:"noopener",text:"voir sur king-jouet.com"}));
+  }
+  if(i.noteKJ) c.append(el("details",{class:"note"},el("summary",{text:"précision"}),el("p",{text:i.noteKJ})));
+  return c;
+}
+function amazonCell(i){
+  const c=el("td",{class:"col-amz","data-label":"Amazon"});
+  const a=amazonOf(i);
+  if(!a||(a.prix==null&&!a.url)){ c.append(el("span",{class:"nobetter",text:"Pas trouvé"})); if(a&&a.note) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:a.note}))); return c; }
+  if(a.prix!=null){
+    c.append(a.url?el("a",{class:"price",href:a.url,target:"_blank",rel:"noopener",text:eur(a.prix)}):el("span",{class:"price",text:eur(a.prix)}));
+    const b=shopPrice(i);
+    if(b!=null&&!a.approx){ const d=b-a.prix; if(d>0.001) c.append(el("span",{class:"save",text:"−"+eur(d)})); else if(d<-0.001) c.append(el("span",{class:"more",text:"+"+eur(-d)})); }
+    if(a.approx) c.append(el("span",{class:"small"},el("span",{class:"approx",text:"modèle proche"})));
+  }else{ c.append(el("a",{class:"small",href:a.url,target:"_blank",rel:"noopener",text:"fiche sans prix"})); }
+  if(a.note) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:a.note})));
+  return c;
+}
+function elseCell(i){
+  const c=el("td",{class:"col-else","data-label":"Le moins cher du web"});
+  const shop=i.custom?(i.boutique||"la boutique"):state.list.boutique;
+  const b=shopPrice(i);
+  const a=amazonOf(i), o=ailleursOf(i);
+  const best=bestElsewhere(i);
+  if(best&&b!=null&&best.prix<b-0.001){
+    // un autre vendeur bat la boutique
+    c.append(best.url?el("a",{class:"price",href:best.url,target:"_blank",rel:"noopener",text:eur(best.prix)}):el("span",{class:"price",text:eur(best.prix)}));
+    c.append(el("span",{class:"small"},el("span",{class:"vendor",text:best.vendeur})));
+    c.append(el("span",{class:"save",text:"−"+eur(b-best.prix)+" vs "+shop}));
+    if(best.vendeur!=="Amazon.fr"&&!best.verifie) c.append(el("span",{class:"small"},el("span",{class:"unverified",text:"à vérifier"})));
+    if(best.vendeur!=="Amazon.fr"&&best.note) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:best.note})));
+  }else if(b!=null){
+    // la boutique est la moins chère (ou seule)
+    c.append(i.url?el("a",{class:"price",href:i.url,target:"_blank",rel:"noopener",text:eur(b)}):el("span",{class:"price",text:eur(b)}));
+    c.append(el("span",{class:"small"},el("span",{class:"vendor",text:shop})));
+    if(best) c.append(el("span",{class:"small",text:"le moins cher ; ensuite "+best.vendeur+" "+eur(best.prix)}));
+    else if(o&&o.vendeur==null) c.append(el("span",{class:"small",text:"seul vendeur trouvé"}));
+    else c.append(el("span",{class:"small",text:"le moins cher"}));
+    if(o&&o.note&&o.vendeur!=null&&!(best&&best.vendeur===o.vendeur)) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:o.note})));
+  }else{
+    if(best){ c.append(best.url?el("a",{class:"price",href:best.url,target:"_blank",rel:"noopener",text:eur(best.prix)}):el("span",{class:"price",text:eur(best.prix)})); c.append(el("span",{class:"small"},el("span",{class:"vendor",text:best.vendeur}))); }
+    else c.append(el("span",{class:"nobetter",text:"—"}));
+  }
+  return c;
+}
+function resCell(i){
+  const c=el("td",{class:"col-res","data-label":"Réservation"});
+  const r=kres(i);
+  if(r){
+    const v=splitVoter(r.voter);
+    const box=el("div",{class:"taken"+(v.ours?" ours":"")});
+    const who=el("div",{class:"who"}); who.innerHTML='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>';
+    who.append(v.ours?(state.parents?"Acheté par nous":"Déjà pris"):"Réservé par "+v.name); box.append(who);
+    if(!ANNIV&&v.occ==="Anniversaire"&&state.parents) box.append(el("div",{class:"occ",text:"offert pour l'anniversaire"}));
+    if(v.ours&&!state.parents){ c.append(box); return c; }
+    if(state.confirmCancel===i.id){
+      box.append(el("div",{class:"occ",text:v.ours?"Annuler « acheté par nous » ?":"Annuler la réservation de "+v.name+" ?"}));
+      box.append(el("div",{class:"row"},
+        el("button",{class:"btn small",text:"Oui, annuler",onclick:async e=>{e.target.disabled=true;const ok=await unreserve(i);state.confirmCancel=null;toast(ok?"Réservation annulée":"Échec de l'annulation");render();}}),
+        el("button",{class:"btn ghost small",text:"Non",onclick:()=>{state.confirmCancel=null;render();}})));
+    }else{
+      box.append(el("button",{class:"linkbtn",text:"Annuler la réservation",onclick:()=>{state.confirmCancel=i.id;state.open=null;render();}}));
+    }
+    c.append(box);
+  }else if(state.open===i.id){
+    let saved=""; try{saved=localStorage.getItem("cadeaux.nom")||""}catch(e){}
+    const inp=el("input",{type:"text",id:"nom-"+i.id,maxlength:"30",placeholder:"Votre prénom",value:saved,autocomplete:"given-name"});
+    const err=el("div",{class:"err"});
+    const confirm=el("button",{class:"btn small",text:"Confirmer",onclick:async()=>{
+      const name=inp.value.trim().replace(/\s+/g," ");
+      if(name.length<2){err.textContent="Indiquez votre prénom.";inp.focus();return;}
+      if(/[|·]/.test(name)){err.textContent="Prénom invalide.";return;}
+      confirm.disabled=true; err.textContent="";
+      const out=await reserve(i,name);
+      if(out.ok){state.open=null;toast("Réservé : "+i.nom);render();}
+      else{confirm.disabled=false;err.textContent=out.msg;}
+    }});
+    const form=el("div",{class:"form"},el("label",{for:"nom-"+i.id,text:"Qui offre ce cadeau ?"}),inp);
+    form.append(el("div",{class:"row"},confirm,el("button",{class:"btn ghost small",text:"Annuler",onclick:()=>{state.open=null;render();}})),err);
+    inp.addEventListener("keydown",e=>{if(e.key==="Enter")confirm.click();});
+    c.append(form); setTimeout(()=>inp.focus(),0);
+  }else{
+    const b=el("button",{class:"btn",text:"Réserver",onclick:()=>{state.open=i.id;state.confirmCancel=null;render();}});
+    if(state.online===false) b.disabled=true;
+    c.append(b);
+    if(state.online===false) c.append(el("span",{class:"small",text:"Réservations inaccessibles pour le moment."}));
+  }
+  if(state.parents){
+    const pa=el("div",{class:"pactions"});
+    if(!r&&!khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Acheté par nous",title:"Marque le cadeau comme pris, sans afficher de prénom",onclick:async e=>{e.target.disabled=true;const ok=await markOurs(i);toast(ok?"Marqué « acheté par nous »":"Déjà réservé par quelqu'un");}}));
+    if(khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Remettre dans la liste",onclick:async e=>{e.target.disabled=true;await setHidden(i,false);toast("Remis dans la liste");}}));
+    else if(state.confirmRemove===i.id){
+      pa.append(el("span",{class:"small",text:i.custom?"Supprimer définitivement ce cadeau ?":"Retirer ce cadeau de la liste ? (il pourra être remis)"}));
+      pa.append(el("div",{class:"row"},el("button",{class:"btn small",text:"Oui",onclick:async e=>{e.target.disabled=true;if(i.custom)await removeCustom(i);else await setHidden(i,true);state.confirmRemove=null;toast(i.custom?"Cadeau supprimé":"Cadeau retiré");}}),el("button",{class:"btn ghost small",text:"Non",onclick:()=>{state.confirmRemove=null;render();}})));
+    }else pa.append(el("button",{class:"btn danger small",text:i.custom?"Supprimer":"Retirer de la liste",onclick:()=>{state.confirmRemove=i.id;render();}}));
+    c.append(pa);
+  }
+  return c;
+}
+function render(){
+  const L=state.list;
+  document.getElementById("th-shop").textContent=L.boutique;
+  const cd=document.getElementById("countdown"); cd.replaceChildren(); cd.classList.toggle("big",ANNIV);
+  const dn=daysTo(DATES.noel), da=daysTo(DATES.anniv);
+  const fmt=(n,label)=>n>1?[el("b",{text:String(n)})," jours avant "+label]:n===1?[el("b",{text:"1"})," jour avant "+label]:n===0?["C'est aujourd'hui : "+label+" !"]:[label+", c'est passé"];
+  if(ANNIV) cd.append(el("span",{},...fmt(da,"l'anniversaire de Louis"))); else cd.append(el("span",{},...fmt(dn,"Noël")));
+  const nt=document.getElementById("notice"); nt.hidden=!ANNIV; if(ANNIV){ nt.replaceChildren(el("b",{text:"Et pour Noël ?"})," Les listes de Noël de Louis, Capucine, Clémentine et Charles seront partagées plus tard, dans un autre lien."); }
+  const pa=document.getElementById("p-anniv"); const annivN=(!ANNIV&&L.id==="louis")?baseItems().filter(i=>isAnnivGift(i)).length:0; pa.hidden=ANNIV||L.id!=="louis"; pa.textContent=(state.showAnniv?"Revenir à la liste de Noël":"Offerts à l'anniversaire")+" ("+annivN+")"; pa.setAttribute("aria-pressed",String(state.showAnniv));
+  const tb=document.getElementById("rows"); tb.replaceChildren();
+  const list=visibleItems();
+  if(!list.length){
+    const total=allItems().filter(i=>!khide(i)).length;
+    const msg= state.showAnniv ? ["Aucun cadeau réservé sur la page anniversaire pour l'instant."] : state.showHidden ? ["Aucun cadeau retiré."] : total===0 ? [el("b",{text:L.prenom+" n'a pas encore fait sa liste."})," ",state.parents?"Ajoutez des cadeaux avec le bouton « Ajouter un cadeau ».":"Les idées arrivent bientôt."] : ["Aucun cadeau ne correspond."];
+    tb.append(el("tr",{},el("td",{colspan:"7",class:"empty"},...msg)));
+  }
+  for(const i of list){
+    const tr=el("tr",{class:(kres(i)?"reserved":"")+(khide(i)?" hiddenrow":""),"data-id":i.id,id:"c-"+i.id});
+    const img=i.img||"img/placeholder.svg";
+    const toy=el("td",{class:"col-toy"},el("div",{class:"toy"},
+      el("button",{class:"zoom",type:"button","aria-label":"Voir "+i.nom+" en grand",onclick:()=>openLightbox(i)},el("img",{src:img,alt:"",loading:"lazy",width:"128",height:"128",onerror:e=>{e.target.onerror=null;e.target.src="img/placeholder.svg";}})),
+      el("div",{style:"min-width:0"},el("p",{class:"name",text:i.nom}),i.sub?el("p",{class:"sub",text:i.sub}):null,
+        i.marque?el("span",{class:"brand",text:i.marque}):null,i.custom?el("span",{class:"custom",text:"ajouté par les parents"}):null,
+        el("div",{},el("button",{class:"share",type:"button",title:"Copier le lien direct vers ce cadeau",onclick:()=>copyLink(i)},"🔗 copier le lien")))));
+    const age=el("td",{class:"col-age","data-label":"Âge",text:i.age?"Dès "+i.age+" ans":"—"});
+    tr.append(avisCell(i),toy,age,shopCell(i),amazonCell(i),elseCell(i),resCell(i)); tb.append(tr);
+  }
+  const items=allItems().filter(i=>!khide(i)); const n=items.length, taken=items.filter(i=>kres(i)).length;
+  const deals=items.filter(i=>isDeal(i,bestElsewhere(i))).length, tops=items.filter(i=>kavis(i)>=3).length;
+  const s=document.getElementById("stats"); s.replaceChildren(
+    el("span",{},el("b",{text:String(n)})," cadeau"+(n>1?"x":"")),
+    el("span",{},el("b",{text:String(taken)})," réservé"+(taken>1?"s":"")),
+    el("span",{},el("b",{text:String(n-taken)})," encore à réserver"),
+    el("span",{},el("b",{text:String(deals)})," moins cher"+(deals>1?"s":"")+" ailleurs qu'à King Jouet"),
+    el("span",{},el("b",{text:String(tops)})," « Je veux absolument »"),
+    el("span",{class:"pill"+(state.online===false?" off":"")},el("span",{class:"dot"}),state.online===false?"Hors ligne":state.online?"À jour":"Chargement…"));
+  const hid=allItems().filter(i=>khide(i)).length;
+  document.getElementById("pbar").hidden=!state.parents;
+  const ph=document.getElementById("p-hidden"); ph.textContent=(state.showHidden?"Revenir à la liste":"Retirés")+" ("+hid+")"; ph.setAttribute("aria-pressed",String(state.showHidden));
+  document.getElementById("open-parents").textContent=state.parents?"Mode parents actif":"Espace parents";
+}
+
+/* ───── Onglets ───── */
+function renderTabs(){
+  const t=document.getElementById("tabs"); t.replaceChildren(); t.hidden=ANNIV; if(ANNIV) return;
+  for(const L of PAGE_LISTS){
+    const n=L.items.length+(state.custom[L.id]||[]).length;
+    t.append(el("button",{class:"tab",role:"tab","aria-selected":String(L===state.list),onclick:()=>selectList(L.id,true)},el("img",{src:L.photo,alt:""}),L.prenom,el("span",{class:"n",text:n?String(n):""})));
+  }
+}
+function selectList(id,push){
+  const L=PAGE_LISTS.find(x=>x.id===id)||PAGE_LISTS[0]; state.list=L; state.open=null; state.confirmCancel=null; state.confirmRemove=null; state.showHidden=false; state.showAnniv=false;
+  if(ANNIV){ document.getElementById("eyebrow").textContent="Jeudi 3 décembre 2026 · Louis fête son anniversaire"; document.getElementById("title").textContent="L'anniversaire de Louis"; document.getElementById("lead").textContent="Louis a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 je veux absolument. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche), le prix Amazon et le moins cher trouvé sur le web. Pour lui offrir un jouet, cliquez sur Réserver et indiquez votre prénom : tout le monde verra qu'il est pris."; }
+  else { document.getElementById("eyebrow").textContent=L.eyebrow; document.getElementById("title").textContent=L.titre; document.getElementById("lead").textContent=L.intro; }
+  const pi=document.getElementById("photo-img"); pi.src=L.photo; pi.alt=L.prenom; document.getElementById("photo-tag").textContent=L.prenom;
+  document.getElementById("q").placeholder="Chercher dans la liste de "+L.prenom+"…";
+  if(push){ try{history.replaceState(null,"","#"+L.id);}catch(e){} window.scrollTo({top:0,behavior:"smooth"}); }
+  renderTabs(); render();
+}
+
+/* ───── Visionneuse ───── */
+const LB=document.getElementById("lightbox");
+function openLightbox(i){
+  const img=document.getElementById("lb-img");
+  const small=i.img||"img/placeholder.svg";
+  const big=i.custom?small:small.replace("img/","img/large/");
+  img.onerror=()=>{img.onerror=null;img.src=small;};
+  img.src=big; img.alt=i.nom;
+  document.getElementById("lb-title").textContent=i.nom;
+  document.getElementById("lb-sub").textContent=(i.sub||"")+(i.age?" · dès "+i.age+" ans":"");
+  const pr=document.getElementById("lb-price"); const p=shopPrice(i); const shop=i.custom?(i.boutique||"la boutique"):state.list.boutique;
+  pr.replaceChildren(p!=null?el("span",{class:"price",text:eur(p)}):"",p!=null?" chez "+shop:"");
+  const lk=document.getElementById("lb-link"); if(i.url){lk.hidden=false;lk.href=i.url;lk.textContent="Voir la fiche "+shop;} else lk.hidden=true;
+  LB.showModal();
+}
+document.getElementById("lb-close").addEventListener("click",()=>LB.close());
+LB.addEventListener("click",e=>{ if(e.target===LB) LB.close(); });
+LB.addEventListener("close",()=>{ document.getElementById("lb-img").src=""; });
+
+/* ───── Espace parents ───── */
+const PIN=document.getElementById("pin"), ADD=document.getElementById("add");
+function setParents(on){ state.parents=on; try{ if(on) localStorage.setItem("cadeaux.parents","1"); else localStorage.removeItem("cadeaux.parents"); }catch(e){} state.showHidden=false; render(); }
+document.getElementById("open-parents").addEventListener("click",()=>{ if(state.parents){ window.scrollTo({top:0,behavior:"smooth"}); return; } document.getElementById("pin-err").textContent=""; document.getElementById("pin-input").value=""; PIN.showModal(); setTimeout(()=>document.getElementById("pin-input").focus(),50); });
+document.getElementById("pin-cancel").addEventListener("click",()=>PIN.close());
+document.getElementById("pin-form").addEventListener("submit",e=>{ const v=document.getElementById("pin-input").value.trim(); if(v!==PARENTS_CODE){ e.preventDefault(); document.getElementById("pin-err").textContent="Code incorrect."; return; } setParents(true); toast("Mode parents activé"); });
+const BIL=document.getElementById("bilan");
+document.getElementById("bilan-close").addEventListener("click",()=>BIL.close());
+BIL.addEventListener("click",e=>{ if(e.target===BIL) BIL.close(); });
+document.getElementById("p-bilan").addEventListener("click",()=>{ renderBilan(); BIL.showModal(); });
+function renderBilan(){
+  const body=document.getElementById("bilan-body"); body.replaceChildren();
+  let grandTotal=0, grandN=0;
+  for(const L of PAGE_LISTS){
+    const sc=L.id+(ANNIV?"-anniv":"");
+    const annivOf=i=>{const r=state.res[L.id+":"+i.id]; return !!r&&splitVoter(r.voter).occ==="Anniversaire";};
+    const items=L.items.concat(state.custom[L.id]||[]).filter(i=>!state.hide[sc+":"+i.id]).filter(i=>ANNIV?true:(L.id==="louis"?!annivOf(i):true));
+    const priceOf=i=>i.custom?(i.prix!=null?Number(i.prix):null):(i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb));
+    const givers={}; let nRes=0,nOurs=0,total=0;
+    for(const i of items){ const r=state.res[L.id+":"+i.id]; if(!r) continue; const v=splitVoter(r.voter); const p=priceOf(i)||0; nRes++; total+=p; if(v.ours){nOurs++; (givers["Nous (parents)"]=givers["Nous (parents)"]||{n:0,t:0,items:[]}); givers["Nous (parents)"].n++; givers["Nous (parents)"].t+=p; givers["Nous (parents)"].items.push(i.nom);} else { const g=givers[v.name]=givers[v.name]||{n:0,t:0,items:[]}; g.n++; g.t+=p; g.items.push(i.nom+(v.occ?" ("+v.occ+")":"")); } }
+    const av=i=>{const v=state.avis[sc+":"+i.id]; return v==null?Number(i.avisDefaut||0):Number(v)||0;};
+    const tops=items.filter(i=>av(i)>=3&&!state.res[L.id+":"+i.id]);
+    grandTotal+=total; grandN+=nRes;
+    const sec=el("div",{class:"bl"},el("h3",{},el("img",{src:L.photo,alt:""}),L.prenom));
+    sec.append(el("div",{class:"kpis"},el("span",{},el("b",{text:String(items.length)})," cadeau"+(items.length>1?"x":"")),el("span",{},el("b",{text:String(nRes)})," réservé"+(nRes>1?"s":"")+(nOurs?" dont "+nOurs+" par nous":"")),el("span",{},el("b",{text:String(items.length-nRes)})," sans preneur"),el("span",{},"total réservé ",el("b",{text:eur(total)}))));
+    const names=Object.keys(givers).sort((a,b)=>givers[b].t-givers[a].t);
+    if(names.length){ const t=el("table",{},el("thead",{},el("tr",{},el("th",{text:"Qui offre"}),el("th",{class:"num",text:"Cadeaux"}),el("th",{class:"num",text:"Montant"}),el("th",{text:"Détail"})))); const tb=el("tbody"); for(const n of names){ const g=givers[n]; tb.append(el("tr",{},el("td",{text:n}),el("td",{class:"num",text:String(g.n)}),el("td",{class:"num",text:eur(g.t)}),el("td",{text:g.items.join(", ")}))); } t.append(tb); sec.append(t); }
+    if(tops.length) sec.append(el("div",{class:"small",style:"margin-top:8px",text:"« Je veux absolument » sans preneur :"}),el("ul",{},...tops.map(i=>el("li",{text:i.nom+(priceOf(i)!=null?" · "+eur(priceOf(i)):"")}))));
+    else if(items.some(i=>av(i)>=3)) sec.append(el("div",{class:"small",style:"margin-top:8px",text:"Tous les « Je veux absolument » ont un preneur."}));
+    if(!ANNIV&&L.id==="louis"){ const ag=L.items.concat(state.custom[L.id]||[]).filter(annivOf); if(ag.length){ const t=ag.reduce((a,i)=>a+(priceOf(i)||0),0); sec.append(el("div",{class:"small",style:"margin-top:8px",text:"Déjà offerts pour l'anniversaire (hors liste de Noël) : "+ag.length+" cadeau"+(ag.length>1?"x":"")+", "+eur(t)})); } }
+    body.append(sec);
+  }
+  body.append(el("div",{class:"bl tot"},"Total famille : "+grandN+" cadeau"+(grandN>1?"x":"")+" réservé"+(grandN>1?"s":"")+", "+eur(grandTotal)));
+}
+document.getElementById("p-quit").addEventListener("click",()=>{ setParents(false); toast("Mode parents quitté"); });
+document.getElementById("p-hidden").addEventListener("click",()=>{ state.showHidden=!state.showHidden; state.showAnniv=false; render(); });
+document.getElementById("p-anniv").addEventListener("click",()=>{ state.showAnniv=!state.showAnniv; state.showHidden=false; render(); });
+document.getElementById("p-add").addEventListener("click",()=>{ document.getElementById("add-form").reset(); document.getElementById("add-err").textContent=""; document.getElementById("add-help").textContent="Ce cadeau sera ajouté à la liste de "+state.list.prenom+", visible par tout le monde."; ADD.showModal(); setTimeout(()=>document.getElementById("a-nom").focus(),50); });
+document.getElementById("add-cancel").addEventListener("click",()=>ADD.close());
+document.getElementById("add-form").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const g=id=>document.getElementById(id).value.trim();
+  const num=v=>v===""?null:Number(v.replace(",","."));
+  const o={nom:g("a-nom"),sub:g("a-sub"),boutique:g("a-boutique"),prix:num(g("a-prix")),url:g("a-url")||null,amazonPrix:num(g("a-aprix")),amazonUrl:g("a-aurl")||null,img:g("a-img")||null,age:num(g("a-age"))};
+  if(!o.nom){ document.getElementById("add-err").textContent="Le nom est obligatoire."; return; }
+  const ok=document.getElementById("add-ok"); ok.disabled=true;
+  const done=await addCustom(o); ok.disabled=false;
+  if(done){ ADD.close(); toast("Ajouté à la liste de "+state.list.prenom); } else document.getElementById("add-err").textContent="Impossible d'enregistrer, réessayez.";
+});
+
+let toastT; function toast(msg){ let t=document.getElementById("toast"); if(!t){t=el("div",{id:"toast",class:"toast",role:"status"});document.body.append(t);} t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>{t.hidden=true},2600); }
+
+document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;state.filter=b.dataset.f;for(const c of e.currentTarget.children)c.setAttribute("aria-pressed",c===b);render();});
+document.getElementById("sort").addEventListener("change",e=>{state.sort=e.target.value;render();});
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value;render();});
+function parseHash(){ const h=location.hash.replace("#",""); const [l,id]=h.split("/"); return {list:PAGE_LISTS.some(x=>x.id===l)?l:null, item:id||null}; }
+function focusItem(id){ if(!id) return; const tr=document.querySelector('tr[data-id="'+CSS.escape(id)+'"]'); if(!tr) return; tr.scrollIntoView({behavior:"smooth",block:"center"}); tr.classList.remove("flash"); void tr.offsetWidth; tr.classList.add("flash"); }
+window.addEventListener("hashchange",()=>{ const h=parseHash(); if(h.list&&h.list!==state.list.id) selectList(h.list,false); if(h.item) setTimeout(()=>focusItem(h.item),50); });
+
+try{ state.parents=localStorage.getItem("cadeaux.parents")==="1"; }catch(e){}
+const h0=parseHash(); selectList(h0.list||"louis",false);
+if(h0.item){ state.pendingFocus=h0.item; setTimeout(()=>{focusItem(state.pendingFocus);},300); }
+loadAll();
+setInterval(loadAll,45000);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")loadAll();});
+</script>
+</body>
+</html>

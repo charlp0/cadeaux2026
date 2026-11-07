@@ -1,4 +1,4 @@
-// Liste de cadeaux — anniversaire (03/12) & Noël 2026.
+// Listes de cadeaux Noël 2026 (index.html) et anniversaire de Louis le 03/12 (anniversaire.html, même liste de Louis).
 // Source : catalogue King Jouet Noël 2026 (prix catalogue magasin valables du 14/10 au 01/12/2026)
 // + fiches king-jouet.com relevées le 07/11/2026 (prixWeb). "ailleurs" = meilleur prix trouvé chez un autre vendeur (hors frais de port).
 const KJ = "https://www.king-jouet.com";
@@ -276,7 +276,7 @@ const AMAZON_CAPUCINE = {
 
 // Les 4 listes du site. Les cadeaux ajoutés par les parents (mode parents) sont stockés en ligne, pas ici.
 const LISTS = [
- {id:"louis", prenom:"Louis", titre:"La liste de Louis", eyebrow:"Anniversaire le 3 décembre · Noël 2026", photo:"img/louis.jpg",
+ {id:"louis", prenom:"Louis", titre:"La liste de Louis", eyebrow:"Noël 2026", photo:"img/louis.jpg",
   intro:"Louis a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 je veux absolument. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche), le prix Amazon et le moins cher trouvé sur le web.",
   items:ITEMS_LOUIS, ailleurs:AILLEURS_LOUIS, amazon:AMAZON_LOUIS, boutique:"King Jouet"},
  {id:"capucine", prenom:"Capucine", titre:"La liste de Capucine", eyebrow:"Noël 2026", photo:"img/capucine.jpg",
