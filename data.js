@@ -68,7 +68,7 @@ const ITEMS_LOUIS = [
   url:KJ+"/jeu-jouet/jeux-constructions/lego-planchettes/ref-1029204-76349-lego-marvel-poursuite-prison-mobile-spider-man.htm", img:"img/1029204.jpg"},
  {id:"lego-spider-hulk", nom:"LEGO Marvel 76350 · L'affrontement légendaire Spider-Man vs Hulk", sub:"534 pièces, 6 minifigurines", marque:"LEGO", age:8, ref:"1029181", prixCat:89.99, prixWeb:89.99, prixWebOrig:null,
   url:KJ+"/jeu-jouet/jeux-constructions/lego-planchettes/ref-1029181-76350-lego-marvel-affrontement-legendaire-spider-man-hulk.htm", img:"img/1029181.jpg"},
- {id:"lego-falcon", nom:"LEGO Star Wars 75375 · Millennium Falcon", sub:"921 pièces, écriteau et brique 25ᵉ anniversaire · 13 × 24 × 19 cm", marque:"LEGO", age:14, ref:"951616", prixCat:69.99, prixWeb:64.99, prixWebOrig:null,
+ {id:"lego-falcon", nom:"LEGO Star Wars 75375 · Millennium Falcon", sub:"921 pièces, écriteau et brique spéciale 25 ans de LEGO Star Wars · 13 × 24 × 19 cm", marque:"LEGO", age:14, ref:"951616", prixCat:69.99, prixWeb:64.99, prixWebOrig:null,
   url:KJ+"/jeu-jouet/jeux-constructions/lego-planchettes/ref-951616-75375-lego-star-wars-millennium-falcon.htm", img:"img/951616.jpg"},
  {id:"lego-anzellans", nom:"LEGO Star Wars 75445 · Le vaisseau des Anzellans", sub:"701 pièces · 7 × 25 × 14 cm", marque:"LEGO", age:9, ref:"1004317", prixCat:69.99, prixCatOrig:74.99, prixWeb:74.99, prixWebOrig:null,
   url:KJ+"/jeu-jouet/jeux-constructions/lego-planchettes/ref-1004317-75445-lego-star-wars-vaisseau-anzellans.htm", img:"img/1004317.jpg"},
