@@ -85,7 +85,13 @@ tbody tr:last-child td{border-bottom:0}
 tbody tr.reserved{background:color-mix(in srgb,var(--green-bg) 55%,var(--paper))}
 tbody tr.hiddenrow{opacity:.55}
 .col-avis{width:9%;white-space:nowrap}
-.col-toy{width:33%}
+.col-pref{width:7%;white-space:nowrap;text-align:center}
+.pref-num{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:var(--accent);color:#fff;font-family:var(--display);font-weight:800;line-height:1;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.pref-num small{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.9}
+.pref-num b{font-size:22px}
+.pref-num.top{background:var(--gold);color:#2b1d00}
+.pref-none{color:var(--muted);font-size:13px}
+.col-toy{width:33%;min-width:280px}
 .col-age{width:7%;white-space:nowrap}
 .col-kj{width:13%}
 .col-amz{width:12%}
@@ -102,7 +108,6 @@ tbody tr.hiddenrow{opacity:.55}
 .toy .sub{color:var(--muted);font-size:13px;margin:4px 0 0}
 .toy .brand{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-right:4px}
 .toy .custom{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:6px;padding:1px 6px}
-.toy .pref{display:inline-block;margin-top:6px;margin-right:4px;font-size:11.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:6px;padding:1px 7px}
 
 .price{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.1;font-variant-numeric:tabular-nums;text-decoration:none;display:inline-block}
 a.price:hover{text-decoration:underline}
@@ -179,13 +184,14 @@ footer{color:var(--muted);font-size:12.5px;padding-block:22px 0;max-width:80ch}
 footer p{margin:6px 0}
 .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:var(--shadow);max-width:calc(100vw - 32px);z-index:50}
 
-@media (max-width:1000px){
+@media (max-width:1120px){
   thead{display:none}
   table,tbody,tr,td{display:block;width:100%}
   tbody tr{border-bottom:1px solid var(--line);padding:6px 0}
   tbody td{border:0;padding:8px 14px}
   tbody td[data-label]::before{content:attr(data-label);display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
-  .col-avis,.col-toy,.col-age,.col-kj,.col-amz,.col-else,.col-res{width:auto}
+  .col-avis,.col-pref,.col-toy,.col-age,.col-kj,.col-amz,.col-else,.col-res{width:auto}
+  .col-pref{text-align:left}
   .toy .zoom img{width:110px;height:110px}
 }
 @media (max-width:860px){
@@ -235,6 +241,7 @@ footer p{margin:6px 0}
   <select id="sort" aria-label="Trier">
     <option value="list">Ordre de la liste</option>
     <option value="avis">Avis des parents</option>
+    <option value="pref" id="opt-pref" hidden>Ordre de préférence</option>
     <option value="priceAsc">Prix croissant</option>
     <option value="priceDesc">Prix décroissant</option>
     <option value="age">Âge</option>
@@ -245,7 +252,7 @@ footer p{margin:6px 0}
 <div class="tablewrap">
 <table>
   <thead><tr>
-    <th class="col-avis">Avis parents</th><th class="col-toy">Cadeau</th><th class="col-age">Âge</th><th class="col-kj" id="th-shop">King Jouet</th><th class="col-amz">Amazon</th><th class="col-else">Moins cher ailleurs</th><th class="col-res">Réservation</th>
+    <th class="col-avis">Avis parents</th><th class="col-pref" id="th-pref" hidden>Choix</th><th class="col-toy">Cadeau</th><th class="col-age">Âge</th><th class="col-kj" id="th-shop">King Jouet</th><th class="col-amz">Amazon</th><th class="col-else">Moins cher ailleurs</th><th class="col-res">Réservation</th>
   </tr></thead>
   <tbody id="rows"></tbody>
 </table>
@@ -299,7 +306,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=4"></script>
+<script src="data.js?v=5"></script>
 <script>
 /* Neige légère dans le bandeau (désactivée si l'utilisateur préfère moins d'animations) */
 (function(){
@@ -395,6 +402,7 @@ function visibleItems(){
   if(state.sort==="priceDesc") list.sort((a,b)=>(sp(b)===Infinity?-1:sp(b))-(sp(a)===Infinity?-1:sp(a)));
   if(state.sort==="age") list.sort((a,b)=>(a.age||0)-(b.age||0));
   if(state.sort==="avis") list.sort((a,b)=>kavis(b)-kavis(a));
+  if(state.sort==="pref") list.sort((a,b)=>(a.pref||999)-(b.pref||999));
   return list;
 }
 
@@ -525,12 +533,15 @@ function resCell(i){
 function render(){
   const L=state.list;
   document.getElementById("th-shop").textContent=L.boutique;
+  const hasPref=L.items.some(i=>i.pref);
+  const thp=document.getElementById("th-pref"); thp.hidden=!hasPref; thp.textContent="Choix de "+L.prenom;
+  const op=document.getElementById("opt-pref"); op.hidden=!hasPref; op.textContent="Ordre de préférence de "+L.prenom; if(!hasPref&&state.sort==="pref"){state.sort="list";document.getElementById("sort").value="list";}
   const tb=document.getElementById("rows"); tb.replaceChildren();
   const list=visibleItems();
   if(!list.length){
     const total=allItems().filter(i=>!khide(i)).length;
     const msg= state.showHidden ? ["Aucun cadeau retiré."] : total===0 ? [el("b",{text:L.prenom+" n'a pas encore fait sa liste."})," ",state.parents?"Ajoutez des cadeaux avec le bouton « Ajouter un cadeau ».":"Les idées arrivent bientôt."] : ["Aucun cadeau ne correspond."];
-    tb.append(el("tr",{},el("td",{colspan:"7",class:"empty"},...msg)));
+    tb.append(el("tr",{},el("td",{colspan:hasPref?"8":"7",class:"empty"},...msg)));
   }
   for(const i of list){
     const tr=el("tr",{class:(kres(i)?"reserved":"")+(khide(i)?" hiddenrow":"")});
@@ -538,10 +549,16 @@ function render(){
     const toy=el("td",{class:"col-toy"},el("div",{class:"toy"},
       el("button",{class:"zoom",type:"button","aria-label":"Voir "+i.nom+" en grand",onclick:()=>openLightbox(i)},el("img",{src:img,alt:"",loading:"lazy",width:"128",height:"128",onerror:e=>{e.target.onerror=null;e.target.src="img/placeholder.svg";}})),
       el("div",{style:"min-width:0"},el("p",{class:"name",text:i.nom}),i.sub?el("p",{class:"sub",text:i.sub}):null,
-        i.pref?el("span",{class:"pref",text:"Choix n°"+i.pref+" de "+L.prenom}):null,
         i.marque?el("span",{class:"brand",text:i.marque}):null,i.custom?el("span",{class:"custom",text:"ajouté par les parents"}):null)));
     const age=el("td",{class:"col-age","data-label":"Âge",text:i.age?"Dès "+i.age+" ans":"—"});
-    tr.append(avisCell(i),toy,age,shopCell(i),amazonCell(i),elseCell(i),resCell(i)); tb.append(tr);
+    tr.append(avisCell(i));
+    if(hasPref){
+      const pc=el("td",{class:"col-pref","data-label":"Choix de "+L.prenom});
+      if(i.pref) pc.append(el("span",{class:"pref-num"+(i.pref<=3?" top":""),title:"Choix n°"+i.pref+" de "+L.prenom},el("small",{text:"n°"}),el("b",{text:String(i.pref)})));
+      else pc.append(el("span",{class:"pref-none",text:i.custom?"—":"sans n°"}));
+      tr.append(pc);
+    }
+    tr.append(toy,age,shopCell(i),amazonCell(i),elseCell(i),resCell(i)); tb.append(tr);
   }
   const items=allItems().filter(i=>!khide(i)); const n=items.length, taken=items.filter(i=>kres(i)).length;
   const deals=items.filter(i=>isDeal(i,bestElsewhere(i))).length, tops=items.filter(i=>kavis(i)>=3).length;
