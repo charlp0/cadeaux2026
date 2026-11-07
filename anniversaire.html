@@ -110,6 +110,7 @@ tbody tr.hiddenrow{opacity:.55}
 .toy .sub{color:var(--muted);font-size:13px;margin:4px 0 0}
 .toy .brand{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-right:4px}
 .toy .custom{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:6px;padding:1px 6px}
+.toy .todo{display:inline-block;margin-top:6px;margin-left:4px;font-size:11.5px;font-weight:700;color:#8a5a00;background:#fff3d6;border:1px solid #f0c36b;border-radius:6px;padding:1px 6px}
 .toy .share{display:inline-flex;align-items:center;gap:4px;margin-top:8px;border:0;background:none;padding:0;color:var(--muted);font-size:12.5px;cursor:pointer;text-decoration:underline}
 .toy .share:hover{color:var(--ink)}
 tr.flash td{animation:flash 2.4s ease-out}
@@ -327,15 +328,16 @@ footer p{margin:6px 0}
 </dialog>
 <dialog id="add" aria-labelledby="add-title">
   <form class="sheet" method="dialog" id="add-form">
-    <h2 id="add-title">Ajouter un cadeau</h2>
+    <h2 id="add-title">Ajouter une idée de cadeau</h2>
     <p class="help" id="add-help"></p>
-    <div class="field"><label for="a-nom">Nom du cadeau *</label><input id="a-nom" type="text" required maxlength="90"></div>
+    <div class="field"><label for="a-url">Lien web du cadeau (le plus simple : collez juste le lien)</label><input id="a-url" type="url" placeholder="https://…" autocomplete="off"></div>
+    <p class="help">Avec un lien seul, la ligne apparaît tout de suite « à compléter » et Claude remplit le reste (nom, photo, prix, Amazon, moins cher du web) dans la journée. Les champs ci-dessous sont facultatifs.</p>
+    <div class="field"><label for="a-nom">Nom du cadeau</label><input id="a-nom" type="text" maxlength="90"></div>
     <div class="field"><label for="a-sub">Détails (taille, couleur, référence…)</label><input id="a-sub" type="text" maxlength="160"></div>
     <div class="two">
       <div class="field"><label for="a-boutique">Boutique</label><input id="a-boutique" type="text" maxlength="40" placeholder="Fnac, Decathlon…"></div>
       <div class="field"><label for="a-prix">Prix (€)</label><input id="a-prix" type="number" step="0.01" min="0"></div>
     </div>
-    <div class="field"><label for="a-url">Lien vers la fiche</label><input id="a-url" type="url" placeholder="https://…"></div>
     <div class="two">
       <div class="field"><label for="a-aprix">Prix Amazon (€)</label><input id="a-aprix" type="number" step="0.01" min="0"></div>
       <div class="field"><label for="a-aurl">Lien Amazon</label><input id="a-aurl" type="url" placeholder="https://www.amazon.fr/…"></div>
@@ -355,7 +357,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=10"></script>
+<script src="data.js?v=11"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -448,7 +450,7 @@ const el=(t,a={},...kids)=>{const n=document.createElement(t);for(const[k,v]of O
 
 function baseItems(){ return state.list.items.concat(state.custom[state.list.id]||[]); }
 function allItems(){ const all=baseItems(); if(ANNIV||state.list.id!=="louis") return all; return all.filter(i=>state.showAnniv?isAnnivGift(i):!isAnnivGift(i)); }
-function shopPrice(i){ if(i.custom) return i.prix!=null?Number(i.prix):null; return i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb); }
+function shopPrice(i){ if(i.custom||i.boutique) return i.prix!=null?Number(i.prix):null; return i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb); }
 function amazonOf(i){ if(i.custom) return (i.amazonPrix!=null||i.amazonUrl)?{prix:i.amazonPrix!=null?Number(i.amazonPrix):null,url:i.amazonUrl||null}:null; return state.list.amazon[i.id]||null; }
 function ailleursOf(i){ return i.custom?null:(state.list.ailleurs[i.id]||null); }
 function isDeal(i,a){ const b=shopPrice(i); return !!(a&&a.prix!=null&&b!=null&&a.prix<b-0.001); }
@@ -488,10 +490,10 @@ function avisCell(i){
   return c;
 }
 function shopCell(i){
-  const c=el("td",{class:"col-kj","data-label":i.custom?(i.boutique||"Boutique"):state.list.boutique});
-  if(i.custom){
+  const c=el("td",{class:"col-kj","data-label":(i.custom||i.boutique)?(i.boutique||"Boutique"):state.list.boutique});
+  if(i.custom||i.boutique){
     if(i.prix!=null) c.append(i.url?el("a",{class:"price",href:i.url,target:"_blank",rel:"noopener",text:eur(i.prix)}):el("span",{class:"price",text:eur(i.prix)}));
-    else if(i.url) c.append(el("a",{class:"small",href:i.url,target:"_blank",rel:"noopener",text:"voir la fiche"}));
+    else if(i.url) c.append(el("a",{class:"small",href:i.url,target:"_blank",rel:"noopener",text:"voir le lien"}));
     else c.append(el("span",{class:"nobetter",text:"—"}));
     if(i.boutique&&i.prix!=null) c.append(el("span",{class:"small",text:i.boutique+(i.url?" · voir la fiche":"")}));
     return c;
@@ -625,7 +627,7 @@ function render(){
     const toy=el("td",{class:"col-toy"},el("div",{class:"toy"},
       el("button",{class:"zoom",type:"button","aria-label":"Voir "+i.nom+" en grand",onclick:()=>openLightbox(i)},el("img",{src:img,alt:"",loading:"lazy",width:"128",height:"128",onerror:e=>{e.target.onerror=null;e.target.src="img/placeholder.svg";}})),
       el("div",{style:"min-width:0"},el("p",{class:"name",text:i.nom}),i.sub?el("p",{class:"sub",text:i.sub}):null,
-        i.marque?el("span",{class:"brand",text:i.marque}):null,i.custom?el("span",{class:"custom",text:"ajouté par les parents"}):null,
+        i.marque?el("span",{class:"brand",text:i.marque}):null,i.custom?el("span",{class:"custom",text:"ajouté par les parents"}):null,i.aCompleter?el("span",{class:"todo",text:"fiche en cours de complétion"}):null,
         el("div",{},el("button",{class:"share",type:"button",title:"Copier le lien direct vers ce cadeau",onclick:()=>copyLink(i)},"🔗 copier le lien")))));
     const age=el("td",{class:"col-age","data-label":"Âge",text:i.age?"Dès "+i.age+" ans":"—"});
     tr.append(avisCell(i),toy,age,shopCell(i),amazonCell(i),elseCell(i),resCell(i)); tb.append(tr);
@@ -673,7 +675,7 @@ function openLightbox(i){
   img.src=big; img.alt=i.nom;
   document.getElementById("lb-title").textContent=i.nom;
   document.getElementById("lb-sub").textContent=(i.sub||"")+(i.age?" · dès "+i.age+" ans":"");
-  const pr=document.getElementById("lb-price"); const p=shopPrice(i); const shop=i.custom?(i.boutique||"la boutique"):state.list.boutique;
+  const pr=document.getElementById("lb-price"); const p=shopPrice(i); const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
   pr.replaceChildren(p!=null?el("span",{class:"price",text:eur(p)}):"",p!=null?" chez "+shop:"");
   const lk=document.getElementById("lb-link"); if(i.url){lk.hidden=false;lk.href=i.url;lk.textContent="Voir la fiche "+shop;} else lk.hidden=true;
   LB.showModal();
@@ -726,10 +728,14 @@ document.getElementById("add-form").addEventListener("submit",async e=>{
   const g=id=>document.getElementById(id).value.trim();
   const num=v=>v===""?null:Number(v.replace(",","."));
   const o={nom:g("a-nom"),sub:g("a-sub"),boutique:g("a-boutique"),prix:num(g("a-prix")),url:g("a-url")||null,amazonPrix:num(g("a-aprix")),amazonUrl:g("a-aurl")||null,img:g("a-img")||null,age:num(g("a-age"))};
-  if(!o.nom){ document.getElementById("add-err").textContent="Le nom est obligatoire."; return; }
+  if(!o.nom&&!o.url){ document.getElementById("add-err").textContent="Collez au moins un lien, ou donnez un nom."; return; }
+  if(o.url&&!/^https?:\/\//i.test(o.url)){ document.getElementById("add-err").textContent="Le lien doit commencer par http:// ou https://"; return; }
+  if(!o.nom){ let host=""; try{host=new URL(o.url).hostname.replace(/^www\./,"");}catch(e){} o.nom="Idée à compléter"+(host?" ("+host+")":""); }
+  if(!o.boutique&&o.url){ try{o.boutique=new URL(o.url).hostname.replace(/^www\./,"");}catch(e){} }
+  o.aCompleter=!(o.prix!=null&&o.img); o.ajoute=new Date().toISOString().slice(0,10);
   const ok=document.getElementById("add-ok"); ok.disabled=true;
   const done=await addCustom(o); ok.disabled=false;
-  if(done){ ADD.close(); toast("Ajouté à la liste de "+state.list.prenom); } else document.getElementById("add-err").textContent="Impossible d'enregistrer, réessayez.";
+  if(done){ ADD.close(); toast(o.aCompleter?"Idée ajoutée, Claude complète la fiche dans la journée":"Ajouté à la liste de "+state.list.prenom); } else document.getElementById("add-err").textContent="Impossible d'enregistrer, réessayez.";
 });
 
 let toastT; function toast(msg){ let t=document.getElementById("toast"); if(!t){t=el("div",{id:"toast",class:"toast",role:"status"});document.body.append(t);} t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>{t.hidden=true},2600); }

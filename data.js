@@ -274,7 +274,17 @@ const AMAZON_CAPUCINE = {
  "funko-vaiana": {"prix": 14.9, "url": "https://www.amazon.fr/dp/B08P5YC75P", "approx": true, "note": "Funko Pop Disney Princesses Moana : vérifier que c'est le même modèle que la réf. King Jouet."}
 };
 
-// Les 4 listes du site. Les cadeaux ajoutés par les parents (mode parents) sont stockés en ligne, pas ici.
+// Listes de Clémentine et Charles : remplies au fil des idées complétées (scripts/idees.js) ou de découpages.
+const ITEMS_CLEMENTINE = [
+];
+const AILLEURS_CLEMENTINE = {};
+const AMAZON_CLEMENTINE = {};
+const ITEMS_CHARLES = [
+];
+const AILLEURS_CHARLES = {};
+const AMAZON_CHARLES = {};
+
+// Les 4 listes du site. Les idées ajoutées par les parents (mode parents) sont stockées en ligne jusqu'à leur complétion, puis intégrées ici.
 const LISTS = [
  {id:"louis", prenom:"Louis", titre:"La liste de Louis", eyebrow:"Noël 2026", photo:"img/louis.jpg",
   intro:"Louis a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 je veux absolument. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche), le prix Amazon et le moins cher trouvé sur le web.",
@@ -282,7 +292,7 @@ const LISTS = [
  {id:"capucine", prenom:"Capucine", titre:"La liste de Capucine", eyebrow:"Noël 2026", photo:"img/capucine.jpg",
   intro:"Capucine a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 je veux absolument. Pour chaque cadeau : le prix King Jouet, le prix Amazon et le moins cher trouvé sur le web.", items:ITEMS_CAPUCINE, ailleurs:AILLEURS_CAPUCINE, amazon:AMAZON_CAPUCINE, boutique:"King Jouet"},
  {id:"clementine", prenom:"Clémentine", titre:"La liste de Clémentine", eyebrow:"Noël 2026", photo:"img/clementine.jpg",
-  intro:"Les idées de cadeaux de Clémentine pour Noël.", items:[], ailleurs:{}, amazon:{}, boutique:"Boutique"},
+  intro:"Les idées de cadeaux de Clémentine pour Noël.", items:ITEMS_CLEMENTINE, ailleurs:AILLEURS_CLEMENTINE, amazon:AMAZON_CLEMENTINE, boutique:"Boutique"},
  {id:"charles", prenom:"Charles", titre:"La liste de Charles", eyebrow:"Noël 2026", photo:"img/charles.jpg",
-  intro:"Les idées de cadeaux de Charles pour Noël.", items:[], ailleurs:{}, amazon:{}, boutique:"Boutique"},
+  intro:"Les idées de cadeaux de Charles pour Noël.", items:ITEMS_CHARLES, ailleurs:AILLEURS_CHARLES, amazon:AMAZON_CHARLES, boutique:"Boutique"},
 ];
