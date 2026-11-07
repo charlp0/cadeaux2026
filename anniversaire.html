@@ -280,7 +280,7 @@ footer p{margin:6px 0}
     <button class="chip" data-f="all" aria-pressed="true">Tous</button>
     <button class="chip" data-f="free" aria-pressed="false">À réserver</button>
     <button class="chip" data-f="taken" aria-pressed="false">Réservés</button>
-    <button class="chip" data-f="deal" aria-pressed="false">Moins cher qu'à King Jouet</button>
+    <button class="chip" data-f="deal" aria-pressed="false">Moins cher ailleurs</button>
     <button class="chip" data-f="top" aria-pressed="false">Je veux absolument</button>
   </div>
   <select id="sort" aria-label="Trier">
@@ -638,7 +638,7 @@ function render(){
     el("span",{},el("b",{text:String(n)})," cadeau"+(n>1?"x":"")),
     el("span",{},el("b",{text:String(taken)})," réservé"+(taken>1?"s":"")),
     el("span",{},el("b",{text:String(n-taken)})," encore à réserver"),
-    el("span",{},el("b",{text:String(deals)})," moins cher"+(deals>1?"s":"")+" ailleurs qu'à King Jouet"),
+    el("span",{},el("b",{text:String(deals)})," moins cher"+(deals>1?"s":"")+" ailleurs"),
     el("span",{},el("b",{text:String(tops)})," « Je veux absolument »"),
     el("span",{class:"pill"+(state.online===false?" off":"")},el("span",{class:"dot"}),state.online===false?"Hors ligne":state.online?"À jour":"Chargement…"));
   const hid=allItems().filter(i=>khide(i)).length;
@@ -721,7 +721,7 @@ function renderBilan(){
 document.getElementById("p-quit").addEventListener("click",()=>{ setParents(false); toast("Mode parents quitté"); });
 document.getElementById("p-hidden").addEventListener("click",()=>{ state.showHidden=!state.showHidden; state.showAnniv=false; render(); });
 document.getElementById("p-anniv").addEventListener("click",()=>{ state.showAnniv=!state.showAnniv; state.showHidden=false; render(); });
-document.getElementById("p-add").addEventListener("click",()=>{ document.getElementById("add-form").reset(); document.getElementById("add-err").textContent=""; document.getElementById("add-help").textContent="Ce cadeau sera ajouté à la liste de "+state.list.prenom+", visible par tout le monde."; ADD.showModal(); setTimeout(()=>document.getElementById("a-nom").focus(),50); });
+document.getElementById("p-add").addEventListener("click",()=>{ document.getElementById("add-form").reset(); document.getElementById("add-err").textContent=""; document.getElementById("add-help").textContent="Ce cadeau sera ajouté à la liste de "+state.list.prenom+", visible par tout le monde."; ADD.showModal(); setTimeout(()=>document.getElementById("a-url").focus(),50); });
 document.getElementById("add-cancel").addEventListener("click",()=>ADD.close());
 document.getElementById("add-form").addEventListener("submit",async e=>{
   e.preventDefault();

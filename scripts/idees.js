@@ -38,7 +38,12 @@ function line(it){ // une ligne d'item au format de data.js
   if(already){ src=src.slice(0,start)+src.slice(start,end).replace(new RegExp('\\n [^\\n]*\\{id:"'+id+'"[^\\n]*'),'\n'+line(it))+src.slice(end); }
   else src=src.slice(0,end)+'\n'+line(it)+src.slice(end);
   // 2. amazon / ailleurs : objets AMAZON_<L> / AILLEURS_<L>
-  const put=(name,val)=>{ const k=`const ${name} = {`; const i=src.indexOf(k); if(i<0) throw new Error(name+' introuvable'); const j=src.indexOf('\n};',i); const body=src.slice(i+k.length,j); const re=new RegExp('\\n "'+id+'": [^\\n]*,?'); let nb=body.replace(re,''); const entry='\n '+JSON.stringify(id)+': '+JSON.stringify(val); nb=nb.trim()?nb.replace(/,?\s*$/,'')+','+entry:entry; src=src.slice(0,i+k.length)+nb+src.slice(j); };
+  const put=(name,val)=>{ const k=`const ${name} = {`; const i=src.indexOf(k); if(i<0) throw new Error(name+' introuvable'); const after=i+k.length; const entry=' '+JSON.stringify(id)+': '+JSON.stringify(val);
+    if(src.startsWith('};',after)){ src=src.slice(0,after)+'\n'+entry+'\n'+src.slice(after); return; }
+    const j=src.indexOf('\n};',after); let body=src.slice(after,j);
+    body=body.replace(new RegExp('\\n "'+id+'": [^\\n]*?(,(?=\\n)|$)'),'');
+    body=body.replace(/,\s*$/,''); body=body.trim()?body+',\n'+entry:'\n'+entry;
+    src=src.slice(0,after)+body+src.slice(j); };
   put(`AMAZON_${L}`, it.amazon||{prix:null,url:null,note:"Pas relevé"});
   put(`AILLEURS_${L}`, it.ailleurs||{vendeur:null,prix:null,url:null,verifie:false,note:"Pas relevé"});
   vm.runInNewContext(src+';LISTS',{}); // data.js doit rester valide

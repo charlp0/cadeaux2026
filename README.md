@@ -22,6 +22,9 @@ Supabase (projet familial), table `corse_votes` (block_id, voter), lecture/écri
 
 Déploiement : éditer → commit → push (Pages sur `main`).
 
+## Idées ajoutées par lien
+En mode parents, « Ajouter une idée de cadeau » accepte un simple lien : la ligne apparaît aussitôt « fiche en cours de complétion » (stockée en ligne, `cadeau-item`, champ `aCompleter`). La complétion (nom, photo dans `img/custom/`, prix, Amazon, moins cher du web) se fait avec `scripts/idees.js` (`list` / `done <liste> <id> fiche.json` / `drop`), qui intègre la fiche dans `data.js` et supprime l'idée en ligne, en gardant le même id (réservations et étoiles conservées). Consigne de la tâche planifiée matin et soir : `scripts/TACHE-completer-idees.md`.
+
 ## Relevé de prix hebdomadaire
 Tâche planifiée Claude (app de bureau) « Relevé des prix des listes de Noël », le lundi à 7 h. Elle enchaîne :
 `node scripts/prix_refs.js` → `scripts/browser_kj.js` et `scripts/browser_amazon.js` exécutés dans le navigateur intégré (King Jouet et Amazon bloquent curl) → `node scripts/compare_prix.js kj.json amazon.json`.
