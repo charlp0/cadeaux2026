@@ -91,6 +91,15 @@ tbody tr.hiddenrow{opacity:.55}
 .pref-num b{font-size:22px}
 .pref-num.top{background:var(--gold);color:#2b1d00}
 .pref-none{color:var(--muted);font-size:13px}
+.pref-ctl{display:flex;flex-wrap:wrap;gap:4px;align-items:center;justify-content:center;margin-top:6px;max-width:120px;margin-inline:auto}
+.pref-ctl .btn.small{padding:3px 7px;font-size:12px;line-height:1.2}
+.pref-ctl input{width:52px;border:1px solid var(--line);border-radius:8px;padding:4px 6px;font-size:13px;background:var(--paper);color:var(--ink);text-align:center}
+.pref-ctl .linkbtn,.pref-ctl .small{flex-basis:100%;text-align:center;margin:0}
+.drag-handle{cursor:grab;font-size:20px;color:var(--muted);user-select:none;padding:0 4px;line-height:1}
+tr.draggable{cursor:grab}
+tr.dragging{opacity:.4}
+tr.drop-before td{box-shadow:inset 0 3px 0 var(--accent)}
+tr.drop-after td{box-shadow:inset 0 -3px 0 var(--accent)}
 .col-toy{width:33%;min-width:280px}
 .col-age{width:7%;white-space:nowrap}
 .col-kj{width:13%}
@@ -192,6 +201,8 @@ footer p{margin:6px 0}
   tbody td[data-label]::before{content:attr(data-label);display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
   .col-avis,.col-pref,.col-toy,.col-age,.col-kj,.col-amz,.col-else,.col-res{width:auto}
   .col-pref{text-align:left}
+  .pref-ctl{justify-content:flex-start;margin-inline:0;max-width:none}
+  .pref-ctl .linkbtn,.pref-ctl .small{flex-basis:auto;text-align:left}
   .toy .zoom img{width:110px;height:110px}
 }
 @media (max-width:860px){
@@ -221,7 +232,7 @@ footer p{margin:6px 0}
 <div class="wrap gutter">
 <div class="pbar" id="pbar" hidden>
   <span>Mode parents</span>
-  <span class="small" style="margin:0;color:#2b1d00;font-weight:600">Notez les cadeaux avec les étoiles, retirez ou ajoutez des lignes.</span>
+  <span class="small" style="margin:0;color:#2b1d00;font-weight:600">Notez les cadeaux avec les étoiles, retirez ou ajoutez des lignes. <span id="p-hint"></span></span>
   <span class="sp"></span>
   <button class="btn small" id="p-add" type="button">+ Ajouter un cadeau</button>
   <button class="btn ghost small" id="p-hidden" type="button" aria-pressed="false">Retirés (0)</button>
@@ -306,7 +317,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=5"></script>
+<script src="data.js?v=7"></script>
 <script>
 /* Neige légère dans le bandeau (désactivée si l'utilisateur préfère moins d'animations) */
 (function(){
@@ -326,7 +337,8 @@ footer p{margin:6px 0}
    cadeau:<liste>:<id>        → réservation, voter = "Prénom · Occasion"
    cadeau-avis:<liste>:<id>   → avis des parents, voter = "1" | "2" | "3"
    cadeau-hide:<liste>:<id>   → ligne retirée par les parents
-   cadeau-item:<liste>:<id>   → cadeau ajouté par les parents, voter = JSON */
+   cadeau-item:<liste>:<id>   → cadeau ajouté par les parents, voter = JSON
+   cadeau-pref:<liste>:<id>   → ordre de préférence modifié par les parents, voter = numéro ("0" = retiré du classement) */
 const SB_URL="https://vhhmageufrcenruywawg.supabase.co";
 const SB_KEY="sb_publishable_NuRpgtxqVQ87R6K8txw57Q_oBUt4qay";
 const TABLE="corse_votes";
@@ -334,7 +346,7 @@ const H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"applic
 const PARENTS_CODE="0312";   // code de l'espace parents (à changer ici si besoin)
 const AVIS_LABEL=["","Pourquoi pas","On aime bien","Coup de cœur"];
 
-const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
+const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, pref:{}, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
 const eur=n=>n==null?"":Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
 const key=(prefix,i)=>prefix+":"+state.list.id+":"+i.id;
 
@@ -345,16 +357,17 @@ async function sbDelete(block_id){const r=await fetch(`${SB_URL}/rest/v1/${TABLE
 async function loadAll(){
   try{
     const rows=await sbGet("block_id=like."+encodeURIComponent("cadeau*"));
-    const res={},avis={},hide={},custom={};
+    const res={},avis={},hide={},custom={},pref={};
     for(const row of rows){
-      const m=/^(cadeau(?:-avis|-hide|-item)?):([^:]+):(.+)$/.exec(row.block_id); if(!m) continue;
+      const m=/^(cadeau(?:-avis|-hide|-item|-pref)?):([^:]+):(.+)$/.exec(row.block_id); if(!m) continue;
       const [,kind,list,id]=m; const k=list+":"+id;
       if(kind==="cadeau"){ if(!res[k]) res[k]=row; }
       else if(kind==="cadeau-avis"){ avis[k]=row.voter; }
       else if(kind==="cadeau-hide"){ hide[k]=true; }
+      else if(kind==="cadeau-pref"){ pref[k]=Number(row.voter)||0; }
       else if(kind==="cadeau-item"){ try{ const o=JSON.parse(row.voter); o.id=id; o.custom=true; (custom[list]=custom[list]||[]).push(o); }catch(e){} }
     }
-    state.res=res; state.avis=avis; state.hide=hide; state.custom=custom; state.online=true;
+    state.res=res; state.avis=avis; state.hide=hide; state.custom=custom; state.pref=pref; state.online=true;
   }catch(e){ state.online=false; }
   renderTabs(); render();
 }
@@ -362,6 +375,18 @@ function splitVoter(v){ const m=/^(.*?)(?: · (Anniversaire|Noël))?$/.exec(v||"
 const kres=i=>state.res[state.list.id+":"+i.id];
 const kavis=i=>Number(state.avis[state.list.id+":"+i.id]||0);
 const khide=i=>!!state.hide[state.list.id+":"+i.id];
+const effPref=i=>{const v=state.pref[state.list.id+":"+i.id]; return v==null?(i.pref||0):v;};
+// Réécrit le classement complet (1..n) à partir d'une liste ordonnée d'items ; n'écrit que ce qui change.
+async function savePrefOrder(ranked, unranked){
+  const writes=[];
+  ranked.forEach((it,idx)=>{ const n=idx+1; if(effPref(it)!==n) writes.push([it,n]); });
+  for(const it of unranked||[]) if(effPref(it)!==0) writes.push([it,0]);
+  for(const [it,n] of writes){ const bid=key("cadeau-pref",it); await sbDelete(bid); if(n!==(it.pref||0)) await sbInsert(bid,String(n)); }
+  await loadAll();
+}
+function rankedItems(){ return allItems().filter(i=>!khide(i)&&effPref(i)>0).sort((a,b)=>effPref(a)-effPref(b)); }
+async function movePref(i,delta){ const r=rankedItems(); const idx=r.findIndex(x=>x.id===i.id); if(idx<0) return; const j=idx+delta; if(j<0||j>=r.length) return; r.splice(idx,1); r.splice(j,0,i); await savePrefOrder(r); }
+async function setPrefAt(i,n){ let r=rankedItems().filter(x=>x.id!==i.id); if(n<=0){ await savePrefOrder(r,[i]); return; } n=Math.max(1,Math.min(n,r.length+1)); r.splice(n-1,0,i); await savePrefOrder(r); }
 
 async function reserve(i,name,occ){
   const voter=name+(occ?" · "+occ:""); const bid=key("cadeau",i);
@@ -397,12 +422,13 @@ function visibleItems(){
   if(state.filter==="taken") list=list.filter(i=>kres(i));
   if(state.filter==="deal") list=list.filter(i=>isDeal(i,bestElsewhere(i)));
   if(state.filter==="top") list=list.filter(i=>kavis(i)>=3);
+  if(state.sort==="list"&&allItems().some(i=>effPref(i)>0||i.pref)){ list.sort((a,b)=>(effPref(a)||999)-(effPref(b)||999)); }
   const sp=i=>{const p=shopPrice(i);return p==null?Infinity:p;};
   if(state.sort==="priceAsc") list.sort((a,b)=>sp(a)-sp(b));
   if(state.sort==="priceDesc") list.sort((a,b)=>(sp(b)===Infinity?-1:sp(b))-(sp(a)===Infinity?-1:sp(a)));
   if(state.sort==="age") list.sort((a,b)=>(a.age||0)-(b.age||0));
   if(state.sort==="avis") list.sort((a,b)=>kavis(b)-kavis(a));
-  if(state.sort==="pref") list.sort((a,b)=>(a.pref||999)-(b.pref||999));
+  if(state.sort==="pref") list.sort((a,b)=>(effPref(a)||999)-(effPref(b)||999));
   return list;
 }
 
@@ -542,7 +568,9 @@ function resCell(i){
 function render(){
   const L=state.list;
   document.getElementById("th-shop").textContent=L.boutique;
-  const hasPref=L.items.some(i=>i.pref);
+  const hasPref=allItems().some(i=>effPref(i)>0)||L.items.some(i=>i.pref);
+  const dragOK=state.parents&&hasPref&&!state.showHidden&&state.sort==="list"&&state.filter==="all"&&!state.q.trim();
+  document.getElementById("p-hint").textContent=hasPref?(dragOK?"Glissez-déposez les lignes pour changer l'ordre des choix de "+L.prenom+" : les numéros se recalculent tout seuls.":"Pour réordonner par glisser-déposer, revenez au tri « Ordre de la liste » sans filtre."):"";
   const thp=document.getElementById("th-pref"); thp.hidden=!hasPref; thp.textContent="Choix de "+L.prenom;
   const op=document.getElementById("opt-pref"); op.hidden=!hasPref; op.textContent="Ordre de préférence de "+L.prenom; if(!hasPref&&state.sort==="pref"){state.sort="list";document.getElementById("sort").value="list";}
   const tb=document.getElementById("rows"); tb.replaceChildren();
@@ -553,7 +581,8 @@ function render(){
     tb.append(el("tr",{},el("td",{colspan:hasPref?"8":"7",class:"empty"},...msg)));
   }
   for(const i of list){
-    const tr=el("tr",{class:(kres(i)?"reserved":"")+(khide(i)?" hiddenrow":"")});
+    const tr=el("tr",{class:(kres(i)?"reserved":"")+(khide(i)?" hiddenrow":""),"data-id":i.id});
+    if(dragOK){ tr.draggable=true; tr.classList.add("draggable"); }
     const img=i.img||"img/placeholder.svg";
     const toy=el("td",{class:"col-toy"},el("div",{class:"toy"},
       el("button",{class:"zoom",type:"button","aria-label":"Voir "+i.nom+" en grand",onclick:()=>openLightbox(i)},el("img",{src:img,alt:"",loading:"lazy",width:"128",height:"128",onerror:e=>{e.target.onerror=null;e.target.src="img/placeholder.svg";}})),
@@ -563,8 +592,24 @@ function render(){
     tr.append(avisCell(i));
     if(hasPref){
       const pc=el("td",{class:"col-pref","data-label":"Choix de "+L.prenom});
-      if(i.pref) pc.append(el("span",{class:"pref-num"+(i.pref<=3?" top":""),title:"Choix n°"+i.pref+" de "+L.prenom},el("small",{text:"n°"}),el("b",{text:String(i.pref)})));
-      else pc.append(el("span",{class:"pref-none",text:i.custom?"—":"sans n°"}));
+      const pn=effPref(i);
+      if(pn) pc.append(el("span",{class:"pref-num"+(pn<=3?" top":""),title:"Choix n°"+pn+" de "+L.prenom},el("small",{text:"n°"}),el("b",{text:String(pn)})));
+      else pc.append(el("span",{class:"pref-none",text:"sans n°"}));
+      if(state.parents&&!khide(i)){
+        const ctl=el("div",{class:"pref-ctl"});
+        if(dragOK) ctl.append(el("span",{class:"drag-handle",title:"Glisser pour déplacer la ligne","aria-hidden":"true",text:"⠿"}));
+        if(pn){
+          ctl.append(el("button",{type:"button",class:"btn ghost small",title:"Monter d'une place","aria-label":"Monter",onclick:async e=>{e.currentTarget.disabled=true;await movePref(i,-1);}},"▲"),
+                     el("button",{type:"button",class:"btn ghost small",title:"Descendre d'une place","aria-label":"Descendre",onclick:async e=>{e.currentTarget.disabled=true;await movePref(i,1);}},"▼"));
+        }
+        const inp=el("input",{type:"number",min:"0",max:"99",value:pn?String(pn):"",placeholder:"n°","aria-label":"Numéro de choix",title:"Tapez un numéro puis Entrée (0 = retirer du classement)"});
+        inp.addEventListener("keydown",async e=>{ if(e.key==="Enter"){ e.preventDefault(); inp.disabled=true; await setPrefAt(i,Number(inp.value||0)); } });
+        inp.addEventListener("change",async()=>{ inp.disabled=true; await setPrefAt(i,Number(inp.value||0)); });
+        ctl.append(inp);
+        if(pn) ctl.append(el("button",{type:"button",class:"linkbtn",text:"retirer du classement",onclick:async()=>{await setPrefAt(i,0);}}));
+        if(pn!==(i.pref||0)) ctl.append(el("span",{class:"small",text:i.pref?"("+L.prenom+" avait mis n°"+i.pref+")":"(ajouté par les parents)"}));
+        pc.append(ctl);
+      }
       tr.append(pc);
     }
     tr.append(toy,age,shopCell(i),amazonCell(i),elseCell(i),resCell(i)); tb.append(tr);
@@ -583,6 +628,24 @@ function render(){
   const ph=document.getElementById("p-hidden"); ph.textContent=(state.showHidden?"Revenir à la liste":"Retirés")+" ("+hid+")"; ph.setAttribute("aria-pressed",String(state.showHidden));
   document.getElementById("open-parents").textContent=state.parents?"Mode parents actif":"Espace parents";
 }
+
+/* ───── Glisser-déposer (mode parents) ───── */
+(function(){
+  const tb=document.getElementById("rows"); let dragId=null;
+  const rowOf=e=>e.target.closest&&e.target.closest("tr.draggable");
+  const clear=()=>{ for(const r of tb.querySelectorAll(".drop-before,.drop-after")) r.classList.remove("drop-before","drop-after"); };
+  tb.addEventListener("dragstart",e=>{ const r=rowOf(e); if(!r) return; dragId=r.dataset.id; r.classList.add("dragging"); try{e.dataTransfer.setData("text/plain",dragId);e.dataTransfer.effectAllowed="move";}catch(_){} });
+  tb.addEventListener("dragover",e=>{ const r=rowOf(e); if(!r||!dragId||r.dataset.id===dragId) return; e.preventDefault(); const box=r.getBoundingClientRect(); const before=(e.clientY-box.top)<box.height/2; clear(); r.classList.add(before?"drop-before":"drop-after"); });
+  tb.addEventListener("dragleave",e=>{ const r=rowOf(e); if(r&&!r.contains(e.relatedTarget)) r.classList.remove("drop-before","drop-after"); });
+  tb.addEventListener("drop",async e=>{ const r=rowOf(e); if(!r||!dragId) return; e.preventDefault(); const before=r.classList.contains("drop-before"); clear();
+    const order=[...tb.querySelectorAll("tr.draggable")].map(x=>x.dataset.id).filter(id=>id!==dragId);
+    let at=order.indexOf(r.dataset.id); if(!before) at++; order.splice(at,0,dragId);
+    const items=allItems(); const byId=Object.fromEntries(items.map(i=>[i.id,i]));
+    const ranked=order.map(id=>byId[id]).filter(i=>i&&(effPref(i)>0||i.id===dragId));
+    const moved=dragId; dragId=null; tb.querySelector(".dragging")?.classList.remove("dragging");
+    await savePrefOrder(ranked); toast("Ordre mis à jour"); });
+  tb.addEventListener("dragend",()=>{ dragId=null; clear(); tb.querySelector(".dragging")?.classList.remove("dragging"); });
+})();
 
 /* ───── Onglets ───── */
 function renderTabs(){
