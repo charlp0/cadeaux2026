@@ -95,7 +95,7 @@ const ITEMS_LOUIS = [
  {id:"cmw6uqf8m", cat:"Jeux & accessoires", nom:"Hot Wheels Skate · Skatepark Octopus avec fingerboard", sub:"Structure finger skate pieuvre : rails à grinder, rampes, fingerboard exclusif et chaussures amovibles pour doigts, rangement inclus (HMK01)", marque:"Hot Wheels", age:4, boutique:"Amazon.fr", prix:19.66, url:"https://www.amazon.fr/dp/B0BRSG1SQJ", img:"img/custom/cmw6uqf8m.jpg"},
  {id:"cmw6uy6iz", cat:"Jeux & accessoires", nom:"Coffret portefeuille + porte-clés Spider-Man", sub:"Portefeuille enfant 3 volets (billets, monnaie, cartes) et porte-clés Marvel Avengers, coffret cadeau rouge", marque:"Get Trend", age:3, boutique:"Amazon.fr", prix:18.99, url:"https://www.amazon.fr/dp/B0CCL3DY44", img:"img/custom/cmw6uy6iz.jpg"},
  {id:"cmw6v96ui", cat:"LEGO & construction", nom:"LEGO Mario Kart 72043 · Mario interactif et kart standard", sub:"278 pièces, figurine LEGO Mario interactive + 2 figurines, le kart peut déraper", marque:"LEGO", age:7, boutique:"Amazon.fr", prix:39.99, url:"https://www.amazon.fr/dp/B0DWF3YGN3", img:"img/custom/cmw6v96ui.jpg"},
- {id:"cmw6vswq5", cat:"Véhicules & radiocommandés", nom:"Absima Truggy Mini AT 1/16 4WD RTR, vert", sub:"Voiture de modélisme prête à rouler : 36 km/h, 4 roues motrices, 2,4 GHz, feux LED, résistante aux éclaboussures, batterie et chargeur USB inclus, autonomie 20 min, portée 60 m · 27 × 21,5 × 12,5 cm, 710 g (réf. 16021)", marque:"Absima", age:14, boutique:"RC Team", prix:79.9, url:"https://www.rcteam.com/products/absima-truggy-mini-at-1-16-4wd-rtr?variant=49404643770653", img:"img/custom/cmw6vswq5.jpg", noteKJ:"Voiture de modélisme (gamme débutant « First Step ») : rapide et puissante, à piloter avec un adulte. Le fabricant la conseille à partir de 14 ans."},
+ {id:"cmw6vswq5", cat:"Véhicules & radiocommandés", nom:"FTX Crawler Mini Outback 3.0 Ranger 1/24 RTR, vert", sub:"Mini crawler 4x4 prêt à rouler : lent et précis pour franchir les obstacles, radio 2,4 GHz proportionnelle, LED avant et arrière, électronique étanche, batterie LiPo 500 mAh et chargeur USB inclus · 20,6 × 10,2 × 11,5 cm (réf. FTX5503G)", marque:"FTX", age:14, boutique:"RC Team", prix:91.9, url:"https://www.rcteam.com/products/ftx-crawler-mini-outback-30-ranger-124-rtr-ftx5503?variant=47479562371357", img:"img/custom/cmw6vswq5.jpg", noteKJ:"Voiture de modélisme : le fabricant la conseille à partir de 14 ans, mais c'est un crawler lent (allure de marche), très accessible à un enfant accompagné."},
  {id:"velo-discover500", cat:"Vélo & plein air", nom:"Vélo enfant 16 pouces Btwin Discover 500, rouge", sub:"Pour 4-6 ans (105 à 125 cm) : freins faciles à actionner pour les premières sorties", marque:"Decathlon · Btwin", age:4, boutique:"Decathlon", prix:159.99, url:"https://www.decathlon.fr/p/velo-enfant-16-pouces-4-6-ans-discover-500-rouge/356390/c354m8901293", img:"img/custom/velo-louis.jpg", noelOnly:true},
 ];
 // Catégories de la liste de Louis (ordre d'affichage). Les parents peuvent déplacer un cadeau ou renommer une catégorie depuis le mode parents (stocké en ligne).
@@ -150,8 +150,8 @@ const AILLEURS_LOUIS = {
  "cmw6uqf8m": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"King Jouet vend un autre coffret Hot Wheels Skate (Skatepark Drop In, 15,39 €, indisponible en ligne), pas le modèle Octopus."},
  "cmw6uy6iz": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Coffret non vendu chez King Jouet ni chez un autre grand vendeur identifié."},
  "cmw6v96ui": {"vendeur":"King Jouet","prix":49.99,"url":"https://www.king-jouet.com/jeu-jouet/jeux-constructions/lego-planchettes/ref-990064-72043-lego-super-mario-mario-kart-lego-mario-interactif-et-kart-standard.htm","verifie":true,"note":"Plus cher qu'Amazon et indisponible en ligne chez King Jouet le 07/11. Cdiscount environ 42 €. Set annoncé en fin de vie fin 2026."},
- "cmw6vswq5": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"RC Team : 79,90 €, en stock (variante verte). Pas de vendeur généraliste moins cher identifié."},
- "velo-discover500": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 159,99 €, en stock, retrait en magasin ou livraison (prix relevé le 08/11/2026)."}
+ "velo-discover500": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 159,99 €, en stock, retrait en magasin ou livraison (prix relevé le 08/11/2026)."},
+ "cmw6vswq5": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"RC Team : 91,90 €, variante verte en stock (la rouge est épuisée). Pas de vendeur généraliste moins cher identifié."}
 };
 // Prix Amazon.fr relevé le 07/11/2026 (prix affiché dans les résultats de recherche, vendeur non vérifié) : {prix, url, approx, note}
 const AMAZON_LOUIS = {
@@ -202,8 +202,8 @@ const AMAZON_LOUIS = {
  "cmw6uqf8m": {"prix":19.66,"url":"https://www.amazon.fr/dp/B0BRSG1SQJ","note":"Lien ajouté par les parents, prix relevé le 07/11/2026."},
  "cmw6uy6iz": {"prix":18.99,"url":"https://www.amazon.fr/dp/B0CCL3DY44","note":"Lien ajouté par les parents, prix relevé le 07/11/2026 (vendeur tiers)."},
  "cmw6v96ui": {"prix":39.99,"url":"https://www.amazon.fr/dp/B0DWF3YGN3","note":"Lien ajouté par les parents, prix relevé le 07/11/2026."},
- "cmw6vswq5": {"prix":85.99,"url":"https://www.amazon.fr/dp/B0FFY85GWR","approx":true,"note":"Même modèle en version rose (B0FFY85GWR) ; la verte n'est pas sur Amazon.fr le 08/11."},
- "velo-discover500": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."}
+ "velo-discover500": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."},
+ "cmw6vswq5": {"prix":null,"url":null,"note":"Le Mini Outback 3.0 Ranger 1/24 n'est pas sur Amazon.fr le 08/11 (seuls les Outback 1/10 et 1/18 y sont)."}
 };
 
 // ── Liste de Capucine (Noël 2026) — découpages du catalogue King Jouet ; pref = numéro écrit au stylo par Capucine (1 = préféré), avisDefaut = étoiles de départ (1-6 → 3, 7-12 → 2, 13-19 → 1)
