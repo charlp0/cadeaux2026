@@ -437,7 +437,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=22"></script>
+<script src="data.js?v=23"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -547,7 +547,7 @@ const el=(t,a={},...kids)=>{const n=document.createElement(t);for(const[k,v]of O
 function baseItems(){ return state.list.items.concat(state.custom[state.list.id]||[]); }
 function allItems(){ const all=baseItems(); if(ANNIV) return all.filter(i=>!i.noelOnly); if(state.list.id!=="louis") return all; return all.filter(i=>state.showAnniv?isAnnivGift(i):!isAnnivGift(i)); }
 function shopPrice(i){ if(i.custom||i.boutique) return i.prix!=null?Number(i.prix):null; return i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb); }
-function amazonOf(i){ if(i.custom) return (i.amazonPrix!=null||i.amazonUrl)?{prix:i.amazonPrix!=null?Number(i.amazonPrix):null,url:i.amazonUrl||null}:null; return state.list.amazon[i.id]||null; }
+function amazonOf(i){ if(i.custom) return (i.amazonPrix!=null||i.amazonUrl)?{prix:i.amazonPrix!=null?Number(i.amazonPrix):null,url:i.amazonUrl||null}:null; const a=state.list.amazon[i.id]||null; if(a&&i.boutique&&/amazon/i.test(i.boutique)) return null; return a; }
 function ailleursOf(i){ return i.custom?null:(state.list.ailleurs[i.id]||null); }
 function isDeal(i,a){ const b=shopPrice(i); return !!(a&&a.prix!=null&&b!=null&&a.prix<b-0.001); }
 function bestElsewhere(i){ // le moins cher entre Amazon et « ailleurs »
@@ -624,7 +624,7 @@ function amazonCell(i){
 }
 function elseCell(i){
   const c=el("td",{class:"col-else","data-label":"Le moins cher du web"});
-  const shop=i.custom?(i.boutique||"la boutique"):state.list.boutique;
+  const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
   const b=shopPrice(i);
   const a=amazonOf(i), o=ailleursOf(i);
   const best=bestElsewhere(i);
