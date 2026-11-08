@@ -92,12 +92,12 @@ tbody tr:last-child td{border-bottom:0}
 tbody tr.reserved{background:color-mix(in srgb,var(--green-bg) 55%,var(--paper))}
 tbody tr.hiddenrow{opacity:.55}
 .col-avis{width:10%;white-space:nowrap}
-.col-toy{width:33%;min-width:280px}
+.col-toy{width:46%;min-width:280px}
 .col-age{width:7%;white-space:nowrap}
 .col-kj{width:13%}
 .col-amz{width:12%}
-.col-else{width:13%}
-.col-res{width:13%}
+.col-else{width:18%}
+.col-res{width:16%}
 .empty{padding:34px 20px;text-align:center;color:var(--muted)}
 tr.cat-row td{background:var(--soft);padding:10px 14px;border-bottom:1px solid var(--line);border-top:2px solid var(--line)}
 tr.cat-row:first-child td{border-top:0}
@@ -250,7 +250,7 @@ footer p{margin:6px 0}
   .tablewrap tbody tr{border-bottom:1px solid var(--line);padding:6px 0}
   .tablewrap tbody td{border:0;padding:8px 14px}
   .tablewrap tbody td[data-label]::before{content:attr(data-label);display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
-  .col-avis,.col-toy,.col-age,.col-kj,.col-amz,.col-else,.col-res{width:auto}
+  .col-avis,.col-toy,.col-age,.col-else,.col-res{width:auto}
   .toy .zoom img{width:110px;height:110px}
 }
 @media (max-width:860px){
@@ -299,7 +299,7 @@ footer p{margin:6px 0}
     <button class="chip" data-f="all" aria-pressed="true">Tous</button>
     <button class="chip" data-f="free" aria-pressed="false">À réserver</button>
     <button class="chip" data-f="taken" aria-pressed="false">Réservés</button>
-    <button class="chip" data-f="deal" aria-pressed="false">Moins cher ailleurs</button>
+    <button class="chip" data-f="deal" aria-pressed="false">Bonnes affaires</button>
     <button class="chip" data-f="top" aria-pressed="false">Coups de Cœur</button>
   </div>
   <select id="sort" aria-label="Trier">
@@ -316,7 +316,7 @@ footer p{margin:6px 0}
 <div class="tablewrap">
 <table>
   <thead><tr>
-    <th class="col-avis">Priorité</th><th class="col-toy">Cadeau</th><th class="col-age">Âge</th><th class="col-kj" id="th-shop">King Jouet</th><th class="col-amz">Amazon</th><th class="col-else">Le moins cher du web</th><th class="col-res">Réservation</th>
+    <th class="col-avis">Priorité</th><th class="col-toy">Cadeau</th><th class="col-age">Âge</th><th class="col-else">Le moins cher du web</th><th class="col-res">Réservation</th>
   </tr></thead>
   <tbody id="rows"></tbody>
 </table>
@@ -377,7 +377,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=16"></script>
+<script src="data.js?v=17"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -568,13 +568,19 @@ function elseCell(i){
   const b=shopPrice(i);
   const a=amazonOf(i), o=ailleursOf(i);
   const best=bestElsewhere(i);
+  const others=[];
+  if(b!=null) others.push(shop+" : "+eur(b)+(!i.custom&&!i.boutique&&i.prixCat!=null&&i.prixWeb!=null&&Math.abs(i.prixCat-i.prixWeb)>0.001?" en ligne, "+eur(i.prixCat)+" catalogue magasin":""));
+  if(a&&a.prix!=null) others.push("Amazon : "+eur(a.prix)+(a.approx?" (modèle proche)":"")); else if(a&&a.note) others.push("Amazon : "+a.note);
+  if(o&&o.vendeur&&o.prix!=null) others.push(o.vendeur+" : "+eur(o.prix)+(o.verifie?"":" (à vérifier)"));
+  const notes=[i.noteKJ,a&&a.note&&a.prix!=null?a.note:null,o&&o.note].filter(Boolean);
+  const detail=()=>el("details",{class:"note"},el("summary",{text:"autres prix et détails"}),...others.map(t=>el("p",{text:t})),...notes.map(t=>el("p",{text:t})));
   if(best&&b!=null&&best.prix<b-0.001){
     // un autre vendeur bat la boutique
     c.append(best.url?el("a",{class:"price",href:best.url,target:"_blank",rel:"noopener",text:eur(best.prix)}):el("span",{class:"price",text:eur(best.prix)}));
     c.append(el("span",{class:"small"},el("span",{class:"vendor",text:best.vendeur})));
     c.append(el("span",{class:"save",text:"−"+eur(b-best.prix)+" vs "+shop}));
     if(best.vendeur!=="Amazon.fr"&&!best.verifie) c.append(el("span",{class:"small"},el("span",{class:"unverified",text:"à vérifier"})));
-    if(best.vendeur!=="Amazon.fr"&&best.note) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:best.note})));
+    c.append(detail());
   }else if(b!=null){
     // la boutique est la moins chère (ou seule)
     c.append(i.url?el("a",{class:"price",href:i.url,target:"_blank",rel:"noopener",text:eur(b)}):el("span",{class:"price",text:eur(b)}));
@@ -582,10 +588,11 @@ function elseCell(i){
     if(best) c.append(el("span",{class:"small",text:"le moins cher ; ensuite "+best.vendeur+" "+eur(best.prix)}));
     else if(o&&o.vendeur==null) c.append(el("span",{class:"small",text:"seul vendeur trouvé"}));
     else c.append(el("span",{class:"small",text:"le moins cher"}));
-    if(o&&o.note&&o.vendeur!=null&&!(best&&best.vendeur===o.vendeur)) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:o.note})));
+    c.append(detail());
   }else{
     if(best){ c.append(best.url?el("a",{class:"price",href:best.url,target:"_blank",rel:"noopener",text:eur(best.prix)}):el("span",{class:"price",text:eur(best.prix)})); c.append(el("span",{class:"small"},el("span",{class:"vendor",text:best.vendeur}))); }
     else c.append(el("span",{class:"nobetter",text:"—"}));
+    if(others.length||notes.length) c.append(detail());
   }
   return c;
 }
@@ -645,7 +652,6 @@ function resCell(i){
 }
 function render(){
   const L=state.list;
-  document.getElementById("th-shop").textContent=L.boutique;
   const cd=document.getElementById("countdown"); cd.replaceChildren(); cd.classList.toggle("big",ANNIV);
   const dn=daysTo(DATES.noel), da=daysTo(DATES.anniv);
   const fmt=(n,label)=>n>1?[el("b",{text:String(n)})," jours avant "+label]:n===1?[el("b",{text:"1"})," jour avant "+label]:n===0?["C'est aujourd'hui : "+label+" !"]:[label+", c'est passé"];
@@ -657,7 +663,7 @@ function render(){
   if(!list.length){
     const total=allItems().filter(i=>!khide(i)).length;
     const msg= state.showAnniv ? ["Aucun cadeau réservé sur la page anniversaire pour l'instant."] : state.showHidden ? ["Aucun cadeau retiré."] : total===0 ? [el("b",{text:L.prenom+" n'a pas encore fait sa liste."})," ",state.parents?"Ajoutez des cadeaux avec le bouton « Ajouter un cadeau ».":"Les idées arrivent bientôt."] : ["Aucun cadeau ne correspond."];
-    tb.append(el("tr",{},el("td",{colspan:"7",class:"empty"},...msg)));
+    tb.append(el("tr",{},el("td",{colspan:"5",class:"empty"},...msg)));
   }
   const grouped=hasCats()&&state.sort==="list"&&!state.showHidden&&!state.showAnniv;
   const dragOK=state.parents&&state.sort==="list"&&!state.showHidden&&!state.showAnniv&&!state.q.trim()&&state.filter==="all"&&!state.catFilter;
@@ -665,7 +671,7 @@ function render(){
   const seq=grouped?order.flatMap(c=>[{header:c,n:list.filter(i=>kcat(i)===c).length},...list.filter(i=>kcat(i)===c)]).filter(x=>x.header?x.n>0:true):list;
   for(const i of seq){
     if(i.header){
-      const td=el("td",{colspan:"7"});
+      const td=el("td",{colspan:"5"});
       if(state.parents&&state.renameCat===i.header){
         const inp=el("input",{type:"text",value:i.header,maxlength:"40","aria-label":"Nouveau nom de la catégorie"});
         const ok=el("button",{class:"btn small",type:"button",text:"Renommer",onclick:async()=>{ok.disabled=true;const old=i.header;state.renameCat=null;await renameCat(old,inp.value);}});
@@ -691,7 +697,7 @@ function render(){
         el("div",{},el("button",{class:"share",type:"button",title:"Copier le lien direct vers ce cadeau",onclick:()=>copyLink(i)},"🔗 copier le lien")),
         (state.parents&&hasCats())?(()=>{const sel=el("select",{class:"catsel","aria-label":"Catégorie du cadeau"});for(const c of catOrder(baseItems()).concat(catOrder(baseItems()).includes(AUTRES)?[]:[AUTRES])) sel.append(el("option",{value:c,text:c,selected:c===kcat(i)?"":null}));sel.append(el("option",{value:"__new__",text:"Nouvelle catégorie…"}));sel.addEventListener("change",async()=>{let v=sel.value;if(v==="__new__"){const w=el("input",{type:"text",class:"catsel",placeholder:"Nom de la nouvelle catégorie",maxlength:"40"});sel.replaceWith(w);w.focus();w.addEventListener("keydown",async e=>{if(e.key==="Enter"&&w.value.trim()){w.disabled=true;await moveCat(i,w.value.trim());}if(e.key==="Escape")render();});return;}sel.disabled=true;await moveCat(i,v);});return sel;})():null)));
     const age=el("td",{class:"col-age","data-label":"Âge",text:i.age?"Dès "+i.age+" ans":"—"});
-    tr.append(avisCell(i),toy,age,shopCell(i),amazonCell(i),elseCell(i),resCell(i)); tb.append(tr);
+    tr.append(avisCell(i),toy,age,elseCell(i),resCell(i)); tb.append(tr);
   }
   const items=allItems().filter(i=>!khide(i)); const n=items.length, taken=items.filter(i=>kres(i)).length;
   const deals=items.filter(i=>isDeal(i,bestElsewhere(i))).length, tops=items.filter(i=>kavis(i)>=3).length;
@@ -699,7 +705,7 @@ function render(){
     el("span",{},el("b",{text:String(n)})," cadeau"+(n>1?"x":"")),
     el("span",{},el("b",{text:String(taken)})," réservé"+(taken>1?"s":"")),
     el("span",{},el("b",{text:String(n-taken)})," encore à réserver"),
-    el("span",{},el("b",{text:String(deals)})," moins cher"+(deals>1?"s":"")+" ailleurs"),
+    el("span",{},el("b",{text:String(deals)})," bonne"+(deals>1?"s":"")+" affaire"+(deals>1?"s":"")),
     el("span",{},el("b",{text:String(tops)})," coup"+(tops>1?"s":"")+" de cœur"),
     el("span",{class:"pill"+(state.online===false?" off":"")},el("span",{class:"dot"}),state.online===false?"Hors ligne":state.online?"À jour":"Chargement…"));
   const hid=allItems().filter(i=>khide(i)).length;
@@ -790,7 +796,8 @@ function openLightbox(i){
   document.getElementById("lb-title").textContent=i.nom;
   document.getElementById("lb-sub").textContent=(i.sub||"")+(i.age?" · dès "+i.age+" ans":"");
   const pr=document.getElementById("lb-price"); const p=shopPrice(i); const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
-  pr.replaceChildren(p!=null?el("span",{class:"price",text:eur(p)}):"",p!=null?" chez "+shop:"");
+  const bst=bestElsewhere(i); const cheap=(bst&&p!=null&&bst.prix<p-0.001)?bst:null;
+  pr.replaceChildren(cheap?el("span",{class:"price",text:eur(cheap.prix)}):(p!=null?el("span",{class:"price",text:eur(p)}):""),cheap?" chez "+cheap.vendeur:(p!=null?" chez "+shop:""));
   const lk=document.getElementById("lb-link"); if(i.url){lk.hidden=false;lk.href=i.url;lk.textContent="Voir la fiche "+shop;} else lk.hidden=true;
   LB.showModal();
 }
