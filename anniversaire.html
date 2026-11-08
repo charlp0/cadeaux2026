@@ -378,7 +378,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=15"></script>
+<script src="data.js?v=16"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -504,7 +504,7 @@ function visibleItems(){
   if(state.filter==="deal") list=list.filter(i=>isDeal(i,bestElsewhere(i)));
   if(state.filter==="top") list=list.filter(i=>kavis(i)>=3);
   if(state.catFilter&&hasCats()) list=list.filter(i=>kcat(i)===state.catFilter);
-  if(state.sort==="list") list=applyOrder(list);
+  if(state.sort==="list"){ list=applyOrder(list); list=list.map((it,k)=>({it,k})).sort((a,b)=>(kavis(b.it)-kavis(a.it))||(a.k-b.k)).map(x=>x.it); }   // dans chaque catégorie : Coups de Cœur d'abord, puis 2 étoiles, 1 étoile, puis l'ordre manuel
   const sp=i=>{const p=shopPrice(i);return p==null?Infinity:p;};
   if(state.sort==="priceAsc") list.sort((a,b)=>sp(a)-sp(b));
   if(state.sort==="priceDesc") list.sort((a,b)=>(sp(b)===Infinity?-1:sp(b))-(sp(a)===Infinity?-1:sp(a)));
