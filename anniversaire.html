@@ -433,11 +433,11 @@ footer p{margin:6px 0}
 
 <footer>
   <p>Prix relevés le 07/11/2026, hors frais de port. Le prix « catalogue » est celui du catalogue King Jouet, valable en magasin du 14/10 au 01/12/2026 (certains prix réservés aux membres King Premium). Le prix « web » est celui de king-jouet.com le jour du relevé. Le prix Amazon est celui affiché sur Amazon.fr le jour du relevé, vendeur non vérifié. Les prix « ailleurs » marqués <span class="unverified">à vérifier</span> viennent de comparateurs et n'ont pas pu être confirmés sur la page du vendeur.</p>
-  <p>Les réservations sont partagées entre tous ceux qui ont le lien. Une erreur ? Cliquez sur « Annuler la réservation » sous le prénom. <button class="linkbtn" id="open-parents" type="button">Espace parents</button></p>
+  <p>Les réservations sont partagées entre tous ceux qui ont le lien. Une erreur ? Seule la personne qui a réservé (sur le même téléphone ou ordinateur) peut annuler, avec le lien sous son prénom ; sinon demandez aux parents. <button class="linkbtn" id="open-parents" type="button">Espace parents</button></p>
 </footer>
 </div>
 
-<script src="data.js?v=21"></script>
+<script src="data.js?v=22"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -666,7 +666,11 @@ function resCell(i){
     who.append(v.ours?(state.parents?"Acheté par nous":"Déjà pris"):"Réservé par "+v.name); box.append(who);
     if(!ANNIV&&v.occ==="Anniversaire"&&state.parents) box.append(el("div",{class:"occ",text:"offert pour l'anniversaire"}));
     if(v.ours&&!state.parents){ c.append(box); return c; }
-    if(state.confirmCancel===i.id){
+    // Seul l'auteur de la réservation (prénom saisi sur cet appareil) ou les parents peuvent annuler
+    let mine=""; try{mine=(localStorage.getItem("cadeaux.nom")||"").trim().toLowerCase();}catch(e){}
+    const canCancel=state.parents||(!v.ours&&mine&&mine===v.name.trim().toLowerCase());
+    if(!canCancel){ box.append(el("div",{class:"occ",text:"Pour annuler, demandez à "+v.name+" ou aux parents."})); c.append(box); }
+    else if(state.confirmCancel===i.id){
       box.append(el("div",{class:"occ",text:v.ours?"Annuler « acheté par nous » ?":"Annuler la réservation de "+v.name+" ?"}));
       box.append(el("div",{class:"row"},
         el("button",{class:"btn small",text:"Oui, annuler",onclick:async e=>{e.target.disabled=true;const ok=await unreserve(i);state.confirmCancel=null;toast(ok?"Réservation annulée":"Échec de l'annulation");render();}}),
@@ -674,7 +678,7 @@ function resCell(i){
     }else{
       box.append(el("button",{class:"linkbtn",text:"Annuler la réservation",onclick:()=>{state.confirmCancel=i.id;state.open=null;render();}}));
     }
-    c.append(box);
+    if(canCancel) c.append(box);
   }else if(state.open===i.id){
     let saved=""; try{saved=localStorage.getItem("cadeaux.nom")||""}catch(e){}
     const inp=el("input",{type:"text",id:"nom-"+i.id,maxlength:"30",placeholder:"Votre prénom",value:saved,autocomplete:"given-name"});
