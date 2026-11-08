@@ -51,7 +51,12 @@ button{font:inherit}
 header.hero{display:grid;grid-template-columns:1fr auto;gap:18px 32px;align-items:center;padding-block:26px 40px}
 .eyebrow{font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:12px;color:var(--gold)}
 h1{font-family:"Mountains of Christmas",var(--display);font-weight:700;font-size:clamp(44px,7vw,74px);line-height:.95;margin:6px 0 10px;text-wrap:balance;color:var(--snow);text-shadow:0 2px 0 rgba(0,0,0,.25)}
-.lead{max-width:62ch;color:rgba(255,255,255,.82);margin:0;font-size:16px}
+.lead{max-width:62ch;color:rgba(255,255,255,.92);margin:0;font-size:18px;font-weight:600}
+.howto{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px;max-width:62ch}
+.howto li{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);border-radius:12px;padding:10px 14px;font-size:15.5px;line-height:1.35;color:var(--snow)}
+.howto li b{color:var(--gold)}
+.howto .ic{flex:0 0 30px;width:30px;height:30px;border-radius:50%;background:var(--gold);color:#2b1d00;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:16px}
+[data-mode="anniv"] .howto li{background:rgba(255,255,255,.16)}
 .lead b{color:var(--snow)}
 .countdown{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .countdown span{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:5px 12px;font-weight:700;font-size:13px;color:var(--snow)}
@@ -269,6 +274,7 @@ footer p{margin:6px 0}
       <div class="eyebrow" id="eyebrow"></div>
       <h1 id="title"></h1>
       <p class="lead" id="lead"></p>
+      <ul class="howto" id="howto"></ul>
       <div class="countdown" id="countdown"></div>
       <div class="notice" id="notice" hidden></div>
     </div>
@@ -378,7 +384,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=17"></script>
+<script src="data.js?v=18"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -778,8 +784,12 @@ function renderTabs(){
 }
 function selectList(id,push){
   const L=PAGE_LISTS.find(x=>x.id===id)||PAGE_LISTS[0]; state.list=L; state.open=null; state.confirmCancel=null; state.confirmRemove=null; state.showHidden=false; state.showAnniv=false; state.catFilter=""; state.renameCat=null;
-  if(ANNIV){ document.getElementById("eyebrow").textContent="Jeudi 3 décembre 2026 · Louis fête ses 5 ans"; document.getElementById("title").textContent="L'anniversaire de Louis"; document.getElementById("lead").textContent="Louis a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 coup de cœur. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche), le prix Amazon et le moins cher trouvé sur le web. Pour lui offrir un jouet, cliquez sur Réserver et indiquez votre prénom : tout le monde verra qu'il est pris."; }
+  if(ANNIV){ document.getElementById("eyebrow").textContent="Jeudi 3 décembre 2026 · Louis fête ses 5 ans"; document.getElementById("title").textContent="L'anniversaire de Louis"; document.getElementById("lead").textContent="Louis a choisi ses envies dans le catalogue King Jouet."; }
   else { document.getElementById("eyebrow").textContent=L.eyebrow; document.getElementById("title").textContent=L.titre; document.getElementById("lead").textContent=L.intro; }
+  const ht=document.getElementById("howto"); ht.replaceChildren(
+    el("li",{},el("span",{class:"ic",text:"★"}),el("span",{},el("b",{text:"Les étoiles = la priorité de "+L.prenom+"."})," 1 j'aimerais · 2 je veux vraiment · 3 coup de cœur")),
+    el("li",{},el("span",{class:"ic",text:"€"}),el("span",{},el("b",{text:"Le prix affiché est le moins cher trouvé sur le web,"})," avec le lien pour acheter")),
+    el("li",{},el("span",{class:"ic",text:"✓"}),el("span",{},el("b",{text:"Pour offrir : « Réserver » + votre prénom."})," Tout le monde voit alors que c'est pris")));
   const pi=document.getElementById("photo-img"); pi.src=L.photo; pi.alt=L.prenom; document.getElementById("photo-tag").textContent=L.prenom;
   document.getElementById("q").placeholder="Chercher dans la liste de "+L.prenom+"…";
   if(push){ try{history.replaceState(null,"","#"+L.id);}catch(e){} window.scrollTo({top:0,behavior:"smooth"}); }

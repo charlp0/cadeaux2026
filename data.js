@@ -310,10 +310,10 @@ const AMAZON_CHARLES = {};
 // Les 4 listes du site. Les idées ajoutées par les parents (mode parents) sont stockées en ligne jusqu'à leur complétion, puis intégrées ici.
 const LISTS = [
  {id:"louis", prenom:"Louis", titre:"La liste de Louis", eyebrow:"Noël 2026", photo:"img/louis.jpg",
-  intro:"Louis a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 coup de cœur. Pour chaque jouet : l'âge, le prix King Jouet (lien vers la fiche), le prix Amazon et le moins cher trouvé sur le web.",
+  intro:"Louis a choisi ses envies dans le catalogue King Jouet.",
   items:ITEMS_LOUIS, ailleurs:AILLEURS_LOUIS, amazon:AMAZON_LOUIS, boutique:"King Jouet", cats:CATEGORIES_LOUIS},
  {id:"capucine", prenom:"Capucine", titre:"La liste de Capucine", eyebrow:"Noël 2026", photo:"img/capucine.jpg",
-  intro:"Capucine a découpé ses envies dans le catalogue King Jouet. Les étoiles indiquent la priorité : 1 étoile j'aimerais, 2 je veux vraiment, 3 coup de cœur. Pour chaque cadeau : le prix King Jouet, le prix Amazon et le moins cher trouvé sur le web.", items:ITEMS_CAPUCINE, ailleurs:AILLEURS_CAPUCINE, amazon:AMAZON_CAPUCINE, boutique:"King Jouet", cats:CATEGORIES_CAPUCINE},
+  intro:"Capucine a choisi ses envies dans le catalogue King Jouet.", items:ITEMS_CAPUCINE, ailleurs:AILLEURS_CAPUCINE, amazon:AMAZON_CAPUCINE, boutique:"King Jouet", cats:CATEGORIES_CAPUCINE},
  {id:"clementine", prenom:"Clémentine", titre:"La liste de Clémentine", eyebrow:"Noël 2026", photo:"img/clementine.jpg",
   intro:"Les idées de cadeaux de Clémentine pour Noël.", items:ITEMS_CLEMENTINE, ailleurs:AILLEURS_CLEMENTINE, amazon:AMAZON_CLEMENTINE, boutique:"Boutique", cats:[]},
  {id:"charles", prenom:"Charles", titre:"La liste de Charles", eyebrow:"Noël 2026", photo:"img/charles.jpg",
