@@ -142,6 +142,11 @@ tr.flash td{animation:flash 2.4s ease-out}
 
 .price{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.1;font-variant-numeric:tabular-nums;text-decoration:none;display:inline-block}
 a.price:hover{text-decoration:underline}
+a.pricelink{display:inline-block;text-decoration:none;color:inherit;border-radius:10px;padding:4px 8px;margin:-4px -8px;transition:background .15s}
+a.pricelink:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.golink{display:block;margin-top:3px;color:var(--accent);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.golink::after{content:" ↗"}
+a.pricelink:hover .golink{text-decoration-thickness:2px}
 .strike{color:var(--muted);text-decoration:line-through;font-size:13px;margin-left:6px;font-weight:400;font-family:var(--body)}
 .small{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
 .vendor{font-weight:700;font-size:13px}
@@ -436,7 +441,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=24"></script>
+<script src="data.js?v=25"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -621,6 +626,10 @@ function amazonCell(i){
   if(a.note) c.append(el("details",{class:"note"},el("summary",{text:"détail"}),el("p",{text:a.note})));
   return c;
 }
+function priceLink(url,prix,vendor){
+  if(!url) return [el("span",{class:"price",text:eur(prix)}),el("span",{class:"small"},el("span",{class:"vendor",text:vendor}))];
+  return [el("a",{class:"pricelink",href:url,target:"_blank",rel:"noopener",title:"Voir sur "+vendor},el("span",{class:"price",text:eur(prix)}),el("span",{class:"golink",text:"Voir sur "+vendor}))];
+}
 function elseCell(i){
   const c=el("td",{class:"col-else","data-label":"Le moins cher du web"});
   const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
@@ -635,21 +644,19 @@ function elseCell(i){
   const detail=()=>el("details",{class:"note"},el("summary",{text:"autres prix et détails"}),...others.map(t=>el("p",{text:t})),...notes.map(t=>el("p",{text:t})));
   if(best&&b!=null&&best.prix<b-0.001){
     // un autre vendeur bat la boutique
-    c.append(best.url?el("a",{class:"price",href:best.url,target:"_blank",rel:"noopener",text:eur(best.prix)}):el("span",{class:"price",text:eur(best.prix)}));
-    c.append(el("span",{class:"small"},el("span",{class:"vendor",text:best.vendeur})));
+    c.append(...priceLink(best.url,best.prix,best.vendeur));
     c.append(el("span",{class:"save",text:"−"+eur(b-best.prix)+" vs "+shop}));
     if(best.vendeur!=="Amazon.fr"&&!best.verifie) c.append(el("span",{class:"small"},el("span",{class:"unverified",text:"à vérifier"})));
     c.append(detail());
   }else if(b!=null){
     // la boutique est la moins chère (ou seule)
-    c.append(i.url?el("a",{class:"price",href:i.url,target:"_blank",rel:"noopener",text:eur(b)}):el("span",{class:"price",text:eur(b)}));
-    c.append(el("span",{class:"small"},el("span",{class:"vendor",text:shop})));
+    c.append(...priceLink(i.url,b,shop));
     if(best) c.append(el("span",{class:"small",text:"le moins cher ; ensuite "+best.vendeur+" "+eur(best.prix)}));
     else if(o&&o.vendeur==null) c.append(el("span",{class:"small",text:"seul vendeur trouvé"}));
     else c.append(el("span",{class:"small",text:"le moins cher"}));
     c.append(detail());
   }else{
-    if(best){ c.append(best.url?el("a",{class:"price",href:best.url,target:"_blank",rel:"noopener",text:eur(best.prix)}):el("span",{class:"price",text:eur(best.prix)})); c.append(el("span",{class:"small"},el("span",{class:"vendor",text:best.vendeur}))); }
+    if(best) c.append(...priceLink(best.url,best.prix,best.vendeur));
     else c.append(el("span",{class:"nobetter",text:"—"}));
     if(others.length||notes.length) c.append(detail());
   }
@@ -668,7 +675,7 @@ function resCell(i){
     // Seul l'auteur de la réservation (prénom saisi sur cet appareil) ou les parents peuvent annuler
     let mine=""; try{mine=(localStorage.getItem("cadeaux.nom")||"").trim().toLowerCase();}catch(e){}
     const canCancel=state.parents||(!v.ours&&mine&&mine===v.name.trim().toLowerCase());
-    if(!canCancel){ box.append(el("div",{class:"occ",text:"Pour annuler, demandez à "+v.name+" ou aux parents."})); c.append(box); }
+    if(!canCancel) c.append(box);
     else if(state.confirmCancel===i.id){
       box.append(el("div",{class:"occ",text:v.ours?"Annuler « acheté par nous » ?":"Annuler la réservation de "+v.name+" ?"}));
       box.append(el("div",{class:"row"},
