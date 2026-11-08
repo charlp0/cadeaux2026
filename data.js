@@ -96,9 +96,10 @@ const ITEMS_LOUIS = [
  {id:"cmw6uy6iz", cat:"Jeux & accessoires", nom:"Coffret portefeuille + porte-clés Spider-Man", sub:"Portefeuille enfant 3 volets (billets, monnaie, cartes) et porte-clés Marvel Avengers, coffret cadeau rouge", marque:"Get Trend", age:3, boutique:"Amazon.fr", prix:18.99, url:"https://www.amazon.fr/dp/B0CCL3DY44", img:"img/custom/cmw6uy6iz.jpg"},
  {id:"cmw6v96ui", cat:"LEGO & construction", nom:"LEGO Mario Kart 72043 · Mario interactif et kart standard", sub:"278 pièces, figurine LEGO Mario interactive + 2 figurines, le kart peut déraper", marque:"LEGO", age:7, boutique:"Amazon.fr", prix:39.99, url:"https://www.amazon.fr/dp/B0DWF3YGN3", img:"img/custom/cmw6v96ui.jpg"},
  {id:"cmw6vswq5", cat:"Véhicules & radiocommandés", nom:"Absima Truggy Mini AT 1/16 4WD RTR, vert", sub:"Voiture de modélisme prête à rouler : 36 km/h, 4 roues motrices, 2,4 GHz, feux LED, résistante aux éclaboussures, batterie et chargeur USB inclus, autonomie 20 min, portée 60 m · 27 × 21,5 × 12,5 cm, 710 g (réf. 16021)", marque:"Absima", age:14, boutique:"RC Team", prix:79.9, url:"https://www.rcteam.com/products/absima-truggy-mini-at-1-16-4wd-rtr?variant=49404643770653", img:"img/custom/cmw6vswq5.jpg", noteKJ:"Voiture de modélisme (gamme débutant « First Step ») : rapide et puissante, à piloter avec un adulte. Le fabricant la conseille à partir de 14 ans."},
+ {id:"velo-discover500", cat:"Vélo & plein air", nom:"Vélo enfant 16 pouces Btwin Discover 500, rouge", sub:"Pour 4-6 ans (105 à 125 cm) : freins faciles à actionner pour les premières sorties", marque:"Decathlon · Btwin", age:4, boutique:"Decathlon", prix:159.99, url:"https://www.decathlon.fr/p/velo-enfant-16-pouces-4-6-ans-discover-500-rouge/356390/c354m8901293", img:"img/custom/velo-louis.jpg", noelOnly:true},
 ];
 // Catégories de la liste de Louis (ordre d'affichage). Les parents peuvent déplacer un cadeau ou renommer une catégorie depuis le mode parents (stocké en ligne).
-const CATEGORIES_LOUIS = ["Pat' Patrouille","LEGO & construction","Déguisements","Expériences & découverte","Figurines & super-héros","Véhicules & radiocommandés","Tir & plein air","Jeux & accessoires"];
+const CATEGORIES_LOUIS = ["Pat' Patrouille","LEGO & construction","Déguisements","Expériences & découverte","Figurines & super-héros","Véhicules & radiocommandés","Tir & plein air","Jeux & accessoires","Vélo & plein air"];
 
 // Meilleur prix trouvé ailleurs : {vendeur, prix, url, verifie, note}
 const AILLEURS_LOUIS = {
@@ -149,7 +150,8 @@ const AILLEURS_LOUIS = {
  "cmw6uqf8m": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"King Jouet vend un autre coffret Hot Wheels Skate (Skatepark Drop In, 15,39 €, indisponible en ligne), pas le modèle Octopus."},
  "cmw6uy6iz": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Coffret non vendu chez King Jouet ni chez un autre grand vendeur identifié."},
  "cmw6v96ui": {"vendeur":"King Jouet","prix":49.99,"url":"https://www.king-jouet.com/jeu-jouet/jeux-constructions/lego-planchettes/ref-990064-72043-lego-super-mario-mario-kart-lego-mario-interactif-et-kart-standard.htm","verifie":true,"note":"Plus cher qu'Amazon et indisponible en ligne chez King Jouet le 07/11. Cdiscount environ 42 €. Set annoncé en fin de vie fin 2026."},
- "cmw6vswq5": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"RC Team : 79,90 €, en stock (variante verte). Pas de vendeur généraliste moins cher identifié."}
+ "cmw6vswq5": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"RC Team : 79,90 €, en stock (variante verte). Pas de vendeur généraliste moins cher identifié."},
+ "velo-discover500": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 159,99 €, en stock, retrait en magasin ou livraison (prix relevé le 08/11/2026)."}
 };
 // Prix Amazon.fr relevé le 07/11/2026 (prix affiché dans les résultats de recherche, vendeur non vérifié) : {prix, url, approx, note}
 const AMAZON_LOUIS = {
@@ -200,7 +202,8 @@ const AMAZON_LOUIS = {
  "cmw6uqf8m": {"prix":19.66,"url":"https://www.amazon.fr/dp/B0BRSG1SQJ","note":"Lien ajouté par les parents, prix relevé le 07/11/2026."},
  "cmw6uy6iz": {"prix":18.99,"url":"https://www.amazon.fr/dp/B0CCL3DY44","note":"Lien ajouté par les parents, prix relevé le 07/11/2026 (vendeur tiers)."},
  "cmw6v96ui": {"prix":39.99,"url":"https://www.amazon.fr/dp/B0DWF3YGN3","note":"Lien ajouté par les parents, prix relevé le 07/11/2026."},
- "cmw6vswq5": {"prix":85.99,"url":"https://www.amazon.fr/dp/B0FFY85GWR","approx":true,"note":"Même modèle en version rose (B0FFY85GWR) ; la verte n'est pas sur Amazon.fr le 08/11."}
+ "cmw6vswq5": {"prix":85.99,"url":"https://www.amazon.fr/dp/B0FFY85GWR","approx":true,"note":"Même modèle en version rose (B0FFY85GWR) ; la verte n'est pas sur Amazon.fr le 08/11."},
+ "velo-discover500": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."}
 };
 
 // ── Liste de Capucine (Noël 2026) — découpages du catalogue King Jouet ; pref = numéro écrit au stylo par Capucine (1 = préféré), avisDefaut = étoiles de départ (1-6 → 3, 7-12 → 2, 13-19 → 1)
@@ -231,8 +234,9 @@ const ITEMS_CAPUCINE = [
  {id:"reveil-angel", cat:"Électronique & jeux", nom:"Réveil veilleuse 3-en-1 Angel", sub:"Lilo & Stitch · réveil digital et veilleuse Lexibook", marque:"Lexibook", age:6, ref:"969695", prixCat:34.99, prixWeb:36.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-electroniques/radios-reveil/ref-969695-reveil-digital-et-veilleuse-angel-lilo-stitch.htm", img:"img/969695.jpg"},
  {id:"lego-valise", cat:"LEGO & construction", nom:"LEGO Friends 42697 · La maison de poupée dans la valise créative", sub:"355 pièces, 8 espaces personnalisables, accessoires et 2 mini-poupées", marque:"LEGO", age:6, ref:"1029293", prixCat:49.99, prixWeb:49.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-constructions/lego-planchettes/ref-1029293-42697-lego-friends-maison-poupee-valise-creative.htm", img:"img/1029293.jpg"},
  {id:"funko-vaiana", cat:"Poupées & figurines", nom:"Figurine Vaiana · Funko Pop", sub:"Figurine en vinyle Disney", marque:"Funko", age:3, ref:"862348", prixCat:17.99, prixWeb:17.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-imitation-mondes-imaginaires/figurines-cartes-a-collectionner/ref-862348-figurine-vaiana-funko-pop.htm", img:"img/862348.jpg"},
+ {id:"velo-expl500", cat:"Vélo & plein air", nom:"VTT enfant 24\" Rockrider EXPL 500, vert", sub:"Pour 9-12 ans (135 à 150 cm) : fourche suspendue, 7 vitesses, pour les sentiers vallonnés", marque:"Decathlon · Rockrider", age:9, boutique:"Decathlon", prix:239.99, url:"https://www.decathlon.fr/p/vtt-enfant-24-expl-500-vert-9-12-ans/337767/c192m8985176", img:"img/custom/velo-capucine.jpg"},
 ];
-const CATEGORIES_CAPUCINE = ["Peluches & compagnons","Poupées & figurines","Électronique & jeux","Créatif & mode","Miniverse","Expériences & découverte","LEGO & construction","Action & aventure"];
+const CATEGORIES_CAPUCINE = ["Peluches & compagnons","Poupées & figurines","Électronique & jeux","Créatif & mode","Miniverse","Expériences & découverte","LEGO & construction","Action & aventure","Vélo & plein air"];
 
 const AILLEURS_CAPUCINE = {
  "kitty-life": {"vendeur":"E.Leclerc","prix":39.9,"url":"https://www.e.leclerc/fp/kitty-life-rose-3417765942556","verifie":true,"note":"Kitty Life rose vendu par E.Leclerc, retrait magasin / Click & Collect. Même prix annoncé chez Carrefour, Oxybul et Boulanger."},
@@ -260,7 +264,8 @@ const AILLEURS_CAPUCINE = {
  "coquillages": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Mattel Vaiana Coquillage Océan Surprise (JJV43) : aucun prix lisible ailleurs (PcComponentes 31,81 € à titre indicatif)."},
  "reveil-angel": {"vendeur":"E.Leclerc","prix":21.99,"url":"https://www.e.leclerc/fp/reveil-avec-veilleuse-angel-en-3d-3380743107288","verifie":true,"note":"Lexibook RL800D1 réveil + veilleuse Angel 3D, bon plan E.Leclerc jusqu'au 06/12/2026 (au lieu de 26,99 €). Correspondance exacte avec le « 3-en-1 » à confirmer."},
  "lego-valise": {"vendeur":"E.Leclerc","prix":39.99,"url":"https://www.e.leclerc/fp/lego-friends-la-maison-de-poupee-dans-la-valise-creative-42697-5702018060575","verifie":true,"note":"Vendu par E.Leclerc, en stock. Auchan 40,99 €."},
- "funko-vaiana": {"vendeur":"E.Leclerc","prix":15.86,"url":"https://www.e.leclerc/fp/pop-disney-vaiana-vaiana-et-pua-0889698932059","verifie":false,"note":"Funko Pop Vaiana et Pua chez E.Leclerc ; le modèle exact de King Jouet n'est pas certain. Auchan 15,99 €."}
+ "funko-vaiana": {"vendeur":"E.Leclerc","prix":15.86,"url":"https://www.e.leclerc/fp/pop-disney-vaiana-vaiana-et-pua-0889698932059","verifie":false,"note":"Funko Pop Vaiana et Pua chez E.Leclerc ; le modèle exact de King Jouet n'est pas certain. Auchan 15,99 €."},
+ "velo-expl500": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 239,99 €, en stock, retrait en magasin ou livraison (prix relevé le 08/11/2026)."}
 };
 const AMAZON_CAPUCINE = {
  "kitty-life": {"prix": 39.99, "url": "https://www.amazon.fr/dp/B0GX7CS966"},
@@ -288,7 +293,8 @@ const AMAZON_CAPUCINE = {
  "coquillages": {"prix": null, "url": null, "note": "Coquillage surprise Disney Princesses introuvable sur Amazon.fr."},
  "reveil-angel": {"prix": 22.99, "url": "https://www.amazon.fr/dp/B0DHGQKRBN", "note": "Lexibook RL800D1 Stitch & Angel réveil veilleuse."},
  "lego-valise": {"prix": 39.99, "url": "https://www.amazon.fr/dp/B0FPXDC9M4"},
- "funko-vaiana": {"prix": 14.9, "url": "https://www.amazon.fr/dp/B08P5YC75P", "approx": true, "note": "Funko Pop Disney Princesses Moana : vérifier que c'est le même modèle que la réf. King Jouet."}
+ "funko-vaiana": {"prix": 14.9, "url": "https://www.amazon.fr/dp/B08P5YC75P", "approx": true, "note": "Funko Pop Disney Princesses Moana : vérifier que c'est le même modèle que la réf. King Jouet."},
+ "velo-expl500": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."}
 };
 
 // Listes de Clémentine et Charles : remplies au fil des idées complétées (scripts/idees.js) ou de découpages.

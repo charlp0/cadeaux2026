@@ -378,7 +378,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=14"></script>
+<script src="data.js?v=15"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -486,7 +486,7 @@ async function addCustom(o){ const id="c"+Date.now().toString(36); const ok=awai
 const el=(t,a={},...kids)=>{const n=document.createElement(t);for(const[k,v]of Object.entries(a)){if(k==="class")n.className=v;else if(k==="text")n.textContent=v;else if(k.startsWith("on"))n.addEventListener(k.slice(2),v);else if(v!=null)n.setAttribute(k,v);}for(const k of kids){if(k==null)continue;n.append(k.nodeType?k:document.createTextNode(k));}return n;};
 
 function baseItems(){ return state.list.items.concat(state.custom[state.list.id]||[]); }
-function allItems(){ const all=baseItems(); if(ANNIV||state.list.id!=="louis") return all; return all.filter(i=>state.showAnniv?isAnnivGift(i):!isAnnivGift(i)); }
+function allItems(){ const all=baseItems(); if(ANNIV) return all.filter(i=>!i.noelOnly); if(state.list.id!=="louis") return all; return all.filter(i=>state.showAnniv?isAnnivGift(i):!isAnnivGift(i)); }
 function shopPrice(i){ if(i.custom||i.boutique) return i.prix!=null?Number(i.prix):null; return i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb); }
 function amazonOf(i){ if(i.custom) return (i.amazonPrix!=null||i.amazonUrl)?{prix:i.amazonPrix!=null?Number(i.amazonPrix):null,url:i.amazonUrl||null}:null; return state.list.amazon[i.id]||null; }
 function ailleursOf(i){ return i.custom?null:(state.list.ailleurs[i.id]||null); }
