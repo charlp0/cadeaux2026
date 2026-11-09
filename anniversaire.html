@@ -442,7 +442,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=27"></script>
+<script src="data.js?v=28"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -725,7 +725,7 @@ function resCell(i){
   }
   if(state.parents){
     const pa=el("div",{class:"pactions"});
-    if(!r&&!khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Réservé par Maman et Papa",title:"Marque le cadeau comme réservé par les parents",onclick:async e=>{e.target.disabled=true;const ok=await markOurs(i);toast(ok?"Réservé par Maman et Papa":"Déjà réservé par quelqu'un");}}));
+    if(!r&&!khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Réserver pour nous",title:"Le cadeau apparaîtra « Réservé par Maman et Papa » pour toute la famille",onclick:async e=>{e.target.disabled=true;const ok=await markOurs(i);toast(ok?"Réservé pour Maman et Papa":"Déjà réservé par quelqu'un");}}));
     if(khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Remettre dans la liste",onclick:async e=>{e.target.disabled=true;await setHidden(i,false);toast("Remis dans la liste");}}));
     else if(state.confirmRemove===i.id){
       pa.append(el("span",{class:"small",text:i.custom?"Supprimer définitivement ce cadeau ?":"Retirer ce cadeau de la liste ? (il pourra être remis)"}));
