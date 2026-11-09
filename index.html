@@ -144,9 +144,8 @@ tr.flash td{animation:flash 2.4s ease-out}
 a.price:hover{text-decoration:underline}
 a.pricelink{display:inline-block;text-decoration:none;color:inherit;border-radius:10px;padding:4px 8px;margin:-4px -8px;transition:background .15s}
 a.pricelink:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
-.golink{display:block;margin-top:3px;color:var(--accent);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.golink{display:block;margin-top:3px;line-height:1.35;color:var(--accent);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:3px}
 .golink::after{content:" ↗"}
-.hidden-price{margin-top:0;font-style:italic}
 a.pricelink:hover .golink{text-decoration-thickness:2px}
 .strike{color:var(--muted);text-decoration:line-through;font-size:13px;margin-left:6px;font-weight:400;font-family:var(--body)}
 .small{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
@@ -442,7 +441,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=26"></script>
+<script src="data.js?v=27"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -644,8 +643,8 @@ function elseCell(i){
   if(!canSeePrice(i)){ // réservé par quelqu'un d'autre : seulement le lien vers la boutique
     const bst=bestElsewhere(i), bb=shopPrice(i); const useBest=bst&&bst.url&&bb!=null&&bst.prix<bb-0.001;
     const url=useBest?bst.url:i.url, vendor=useBest?bst.vendeur:shop;
-    c.append(el("span",{class:"small hidden-price",text:"prix masqué (cadeau réservé)"}));
     if(url) c.append(el("a",{class:"golink",href:url,target:"_blank",rel:"noopener",text:"Voir sur "+vendor}));
+    else c.append(el("span",{class:"small",text:vendor}));
     return c;
   }
   const b=shopPrice(i);
@@ -885,7 +884,7 @@ function openLightbox(i){
   document.getElementById("lb-sub").textContent=(i.sub||"")+(i.age?" · dès "+i.age+" ans":"");
   const pr=document.getElementById("lb-price"); const p=shopPrice(i); const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
   const bst=bestElsewhere(i); const cheap=(bst&&p!=null&&bst.prix<p-0.001)?bst:null;
-  if(!canSeePrice(i)) pr.replaceChildren(el("span",{class:"small hidden-price",text:"prix masqué (cadeau réservé)"}));
+  if(!canSeePrice(i)) pr.replaceChildren("");
   else pr.replaceChildren(cheap?el("span",{class:"price",text:eur(cheap.prix)}):(p!=null?el("span",{class:"price",text:eur(p)}):""),cheap?" chez "+cheap.vendeur:(p!=null?" chez "+shop:""));
   const lk=document.getElementById("lb-link"); if(i.url){lk.hidden=false;lk.href=i.url;lk.textContent="Voir la fiche "+shop;} else lk.hidden=true;
   LB.showModal();
