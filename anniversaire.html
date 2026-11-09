@@ -147,6 +147,7 @@ a.pricelink{display:inline-block;text-decoration:none;color:inherit;border-radiu
 a.pricelink:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
 .golink{display:block;margin-top:3px;color:var(--accent);font-weight:700;font-size:13px;text-decoration:underline;text-underline-offset:3px}
 .golink::after{content:" ↗"}
+.hidden-price{margin-top:0;font-style:italic}
 a.pricelink:hover .golink{text-decoration-thickness:2px}
 .strike{color:var(--muted);text-decoration:line-through;font-size:13px;margin-left:6px;font-weight:400;font-family:var(--body)}
 .small{display:block;color:var(--muted);font-size:12.5px;margin-top:4px}
@@ -442,7 +443,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=25"></script>
+<script src="data.js?v=26"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -631,9 +632,23 @@ function priceLink(url,prix,vendor){
   if(!url) return [el("span",{class:"price",text:eur(prix)}),el("span",{class:"small"},el("span",{class:"vendor",text:vendor}))];
   return [el("a",{class:"pricelink",href:url,target:"_blank",rel:"noopener",title:"Voir sur "+vendor},el("span",{class:"price",text:eur(prix)}),el("span",{class:"golink",text:"Voir sur "+vendor}))];
 }
+// Le prix d'un cadeau réservé n'est visible que par la personne qui l'a réservé (prénom de cet appareil) et par les parents
+function canSeePrice(i){
+  const r=kres(i); if(!r||state.parents) return true;
+  const v=splitVoter(r.voter); if(v.ours) return false;
+  let mine=""; try{mine=(localStorage.getItem("cadeaux.nom")||"").trim().toLowerCase();}catch(e){}
+  return !!mine&&mine===v.name.trim().toLowerCase();
+}
 function elseCell(i){
   const c=el("td",{class:"col-else","data-label":"Le moins cher du web"});
   const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
+  if(!canSeePrice(i)){ // réservé par quelqu'un d'autre : seulement le lien vers la boutique
+    const bst=bestElsewhere(i), bb=shopPrice(i); const useBest=bst&&bst.url&&bb!=null&&bst.prix<bb-0.001;
+    const url=useBest?bst.url:i.url, vendor=useBest?bst.vendeur:shop;
+    c.append(el("span",{class:"small hidden-price",text:"prix masqué (cadeau réservé)"}));
+    if(url) c.append(el("a",{class:"golink",href:url,target:"_blank",rel:"noopener",text:"Voir sur "+vendor}));
+    return c;
+  }
   const b=shopPrice(i);
   const a=amazonOf(i), o=ailleursOf(i);
   const best=bestElsewhere(i);
@@ -670,7 +685,7 @@ function resCell(i){
     const v=splitVoter(r.voter);
     const box=el("div",{class:"taken"+(v.ours?" ours":"")});
     const who=el("div",{class:"who"}); who.innerHTML='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>';
-    who.append(v.ours?(state.parents?"Acheté par nous":"Déjà pris"):"Réservé par "+v.name); box.append(who);
+    who.append(v.ours?"Réservé par Maman et Papa":"Réservé par "+v.name); box.append(who);
     if(!ANNIV&&v.occ==="Anniversaire"&&state.parents) box.append(el("div",{class:"occ",text:"offert pour l'anniversaire"}));
     if(v.ours&&!state.parents){ c.append(box); return c; }
     // Seul l'auteur de la réservation (prénom saisi sur cet appareil) ou les parents peuvent annuler
@@ -678,7 +693,7 @@ function resCell(i){
     const canCancel=state.parents||(!v.ours&&mine&&mine===v.name.trim().toLowerCase());
     if(!canCancel) c.append(box);
     else if(state.confirmCancel===i.id){
-      box.append(el("div",{class:"occ",text:v.ours?"Annuler « acheté par nous » ?":"Annuler la réservation de "+v.name+" ?"}));
+      box.append(el("div",{class:"occ",text:"Annuler la réservation de "+(v.ours?"Maman et Papa":v.name)+" ?"}));
       box.append(el("div",{class:"row"},
         el("button",{class:"btn small",text:"Oui, annuler",onclick:async e=>{e.target.disabled=true;const ok=await unreserve(i);state.confirmCancel=null;toast(ok?"Réservation annulée":"Échec de l'annulation");render();}}),
         el("button",{class:"btn ghost small",text:"Non",onclick:()=>{state.confirmCancel=null;render();}})));
@@ -711,7 +726,7 @@ function resCell(i){
   }
   if(state.parents){
     const pa=el("div",{class:"pactions"});
-    if(!r&&!khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Acheté par nous",title:"Marque le cadeau comme pris, sans afficher de prénom",onclick:async e=>{e.target.disabled=true;const ok=await markOurs(i);toast(ok?"Marqué « acheté par nous »":"Déjà réservé par quelqu'un");}}));
+    if(!r&&!khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Réservé par Maman et Papa",title:"Marque le cadeau comme réservé par les parents",onclick:async e=>{e.target.disabled=true;const ok=await markOurs(i);toast(ok?"Réservé par Maman et Papa":"Déjà réservé par quelqu'un");}}));
     if(khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Remettre dans la liste",onclick:async e=>{e.target.disabled=true;await setHidden(i,false);toast("Remis dans la liste");}}));
     else if(state.confirmRemove===i.id){
       pa.append(el("span",{class:"small",text:i.custom?"Supprimer définitivement ce cadeau ?":"Retirer ce cadeau de la liste ? (il pourra être remis)"}));
@@ -871,7 +886,8 @@ function openLightbox(i){
   document.getElementById("lb-sub").textContent=(i.sub||"")+(i.age?" · dès "+i.age+" ans":"");
   const pr=document.getElementById("lb-price"); const p=shopPrice(i); const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
   const bst=bestElsewhere(i); const cheap=(bst&&p!=null&&bst.prix<p-0.001)?bst:null;
-  pr.replaceChildren(cheap?el("span",{class:"price",text:eur(cheap.prix)}):(p!=null?el("span",{class:"price",text:eur(p)}):""),cheap?" chez "+cheap.vendeur:(p!=null?" chez "+shop:""));
+  if(!canSeePrice(i)) pr.replaceChildren(el("span",{class:"small hidden-price",text:"prix masqué (cadeau réservé)"}));
+  else pr.replaceChildren(cheap?el("span",{class:"price",text:eur(cheap.prix)}):(p!=null?el("span",{class:"price",text:eur(p)}):""),cheap?" chez "+cheap.vendeur:(p!=null?" chez "+shop:""));
   const lk=document.getElementById("lb-link"); if(i.url){lk.hidden=false;lk.href=i.url;lk.textContent="Voir la fiche "+shop;} else lk.hidden=true;
   LB.showModal();
 }
@@ -898,7 +914,7 @@ function renderBilan(){
     const items=L.items.concat(state.custom[L.id]||[]).filter(i=>!state.hide[sc+":"+i.id]).filter(i=>ANNIV?true:(L.id==="louis"?!annivOf(i):true));
     const priceOf=i=>i.custom?(i.prix!=null?Number(i.prix):null):(i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb));
     const givers={}; let nRes=0,nOurs=0,total=0;
-    for(const i of items){ const r=state.res[L.id+":"+i.id]; if(!r) continue; const v=splitVoter(r.voter); const p=priceOf(i)||0; nRes++; total+=p; if(v.ours){nOurs++; (givers["Nous (parents)"]=givers["Nous (parents)"]||{n:0,t:0,items:[]}); givers["Nous (parents)"].n++; givers["Nous (parents)"].t+=p; givers["Nous (parents)"].items.push(i.nom);} else { const g=givers[v.name]=givers[v.name]||{n:0,t:0,items:[]}; g.n++; g.t+=p; g.items.push(i.nom+(v.occ?" ("+v.occ+")":"")); } }
+    for(const i of items){ const r=state.res[L.id+":"+i.id]; if(!r) continue; const v=splitVoter(r.voter); const p=priceOf(i)||0; nRes++; total+=p; if(v.ours){nOurs++; (givers["Maman et Papa"]=givers["Maman et Papa"]||{n:0,t:0,items:[]}); givers["Maman et Papa"].n++; givers["Maman et Papa"].t+=p; givers["Maman et Papa"].items.push(i.nom);} else { const g=givers[v.name]=givers[v.name]||{n:0,t:0,items:[]}; g.n++; g.t+=p; g.items.push(i.nom+(v.occ?" ("+v.occ+")":"")); } }
     const av=i=>{const v=state.avis[sc+":"+i.id]; return v==null?Number(i.avisDefaut||0):Number(v)||0;};
     const tops=items.filter(i=>av(i)>=3&&!state.res[L.id+":"+i.id]);
     grandTotal+=total; grandN+=nRes;

@@ -11,7 +11,7 @@ Site statique (GitHub Pages), deux pages :
 - `img/` : visuels King Jouet 480 px, `img/large/` 600 px pour la visionneuse, photos des 4 listes, `placeholder.svg`
 
 ## Mode parents
-Lien « Espace parents » en bas de page, code `PARENTS_CODE` dans `index.html` (0312 par défaut). Permet de fixer la priorité de chaque cadeau (1 étoile = J'aimerais, 2 = Je veux vraiment, 3 = Je veux absolument ; `avisDefaut` dans data.js donne la valeur de départ, par exemple celle déduite de l'ordre écrit par Capucine), de marquer un cadeau « acheté par nous », de retirer / remettre une ligne, d'ajouter un cadeau (nom, boutique, prix, liens, image), de supprimer un cadeau ajouté et de consulter le bilan.
+Lien « Espace parents » en bas de page, code `PARENTS_CODE` dans `index.html` (0312 par défaut). Permet de fixer la priorité de chaque cadeau (1 étoile = J'aimerais, 2 = Je veux vraiment, 3 = Je veux absolument ; `avisDefaut` dans data.js donne la valeur de départ, par exemple celle déduite de l'ordre écrit par Capucine), de marquer un cadeau « réservé par Maman et Papa », de retirer / remettre une ligne, d'ajouter un cadeau (nom, boutique, prix, liens, image), de supprimer un cadeau ajouté et de consulter le bilan.
 
 ## Stockage partagé
 Supabase (projet familial), table `corse_votes` (block_id, voter), lecture/écriture avec la clé publique :
