@@ -307,10 +307,19 @@ const AILLEURS_CLEMENTINE = {
 const AMAZON_CLEMENTINE = {
  "cordon-tessa": {"prix":null,"url":null,"note":"Pas vendu sur Amazon.fr (recherche du 11/11/2026)."}
 };
+const CATEGORIES_CHARLES = ["Cadeaux communs","Autres idées"];
+// commun:true = cadeau à plusieurs : pas de prix ni de lien affichés, bouton « Participer » (prénom + montant), puis voir avec Clémentine
 const ITEMS_CHARLES = [
+ {id:"ecran-odyssey-g7", cat:"Cadeaux communs", commun:true, nom:"Écran gaming Samsung Odyssey G7 37 pouces", sub:"Écran incurvé 4K UHD, 165 Hz (modèle G75F)", marque:"Samsung", age:0, img:"img/custom/ecran-odyssey-g7.jpg"},
+ {id:"volant-fanatec-wrc", cat:"Cadeaux communs", commun:true, nom:"Volant de simulation Fanatec CSL Elite WRC", sub:"Volant de course de 30 cm en Alcantara, sous licence officielle WRC, pour base Fanatec", marque:"Fanatec", age:0, img:"img/custom/volant-fanatec-wrc.jpg"},
+ {id:"box-signature", cat:"Autres idées", nom:"Box de vins Signature, Trois Fois Vin", sub:"2 ou 3 bouteilles de petits domaines et de vignerons, rouges ou rouge et blanc, avec livret de dégustation · livraison en point relais incluse", marque:"Trois Fois Vin", age:0, boutique:"Trois Fois Vin", prix:53.90, url:"https://www.troisfoisvin.com/produit/boxs-du-mois/signature-2/", img:"img/custom/box-signature.jpg"},
 ];
-const AILLEURS_CHARLES = {};
-const AMAZON_CHARLES = {};
+const AILLEURS_CHARLES = {
+ "box-signature": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Trois Fois Vin : 53,90 € la box de 2 bouteilles, 74,90 € celle de 3 (prix relevés le 11/11/2026). La page annonce aussi un abonnement à partir de 48,90 € par mois."}
+};
+const AMAZON_CHARLES = {
+ "box-signature": {"prix":null,"url":null,"note":"Box vendue par Trois Fois Vin sur son site."}
+};
 
 // Les 4 listes du site. Les idées ajoutées par les parents (mode parents) sont stockées en ligne jusqu'à leur complétion, puis intégrées ici.
 const LISTS = [
@@ -322,5 +331,5 @@ const LISTS = [
  {id:"clementine", prenom:"Clémentine", titre:"La liste de Clémentine", eyebrow:"Noël 2026", photo:"img/clementine.jpg",
   intro:"Les idées de cadeaux de Clémentine pour Noël.", items:ITEMS_CLEMENTINE, ailleurs:AILLEURS_CLEMENTINE, amazon:AMAZON_CLEMENTINE, boutique:"Boutique", cats:[]},
  {id:"charles", prenom:"Charles", titre:"La liste de Charles", eyebrow:"Noël 2026", photo:"img/charles.jpg",
-  intro:"Les idées de cadeaux de Charles pour Noël.", items:ITEMS_CHARLES, ailleurs:AILLEURS_CHARLES, amazon:AMAZON_CHARLES, boutique:"Boutique", cats:[]},
+  intro:"Les idées de cadeaux de Charles pour Noël.", items:ITEMS_CHARLES, ailleurs:AILLEURS_CHARLES, amazon:AMAZON_CHARLES, boutique:"Boutique", cats:CATEGORIES_CHARLES},
 ];

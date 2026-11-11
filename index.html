@@ -188,6 +188,16 @@ details.note p{margin:4px 0 0;max-width:36ch}
 .form input[type=text]{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px;background:var(--paper);color:var(--ink);width:100%}
 .row{display:flex;gap:6px;flex-wrap:wrap}
 .err{color:var(--accent);font-size:12.5px;font-weight:700}
+.form input[type=number]{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px;background:var(--paper);color:var(--ink);width:100%}
+.commun-tag{display:inline-block;background:color-mix(in srgb,var(--gold) 34%,var(--paper));color:var(--ink);font-weight:800;font-size:13px;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.parts{display:grid;gap:6px;margin-bottom:8px}
+.parts .mine{font-weight:800;color:var(--green);display:flex;align-items:flex-start;gap:6px;line-height:1.3}
+.parts .mine svg{width:16px;height:16px;flex:0 0 auto;margin-top:2px}
+.parts .clem{font-size:13px;line-height:1.35;background:color-mix(in srgb,var(--gold) 22%,var(--paper));border-radius:10px;padding:7px 10px}
+.parts ul{list-style:none;margin:0;padding:0;display:grid;gap:3px;font-size:13px}
+.parts .tot{font-weight:800;font-size:13.5px}
+#merci .sheet p{margin:8px 0 0;font-size:15.5px;line-height:1.45}
+#merci .sheet p.clem{background:color-mix(in srgb,var(--gold) 26%,var(--paper));border-radius:12px;padding:10px 12px;font-weight:700}
 .pactions{display:grid;gap:6px;margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
@@ -394,6 +404,14 @@ footer p{margin:6px 0}
   </div>
 </dialog>
 
+<dialog id="merci" aria-labelledby="merci-title">
+  <form class="sheet" method="dialog">
+    <h2 id="merci-title">Merci !</h2>
+    <p id="merci-text"></p>
+    <p class="clem" id="merci-clem"></p>
+    <div class="actions"><button class="btn" type="submit">J'ai compris</button></div>
+  </form>
+</dialog>
 <dialog id="pin" aria-labelledby="pin-title">
   <form class="sheet" method="dialog" id="pin-form">
     <h2 id="pin-title">Espace parents</h2>
@@ -441,7 +459,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=29"></script>
+<script src="data.js?v=30"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -479,7 +497,7 @@ const H={"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"applic
 const PARENTS_CODE="0312";   // code de l'espace parents (à changer ici si besoin)
 const AVIS_LABEL=["","J'aimerais","Je veux vraiment","Coup de Cœur"];
 
-const state={list:null, res:{}, avis:{}, hide:{}, custom:{}, cat:{}, order:{}, catOrder:{}, catFilter:"", renameCat:null, showAnniv:false, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
+const state={list:null, parts:{}, partDraft:null, res:{}, avis:{}, hide:{}, custom:{}, cat:{}, order:{}, catOrder:{}, catFilter:"", renameCat:null, showAnniv:false, filter:"all", sort:"list", q:"", online:null, open:null, confirmCancel:null, confirmRemove:null, parents:false, showHidden:false};
 const eur=n=>n==null?"":Number(n).toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
 const key=(prefix,i)=>prefix+":"+state.list.id+":"+i.id;
 const OURS="__nous__";   // réservation « acheté par nous » (parents), affichée sans prénom
@@ -496,21 +514,91 @@ async function sbDelete(block_id){const r=await fetch(`${SB_URL}/rest/v1/${TABLE
 async function loadAll(){
   try{
     const rows=await sbGet("block_id=like."+encodeURIComponent("cadeau*"));
-    const res={},avis={},hide={},custom={},cat={},order={},catOrderS={};
+    const res={},avis={},hide={},custom={},cat={},order={},catOrderS={},parts={};
     for(const row of rows){
-      const m=/^(cadeau(?:-avis|-hide|-item|-cat|-order|-catorder)?):([^:]+):(.+)$/.exec(row.block_id); if(!m) continue;
+      const m=/^(cadeau(?:-avis|-hide|-item|-cat|-order|-catorder|-part)?):([^:]+):(.+)$/.exec(row.block_id); if(!m) continue;
       const [,kind,list,id]=m; const k=list+":"+id;
       if(kind==="cadeau"){ if(!res[k]) res[k]=row; }
       else if(kind==="cadeau-avis"){ avis[k]=row.voter; }
       else if(kind==="cadeau-hide"){ hide[k]=true; }
+      else if(kind==="cadeau-part"){ (parts[k]=parts[k]||[]).push(parsePart(row.voter)); }
       else if(kind==="cadeau-cat"){ cat[k]=row.voter; }
       else if(kind==="cadeau-order"){ try{ order[list]=JSON.parse(row.voter); }catch(e){} }
       else if(kind==="cadeau-catorder"){ try{ catOrderS[list]=JSON.parse(row.voter); }catch(e){} }
       else if(kind==="cadeau-item"){ try{ const o=JSON.parse(row.voter); o.id=id; o.custom=true; (custom[list]=custom[list]||[]).push(o); }catch(e){} }
     }
-    state.res=res; state.avis=avis; state.hide=hide; state.custom=custom; state.cat=cat; state.order=order; state.catOrder=catOrderS; state.online=true;
+    state.res=res; state.parts=parts; state.avis=avis; state.hide=hide; state.custom=custom; state.cat=cat; state.order=order; state.catOrder=catOrderS; state.online=true;
   }catch(e){ state.online=false; }
   renderTabs(); render();
+}
+/* Cadeaux communs : chacun indique un montant (ligne « cadeau-part:<liste>:<id> », valeur « Prénom|montant »), puis voit avec la personne qui tient la cagnotte */
+const CAGNOTTE="Clémentine";
+function parsePart(v){ const k=String(v).lastIndexOf("|"); return {n:k<0?String(v):String(v).slice(0,k), m:k<0?0:(Number(String(v).slice(k+1))||0), raw:String(v)}; }
+const kparts=i=>state.parts[state.list.id+":"+i.id]||[];
+const myName=()=>{let m="";try{m=(localStorage.getItem("cadeaux.nom")||"").trim().toLowerCase();}catch(e){}return m;};
+async function sbDeleteRow(block_id,voter){const r=await fetch(`${SB_URL}/rest/v1/${TABLE}?block_id=eq.${encodeURIComponent(block_id)}&voter=eq.${encodeURIComponent(voter)}`,{method:"DELETE",headers:{...H,"Prefer":"return=minimal"}});return r.ok;}
+async function participate(i,name,amount){
+  const bid=key("cadeau-part",i); let ex;
+  try{ ex=await sbGet("block_id=eq."+encodeURIComponent(bid)); }catch(e){ return {ok:false,msg:"Impossible d'enregistrer (réessayez dans un instant)."}; }
+  for(const r of ex){ if(parsePart(r.voter).n.trim().toLowerCase()===name.toLowerCase()) await sbDeleteRow(bid,r.voter); }   // une seule participation par prénom
+  if(!await sbInsert(bid,name+"|"+amount)) return {ok:false,msg:"Impossible d'enregistrer (réessayez dans un instant)."};
+  try{localStorage.setItem("cadeaux.nom",name)}catch(e){}
+  await loadAll(); return {ok:true};
+}
+async function unparticipate(i,raw){ const ok=await sbDeleteRow(key("cadeau-part",i),raw); await loadAll(); return ok; }
+function partBox(c,i){
+  c.setAttribute("data-label","Participation");
+  const ps=kparts(i), mine=myName(), me=ps.find(p=>mine&&p.n.trim().toLowerCase()===mine)||null;
+  const check='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>';
+  const box=el("div",{class:"parts"});
+  if(state.parents&&ps.length){   // les parents voient les montants et le total
+    box.append(el("div",{class:"tot",text:"Cagnotte : "+ps.reduce((a,p)=>a+p.m,0)+" € ("+ps.length+" participant"+(ps.length>1?"s":"")+")"}));
+    box.append(el("ul",{},...ps.map(p=>el("li",{},p.n+" · "+p.m+" € ",el("button",{class:"linkbtn",type:"button",text:"retirer",onclick:async e=>{ if(!window.confirm("Retirer la participation de "+p.n+" ("+p.m+" €) ?")) return; e.target.disabled=true; const ok=await unparticipate(i,p.raw); toast(ok?"Participation retirée":"Échec"); }})))));
+  }else if(ps.length){            // la famille voit qui participe, pas les montants
+    const others=ps.filter(p=>p!==me).map(p=>p.n);
+    if(others.length) box.append(el("div",{class:"small",style:"margin-top:0",text:(me?"Participent aussi : ":"Participent déjà : ")+others.join(", ")}));
+  }
+  if(me&&state.open!==i.id){
+    const w=el("div",{class:"mine"}); w.innerHTML=check; w.append("Vous participez : "+me.m+" €"); box.append(w);
+    box.append(el("div",{class:"clem",text:"Voyez avec "+CAGNOTTE+" pour lui remettre votre participation."}));
+    box.append(el("div",{class:"row"},
+      el("button",{class:"linkbtn",type:"button",text:"Modifier le montant",onclick:()=>{state.partDraft={id:i.id,n:me.n,m:String(me.m),f:"m"};state.open=i.id;render();}}),
+      el("button",{class:"linkbtn",type:"button",text:"Retirer ma participation",onclick:async e=>{ if(!window.confirm("Retirer votre participation de "+me.m+" € ?")) return; e.target.disabled=true; const ok=await unparticipate(i,me.raw); toast(ok?"Participation retirée":"Échec"); }})));
+  }
+  if(box.childNodes.length) c.append(box);
+  if(state.open===i.id){
+    let saved=""; try{saved=localStorage.getItem("cadeaux.nom")||""}catch(e){}
+    if(!state.partDraft||state.partDraft.id!==i.id) state.partDraft={id:i.id,n:me?me.n:saved,m:me?String(me.m):"",f:(me||saved)?"m":"n"};
+    const d=state.partDraft;   // le brouillon survit aux rafraîchissements automatiques de la page
+    const inN=el("input",{type:"text",id:"pnom-"+i.id,maxlength:"30",placeholder:"Votre prénom",value:d.n,autocomplete:"given-name",oninput:e=>{d.n=e.target.value;},onfocus:()=>{d.f="n";}});
+    const inM=el("input",{type:"number",id:"pmt-"+i.id,min:"1",max:"5000",step:"1",inputmode:"numeric",placeholder:"Montant en €",value:d.m,oninput:e=>{d.m=e.target.value;},onfocus:()=>{d.f="m";}});
+    const err=el("div",{class:"err"});
+    const ok=el("button",{class:"btn small",type:"button",text:"Confirmer",onclick:async()=>{
+      const name=inN.value.trim().replace(/\s+/g," "); const amt=Math.round(Number(String(inM.value).replace(",",".")));
+      if(name.length<2){err.textContent="Indiquez votre prénom.";inN.focus();return;}
+      if(/[|·]/.test(name)){err.textContent="Prénom invalide.";return;}
+      if(!(amt>=1&&amt<=5000)){err.textContent="Indiquez un montant en euros.";inM.focus();return;}
+      ok.disabled=true; err.textContent="";
+      const out=await participate(i,name,amt);
+      if(out.ok){ state.open=null; state.partDraft=null; render(); showMerci(i,name,amt); }
+      else{ ok.disabled=false; err.textContent=out.msg; }
+    }});
+    const form=el("div",{class:"form"},el("label",{for:"pnom-"+i.id,text:"Qui participe ?"}),inN,el("label",{for:"pmt-"+i.id,text:"Combien souhaitez-vous mettre ? (en €)"}),inM);
+    form.append(el("div",{class:"row"},ok,el("button",{class:"btn ghost small",type:"button",text:"Annuler",onclick:()=>{state.open=null;state.partDraft=null;render();}})),err);
+    for(const x of [inN,inM]) x.addEventListener("keydown",e=>{if(e.key==="Enter")ok.click();});
+    c.append(form); setTimeout(()=>(d.f==="m"?inM:inN).focus(),0);
+  }else if(!me){
+    const b=el("button",{class:"btn",type:"button",text:"Participer",onclick:()=>{state.partDraft=null;state.open=i.id;state.confirmCancel=null;render();}});
+    if(state.online===false) b.disabled=true;
+    c.append(b);
+    if(state.online===false) c.append(el("span",{class:"small",text:"Participations inaccessibles pour le moment."}));
+  }
+}
+function showMerci(i,name,amt){
+  document.getElementById("merci-title").textContent="Merci "+name+" !";
+  document.getElementById("merci-text").textContent="Votre participation de "+amt+" € pour « "+i.nom+" » est bien notée.";
+  document.getElementById("merci-clem").textContent="👉 Voyez maintenant avec "+CAGNOTTE+" pour lui remettre votre participation : c'est elle qui tient la cagnotte.";
+  document.getElementById("merci").showModal();
 }
 function splitVoter(v){ const m=/^(.*?)(?: · (Anniversaire|Noël))?$/.exec(v||""); const name=m?m[1]:v; return {name:name===OURS?"":name, occ:m&&m[2]?m[2]:"", ours:name===OURS}; }
 async function markOurs(i){ const bid=key("cadeau",i); const ex=await sbGet("block_id=eq."+encodeURIComponent(bid)+"&limit=1").catch(()=>[]); if(ex.length){ await loadAll(); return false; } const ok=await sbInsert(bid,OURS+(ANNIV?" · Anniversaire":"")); await loadAll(); return ok; }
@@ -550,7 +638,7 @@ const el=(t,a={},...kids)=>{const n=document.createElement(t);for(const[k,v]of O
 
 function baseItems(){ return state.list.items.concat(state.custom[state.list.id]||[]); }
 function allItems(){ const all=baseItems(); if(ANNIV) return all.filter(i=>!i.noelOnly); if(state.list.id!=="louis") return all; return all.filter(i=>state.showAnniv?isAnnivGift(i):!isAnnivGift(i)); }
-function shopPrice(i){ if(i.custom||i.boutique) return i.prix!=null?Number(i.prix):null; return i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb); }
+function shopPrice(i){ if(i.commun) return null; if(i.custom||i.boutique) return i.prix!=null?Number(i.prix):null; return i.prixWeb==null?i.prixCat:Math.min(i.prixCat,i.prixWeb); }
 function amazonOf(i){ if(i.custom) return (i.amazonPrix!=null||i.amazonUrl)?{prix:i.amazonPrix!=null?Number(i.amazonPrix):null,url:i.amazonUrl||null}:null; const a=state.list.amazon[i.id]||null; if(a&&i.boutique&&/amazon/i.test(i.boutique)) return null; return a; }
 function ailleursOf(i){ return i.custom?null:(state.list.ailleurs[i.id]||null); }
 function isDeal(i,a){ const b=shopPrice(i); return !!(a&&a.prix!=null&&b!=null&&a.prix<b-0.001); }
@@ -639,6 +727,7 @@ function canSeePrice(i){
 }
 function elseCell(i){
   const c=el("td",{class:"col-else","data-label":"Le moins cher du web"});
+  if(i.commun){ c.setAttribute("data-label","Cadeau à plusieurs"); c.append(el("span",{class:"commun-tag",text:"🤝 Cadeau commun"}),el("span",{class:"small",text:"On se cotise : chacun met ce qu'il veut."})); return c; }
   const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
   if(!canSeePrice(i)){ // réservé par quelqu'un d'autre : seulement le lien vers la boutique
     const bst=bestElsewhere(i), bb=shopPrice(i); const useBest=bst&&bst.url&&bb!=null&&bst.prix<bb-0.001;
@@ -679,7 +768,8 @@ function elseCell(i){
 function resCell(i){
   const c=el("td",{class:"col-res","data-label":"Réservation"});
   const r=kres(i);
-  if(r){
+  if(i.commun){ partBox(c,i); }
+  else if(r){
     const v=splitVoter(r.voter);
     const box=el("div",{class:"taken"+(v.ours?" ours":"")});
     const who=el("div",{class:"who"}); who.innerHTML='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>';
@@ -724,7 +814,7 @@ function resCell(i){
   }
   if(state.parents){
     const pa=el("div",{class:"pactions"});
-    if(!r&&!khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Réserver pour nous",title:"Le cadeau apparaîtra « Réservé par Maman et Papa » pour toute la famille",onclick:async e=>{e.target.disabled=true;const ok=await markOurs(i);toast(ok?"Réservé pour Maman et Papa":"Déjà réservé par quelqu'un");}}));
+    if(!r&&!khide(i)&&!i.commun) pa.append(el("button",{class:"btn ghost small",text:"Réserver pour nous",title:"Le cadeau apparaîtra « Réservé par Maman et Papa » pour toute la famille",onclick:async e=>{e.target.disabled=true;const ok=await markOurs(i);toast(ok?"Réservé pour Maman et Papa":"Déjà réservé par quelqu'un");}}));
     if(khide(i)) pa.append(el("button",{class:"btn ghost small",text:"Remettre dans la liste",onclick:async e=>{e.target.disabled=true;await setHidden(i,false);toast("Remis dans la liste");}}));
     else if(state.confirmRemove===i.id){
       pa.append(el("span",{class:"small",text:i.custom?"Supprimer définitivement ce cadeau ?":"Retirer ce cadeau de la liste ? (il pourra être remis)"}));
@@ -783,12 +873,13 @@ function render(){
     const age=el("td",{class:"col-age","data-label":"Âge",text:i.age?"Dès "+i.age+" ans":"—"});
     tr.append(avisCell(i),toy,age,elseCell(i),resCell(i)); tb.append(tr);
   }
-  const items=allItems().filter(i=>!khide(i)); const n=items.length, taken=items.filter(i=>kres(i)).length;
+  const items=allItems().filter(i=>!khide(i)); const n=items.length, taken=items.filter(i=>kres(i)).length, com=items.filter(i=>i.commun).length;
   const deals=items.filter(i=>isDeal(i,bestElsewhere(i))).length, tops=items.filter(i=>kavis(i)>=3).length;
   const s=document.getElementById("stats"); s.replaceChildren(
     el("span",{},el("b",{text:String(n)})," cadeau"+(n>1?"x":"")),
     el("span",{},el("b",{text:String(taken)})," réservé"+(taken>1?"s":"")),
-    el("span",{},el("b",{text:String(n-taken)})," encore à réserver"),
+    el("span",{},el("b",{text:String(n-taken-com)})," encore à réserver"),
+    com?el("span",{},el("b",{text:String(com)})," cadeau"+(com>1?"x":"")+" commun"+(com>1?"s":"")):null,
     el("span",{},el("b",{text:String(deals)})," bonne"+(deals>1?"s":"")+" affaire"+(deals>1?"s":"")),
     el("span",{},el("b",{text:String(tops)})," coup"+(tops>1?"s":"")+" de cœur"),
     el("span",{class:"pill"+(state.online===false?" off":"")},el("span",{class:"dot"}),state.online===false?"Hors ligne":state.online?"À jour":"Chargement…"));
@@ -865,7 +956,8 @@ function selectList(id,push){
   else { document.getElementById("eyebrow").textContent=L.eyebrow; document.getElementById("title").textContent=L.titre; document.getElementById("lead").textContent=L.intro; }
   const ht=document.getElementById("howto"); ht.replaceChildren(
     el("li",{},el("span",{class:"ic",text:"€"}),el("span",{},el("b",{text:"Le prix affiché est le moins cher trouvé sur le web,"})," avec le lien pour acheter")),
-    el("li",{},el("span",{class:"ic",text:"✓"}),el("span",{},el("b",{text:"Pour offrir : « Réserver » + votre prénom."})," Tout le monde voit alors que c'est pris, mais c'est à vous de commander 😇")));
+    el("li",{},el("span",{class:"ic",text:"✓"}),el("span",{},el("b",{text:"Pour offrir : « Réserver » + votre prénom."})," Tout le monde voit alors que c'est pris, mais c'est à vous de commander 😇")),
+    (!ANNIV&&L.items.some(i=>i.commun))?el("li",{},el("span",{class:"ic",text:"🤝"}),el("span",{},el("b",{text:"Cadeau commun : « Participer » + votre prénom et un montant."})," Voyez ensuite avec "+CAGNOTTE+", qui tient la cagnotte")):null);
   const pi=document.getElementById("photo-img"); pi.src=L.photo; pi.alt=L.prenom; document.getElementById("photo-tag").textContent=L.prenom;
   document.getElementById("q").placeholder="Chercher dans la liste de "+L.prenom+"…";
   if(push){ try{history.replaceState(null,"","#"+L.id);}catch(e){} window.scrollTo({top:0,behavior:"smooth"}); }
@@ -884,7 +976,8 @@ function openLightbox(i){
   document.getElementById("lb-sub").textContent=(i.sub||"")+(i.age?" · dès "+i.age+" ans":"");
   const pr=document.getElementById("lb-price"); const p=shopPrice(i); const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
   const bst=bestElsewhere(i); const cheap=(bst&&p!=null&&bst.prix<p-0.001)?bst:null;
-  if(!canSeePrice(i)) pr.replaceChildren("");
+  if(i.commun) pr.replaceChildren("Cadeau commun · participation libre");
+  else if(!canSeePrice(i)) pr.replaceChildren("");
   else pr.replaceChildren(cheap?el("span",{class:"price",text:eur(cheap.prix)}):(p!=null?el("span",{class:"price",text:eur(p)}):""),cheap?" chez "+cheap.vendeur:(p!=null?" chez "+shop:""));
   const lk=document.getElementById("lb-link"); if(i.url){lk.hidden=false;lk.href=i.url;lk.textContent="Voir la fiche "+shop;} else lk.hidden=true;
   LB.showModal();
@@ -917,9 +1010,10 @@ function renderBilan(){
     const tops=items.filter(i=>av(i)>=3&&!state.res[L.id+":"+i.id]);
     grandTotal+=total; grandN+=nRes;
     const sec=el("div",{class:"bl"},el("h3",{},el("img",{src:L.photo,alt:""}),L.prenom));
-    sec.append(el("div",{class:"kpis"},el("span",{},el("b",{text:String(items.length)})," cadeau"+(items.length>1?"x":"")),el("span",{},el("b",{text:String(nRes)})," réservé"+(nRes>1?"s":"")+(nOurs?" dont "+nOurs+" par nous":"")),el("span",{},el("b",{text:String(items.length-nRes)})," sans preneur"),el("span",{},"total réservé ",el("b",{text:eur(total)}))));
+    sec.append(el("div",{class:"kpis"},el("span",{},el("b",{text:String(items.length)})," cadeau"+(items.length>1?"x":"")),el("span",{},el("b",{text:String(nRes)})," réservé"+(nRes>1?"s":"")+(nOurs?" dont "+nOurs+" par nous":"")),el("span",{},el("b",{text:String(items.length-nRes-items.filter(i=>i.commun).length)})," sans preneur"),el("span",{},"total réservé ",el("b",{text:eur(total)}))));
     const names=Object.keys(givers).sort((a,b)=>givers[b].t-givers[a].t);
     if(names.length){ const t=el("table",{},el("thead",{},el("tr",{},el("th",{text:"Qui offre"}),el("th",{class:"num",text:"Cadeaux"}),el("th",{class:"num",text:"Montant"}),el("th",{text:"Détail"})))); const tb=el("tbody"); for(const n of names){ const g=givers[n]; tb.append(el("tr",{},el("td",{text:n}),el("td",{class:"num",text:String(g.n)}),el("td",{class:"num",text:eur(g.t)}),el("td",{text:g.items.join(", ")}))); } t.append(tb); sec.append(t); }
+    for(const i of items.filter(i=>i.commun)){ const ps=state.parts[L.id+":"+i.id]||[]; sec.append(el("div",{class:"small",style:"margin-top:8px",text:"Cadeau commun « "+i.nom+" » : "+(ps.length?ps.reduce((a,p)=>a+p.m,0)+" € promis ("+ps.map(p=>p.n+" "+p.m+" €").join(", ")+")":"aucune participation pour l'instant")})); }
     if(tops.length) sec.append(el("div",{class:"small",style:"margin-top:8px",text:"Coups de Cœur sans preneur :"}),el("ul",{},...tops.map(i=>el("li",{text:i.nom+(priceOf(i)!=null?" · "+eur(priceOf(i)):"")}))));
     else if(items.some(i=>av(i)>=3)) sec.append(el("div",{class:"small",style:"margin-top:8px",text:"Tous les Coups de Cœur ont un preneur."}));
     if(!ANNIV&&L.id==="louis"){ const ag=L.items.concat(state.custom[L.id]||[]).filter(annivOf); if(ag.length){ const t=ag.reduce((a,i)=>a+(priceOf(i)||0),0); sec.append(el("div",{class:"small",style:"margin-top:8px",text:"Déjà offerts pour l'anniversaire (hors liste de Noël) : "+ag.length+" cadeau"+(ag.length>1?"x":"")+", "+eur(t)})); } }
