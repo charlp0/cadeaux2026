@@ -316,8 +316,10 @@ const ITEMS_CHARLES = [
  {id:"ecran-odyssey-g7", cat:"Cadeaux communs", commun:true, nom:"Écran gaming Samsung Odyssey G7 37 pouces", sub:"Écran incurvé 4K UHD, 165 Hz (modèle G75F)", marque:"Samsung", age:0, img:"img/custom/ecran-odyssey-g7.jpg"},
  {id:"volant-fanatec-wrc", cat:"Cadeaux communs", commun:true, nom:"Volant de simulation Fanatec CSL Elite WRC", sub:"Volant de course de 30 cm en Alcantara, sous licence officielle WRC, pour base Fanatec", marque:"Fanatec", age:0, img:"img/custom/volant-fanatec-wrc.jpg"},
  {id:"box-signature", cat:"Autres idées", nom:"Box de vins Signature, Trois Fois Vin", sub:"2 ou 3 bouteilles de petits domaines et de vignerons, rouges ou rouge et blanc, avec livret de dégustation · livraison en point relais incluse", marque:"Trois Fois Vin", age:0, boutique:"Trois Fois Vin", prix:53.90, url:"https://www.troisfoisvin.com/produit/boxs-du-mois/signature-2/", img:"img/custom/box-signature.jpg"},
+ {id:"gants-sparco-meca3", cat:"Autres idées", nom:"Gants Sparco Meca 3, bleu/orange, taille M", sub:"Gants de mécanicien au look course, extensibles, paume en daim · prendre la taille 10 (M), coloris bleu/orange", marque:"Sparco", age:0, boutique:"Amazon.fr", prix:36, url:"https://www.amazon.fr/dp/B09QQJDPFD?th=1&psc=1", img:"img/custom/gants-sparco-meca3.jpg"},
 ];
 const AILLEURS_CHARLES = {
+ "gants-sparco-meca3": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Amazon.fr : 36,00 € en taille 10 (M) bleu/orange, en stock (prix relevé le 11/11/2026). Pas d'autre vendeur comparé."},
  "box-signature": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Trois Fois Vin : 53,90 € la box de 2 bouteilles, 74,90 € celle de 3 (prix relevés le 11/11/2026). La page annonce aussi un abonnement à partir de 48,90 € par mois."}
 };
 const AMAZON_CHARLES = {
