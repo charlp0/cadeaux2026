@@ -303,12 +303,18 @@ const AMAZON_CAPUCINE = {
 // Listes de Clémentine et Charles : remplies au fil des idées complétées (scripts/idees.js) ou de découpages.
 const ITEMS_CLEMENTINE = [
  {id:"cordon-tessa", nom:"Cordon de téléphone Tessa, bordeaux-doré", sub:"Bandoulière tressée détachable pour porter le téléphone en mains libres · réglable de 80 à 150 cm · mousquetons plaqués or", marque:"Louvini Paris", age:0, boutique:"Louvini", prix:25, url:"https://louvini.com/products/cordon-tessa-bordeaux-dore", img:"img/custom/cordon-tessa.jpg"},
+ {id:"cmwcoeatc", nom:"Appareil à croque-monsieur Philips 5000, 3 en 1", sub:"3 jeux de plaques amovibles : croque-monsieur, panini et gaufres · 750 W, noir (modèle HD2350/80)", marque:"Philips", age:0, boutique:"Amazon.fr", prix:39.99, url:"https://www.amazon.fr/dp/B0CPJ23RHZ", img:"img/custom/cmwcoeatc.jpg"},
+ {id:"cmwcog2n3", nom:"Cocotte ovale Le Creuset Signature 33 cm, cerise", sub:"Cocotte en fonte émaillée avec couvercle, 7,5 litres, coloris cerise", marque:"Le Creuset", age:0, boutique:"Amazon.fr", prix:297.99, url:"https://www.amazon.fr/dp/B00VA5HNL8?th=1", img:"img/custom/cmwcog2n3.jpg"},
 ];
 const AILLEURS_CLEMENTINE = {
- "cordon-tessa": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Louvini : 25 €, en stock, livré dans un pochon ou une boîte cadeau (prix relevé le 11/11/2026)."}
+ "cordon-tessa": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Louvini : 25 €, en stock, livré dans un pochon ou une boîte cadeau (prix relevé le 11/11/2026)."},
+ "cmwcoeatc": {"vendeur":"Boulanger","prix":47.69,"url":null,"verifie":false,"note":"Amazon.fr : 39,99 € au lieu de 52,99 €, en stock (relevé le 11/11/2026). Boulanger annonce le même modèle à partir de 47,69 €, prix non vérifié sur sa fiche."},
+ "cmwcog2n3": {"vendeur":"Galeries Lafayette","prix":494.95,"url":null,"verifie":false,"note":"Amazon.fr : 297,99 € au lieu de 495,00 €, en stock, en 33 cm cerise (relevé le 11/11/2026). Galeries Lafayette l'affiche à 494,95 €, prix non vérifié sur sa fiche."}
 };
 const AMAZON_CLEMENTINE = {
- "cordon-tessa": {"prix":null,"url":null,"note":"Pas vendu sur Amazon.fr (recherche du 11/11/2026)."}
+ "cordon-tessa": {"prix":null,"url":null,"note":"Pas vendu sur Amazon.fr (recherche du 11/11/2026)."},
+ "cmwcoeatc": {"prix":39.99,"url":"https://www.amazon.fr/dp/B0CPJ23RHZ","note":"Prix barré 52,99 €, en stock (relevé le 11/11/2026)."},
+ "cmwcog2n3": {"prix":297.99,"url":"https://www.amazon.fr/dp/B00VA5HNL8?th=1","note":"Prix barré 495,00 €, en stock (relevé le 11/11/2026)."}
 };
 const CATEGORIES_CHARLES = ["Projet Sim Racing","Autres idées"];   // « Cadeaux communs » renommée par Charles le 11/11/2026
 // commun:true = cadeau à plusieurs : pas de prix ni de lien affichés, bouton « Participer » (prénom + montant), puis voir avec Clémentine
