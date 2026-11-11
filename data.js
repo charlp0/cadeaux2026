@@ -299,9 +299,14 @@ const AMAZON_CAPUCINE = {
 
 // Listes de Clémentine et Charles : remplies au fil des idées complétées (scripts/idees.js) ou de découpages.
 const ITEMS_CLEMENTINE = [
+ {id:"cordon-tessa", nom:"Cordon de téléphone Tessa, bordeaux-doré", sub:"Bandoulière tressée détachable pour porter le téléphone en mains libres · réglable de 80 à 150 cm · mousquetons plaqués or", marque:"Louvini Paris", age:0, boutique:"Louvini", prix:25, url:"https://louvini.com/products/cordon-tessa-bordeaux-dore", img:"img/custom/cordon-tessa.jpg"},
 ];
-const AILLEURS_CLEMENTINE = {};
-const AMAZON_CLEMENTINE = {};
+const AILLEURS_CLEMENTINE = {
+ "cordon-tessa": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Louvini : 25 €, en stock, livré dans un pochon ou une boîte cadeau (prix relevé le 11/11/2026)."}
+};
+const AMAZON_CLEMENTINE = {
+ "cordon-tessa": {"prix":null,"url":null,"note":"Pas vendu sur Amazon.fr (recherche du 11/11/2026)."}
+};
 const ITEMS_CHARLES = [
 ];
 const AILLEURS_CHARLES = {};
