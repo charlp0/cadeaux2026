@@ -460,7 +460,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=36"></script>
+<script src="data.js?v=37"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -876,14 +876,14 @@ function render(){
   }
   const items=allItems().filter(i=>!khide(i)); const n=items.length, taken=items.filter(i=>kres(i)).length, com=items.filter(i=>i.commun).length;
   const deals=items.filter(i=>isDeal(i,bestElsewhere(i))).length, tops=items.filter(i=>kavis(i)>=3).length;
-  const s=document.getElementById("stats"); s.replaceChildren(
+  const s=document.getElementById("stats"); s.replaceChildren(...[
     el("span",{},el("b",{text:String(n)})," cadeau"+(n>1?"x":"")),
     el("span",{},el("b",{text:String(taken)})," réservé"+(taken>1?"s":"")),
     el("span",{},el("b",{text:String(n-taken-com)})," encore à réserver"),
     com?el("span",{},el("b",{text:String(com)})," cadeau"+(com>1?"x":"")+" commun"+(com>1?"s":"")):null,
     el("span",{},el("b",{text:String(deals)})," bonne"+(deals>1?"s":"")+" affaire"+(deals>1?"s":"")),
     el("span",{},el("b",{text:String(tops)})," coup"+(tops>1?"s":"")+" de cœur"),
-    el("span",{class:"pill"+(state.online===false?" off":"")},el("span",{class:"dot"}),state.online===false?"Hors ligne":state.online?"À jour":"Chargement…"));
+    el("span",{class:"pill"+(state.online===false?" off":"")},el("span",{class:"dot"}),state.online===false?"Hors ligne":state.online?"À jour":"Chargement…")].filter(Boolean));
   const hid=allItems().filter(i=>khide(i)).length;
   document.getElementById("pbar").hidden=!state.parents;
   const ph=document.getElementById("p-hidden"); ph.textContent=(state.showHidden?"Revenir à la liste":"Retirés")+" ("+hid+")"; ph.setAttribute("aria-pressed",String(state.showHidden));
@@ -956,10 +956,10 @@ function selectList(id,push){
   const L=PAGE_LISTS.find(x=>x.id===id)||PAGE_LISTS[0]; state.list=L; state.open=null; state.confirmCancel=null; state.confirmRemove=null; state.showHidden=false; state.showAnniv=false; state.catFilter=""; state.renameCat=null;
   if(ANNIV){ document.getElementById("eyebrow").textContent="Jeudi 3 décembre 2026 · Louis fête ses 5 ans"; document.getElementById("title").textContent="L'anniversaire de Louis"; document.getElementById("lead").textContent="Louis a choisi ses envies dans le catalogue King Jouet."; }
   else { document.getElementById("eyebrow").textContent=L.eyebrow; document.getElementById("title").textContent=L.titre; document.getElementById("lead").textContent=L.intro; }
-  const ht=document.getElementById("howto"); ht.replaceChildren(
+  const ht=document.getElementById("howto"); ht.replaceChildren(...[
     el("li",{},el("span",{class:"ic",text:"€"}),el("span",{},el("b",{text:"Le prix affiché est le moins cher trouvé sur le web,"})," avec le lien pour acheter")),
     el("li",{},el("span",{class:"ic",text:"✓"}),el("span",{},el("b",{text:"Pour offrir : « Réserver » + votre prénom."})," Tout le monde voit alors que c'est pris, mais c'est à vous de commander 😇")),
-    (!ANNIV&&L.items.some(i=>i.commun))?el("li",{},el("span",{class:"ic",text:"🤝"}),el("span",{},el("b",{text:"Cadeau commun : « Participer » + votre prénom et un montant."})," Voyez ensuite avec "+CAGNOTTE+", qui tient la cagnotte")):null);
+    (!ANNIV&&L.items.some(i=>i.commun))?el("li",{},el("span",{class:"ic",text:"🤝"}),el("span",{},el("b",{text:"Cadeau commun : « Participer » + votre prénom et un montant."})," Voyez ensuite avec "+CAGNOTTE+", qui tient la cagnotte")):null].filter(Boolean));
   const pi=document.getElementById("photo-img"); pi.src=L.photo; pi.alt=L.prenom; document.getElementById("photo-tag").textContent=L.prenom;
   document.getElementById("q").placeholder="Chercher dans la liste de "+L.prenom+"…";
   if(push){ try{history.replaceState(null,"","#"+L.id);}catch(e){} window.scrollTo({top:0,behavior:"smooth"}); }
