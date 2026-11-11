@@ -235,6 +235,7 @@ const ITEMS_CAPUCINE = [
  {id:"lego-valise", cat:"LEGO & construction", nom:"LEGO Friends 42697 · La maison de poupée dans la valise créative", sub:"355 pièces, 8 espaces personnalisables, accessoires et 2 mini-poupées", marque:"LEGO", age:6, ref:"1029293", prixCat:49.99, prixWeb:49.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-constructions/lego-planchettes/ref-1029293-42697-lego-friends-maison-poupee-valise-creative.htm", img:"img/1029293.jpg"},
  {id:"funko-vaiana", cat:"Poupées & figurines", nom:"Figurine Vaiana · Funko Pop", sub:"Figurine en vinyle Disney", marque:"Funko", age:3, ref:"862348", prixCat:17.99, prixWeb:17.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-imitation-mondes-imaginaires/figurines-cartes-a-collectionner/ref-862348-figurine-vaiana-funko-pop.htm", img:"img/862348.jpg"},
  {id:"velo-expl500", cat:"Vélo & plein air", nom:"VTT enfant 24\" Rockrider EXPL 500, vert", sub:"Pour 9-12 ans (135 à 150 cm) : fourche suspendue, 7 vitesses, pour les sentiers vallonnés", marque:"Decathlon · Rockrider", age:9, boutique:"Decathlon", prix:239.99, url:"https://www.decathlon.fr/p/vtt-enfant-24-expl-500-vert-9-12-ans/337767/c192m8985176", img:"img/custom/velo-capucine.jpg"},
+ {id:"roller-play5", cat:"Vélo & plein air", nom:"Rollers enfant Oxelo Play5 menthe, taille 34/36", sub:"Rollers en ligne pour débuter : solides, confortables, pointure réglable (prendre la taille 34/36), vert menthe pastel", marque:"Decathlon · Oxelo", age:0, boutique:"Decathlon", prix:34.99, url:"https://www.decathlon.fr/p/roller-enfant-play5-menthe/7961/c202m8739811", img:"img/custom/roller-play5.jpg"},
 ];
 const CATEGORIES_CAPUCINE = ["Peluches & compagnons","Poupées & figurines","Électronique & jeux","Créatif & mode","Miniverse","Expériences & découverte","LEGO & construction","Action & aventure","Vélo & plein air"];
 
@@ -265,7 +266,8 @@ const AILLEURS_CAPUCINE = {
  "reveil-angel": {"vendeur":"E.Leclerc","prix":21.99,"url":"https://www.e.leclerc/fp/reveil-avec-veilleuse-angel-en-3d-3380743107288","verifie":true,"note":"Lexibook RL800D1 réveil + veilleuse Angel 3D, bon plan E.Leclerc jusqu'au 06/12/2026 (au lieu de 26,99 €). Correspondance exacte avec le « 3-en-1 » à confirmer."},
  "lego-valise": {"vendeur":"E.Leclerc","prix":39.99,"url":"https://www.e.leclerc/fp/lego-friends-la-maison-de-poupee-dans-la-valise-creative-42697-5702018060575","verifie":true,"note":"Vendu par E.Leclerc, en stock. Auchan 40,99 €."},
  "funko-vaiana": {"vendeur":"E.Leclerc","prix":15.86,"url":"https://www.e.leclerc/fp/pop-disney-vaiana-vaiana-et-pua-0889698932059","verifie":false,"note":"Funko Pop Vaiana et Pua chez E.Leclerc ; le modèle exact de King Jouet n'est pas certain. Auchan 15,99 €."},
- "velo-expl500": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 239,99 €, en stock, retrait en magasin ou livraison (prix relevé le 08/11/2026)."}
+ "velo-expl500": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 239,99 €, en stock, retrait en magasin ou livraison (prix relevé le 08/11/2026)."},
+ "roller-play5": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 34,99 €, taille 34/36 proposée sur la fiche, retrait en magasin ou livraison (prix relevé le 11/11/2026)."}
 };
 const AMAZON_CAPUCINE = {
  "kitty-life": {"prix": 39.99, "url": "https://www.amazon.fr/dp/B0GX7CS966"},
@@ -294,7 +296,8 @@ const AMAZON_CAPUCINE = {
  "reveil-angel": {"prix": 22.99, "url": "https://www.amazon.fr/dp/B0DHGQKRBN", "note": "Lexibook RL800D1 Stitch & Angel réveil veilleuse."},
  "lego-valise": {"prix": 39.99, "url": "https://www.amazon.fr/dp/B0FPXDC9M4"},
  "funko-vaiana": {"prix": 14.9, "url": "https://www.amazon.fr/dp/B08P5YC75P", "approx": true, "note": "Funko Pop Disney Princesses Moana : vérifier que c'est le même modèle que la réf. King Jouet."},
- "velo-expl500": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."}
+ "velo-expl500": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."},
+ "roller-play5": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."}
 };
 
 // Listes de Clémentine et Charles : remplies au fil des idées complétées (scripts/idees.js) ou de découpages.
