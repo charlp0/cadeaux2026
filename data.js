@@ -318,6 +318,7 @@ const AMAZON_CLEMENTINE = {
 };
 const CATEGORIES_CHARLES = ["Projet Sim Racing","Autres idées"];   // « Cadeaux communs » renommée par Charles le 11/11/2026
 // badge:"…" = pastille bien visible sous le nom du cadeau (ex. « Achat d'occasion 💪 »)
+// indicatif:true = prix indicatif affiché, sans lien d'achat
 // commun:true = cadeau à plusieurs : pas de prix ni de lien affichés, bouton « Participer » (prénom + montant), puis voir avec Clémentine
 const ITEMS_CHARLES = [
  {id:"ecran-odyssey-g7", cat:"Projet Sim Racing", commun:true, nom:"Écran gaming Samsung Odyssey G7 37 pouces", sub:"Écran incurvé 4K UHD, 165 Hz (modèle G75F)", marque:"Samsung", age:0, img:"img/custom/ecran-odyssey-g7.jpg"},
@@ -327,6 +328,7 @@ const ITEMS_CHARLES = [
  {id:"levier-fanatec-clubsport-sq", cat:"Projet Sim Racing", commun:true, nom:"Levier de vitesses Fanatec ClubSport Shifter SQ", sub:"Levier tout métal, grille en H à 7 rapports et mode séquentiel, pour base Fanatec", badge:"Achat d'occasion 💪", marque:"Fanatec", age:0, img:"img/custom/levier-fanatec-clubsport-sq.jpg"},
  {id:"box-signature", cat:"Autres idées", nom:"Box de vins Signature, Trois Fois Vin", sub:"2 ou 3 bouteilles de petits domaines et de vignerons, rouges ou rouge et blanc, avec livret de dégustation · livraison en point relais incluse", marque:"Trois Fois Vin", age:0, boutique:"Trois Fois Vin", prix:53.90, url:"https://www.troisfoisvin.com/produit/boxs-du-mois/signature-2/", img:"img/custom/box-signature.jpg"},
  {id:"gants-sparco-meca3", cat:"Autres idées", nom:"Gants Sparco Meca 3, bleu/orange, taille M", sub:"Gants de mécanicien au look course, extensibles, paume en daim · prendre la taille 10 (M), coloris bleu/orange", marque:"Sparco", age:0, boutique:"Amazon.fr", prix:36, url:"https://www.amazon.fr/dp/B09QQJDPFD?th=1&psc=1", img:"img/custom/gants-sparco-meca3.jpg"},
+ {id:"gta6-xbox", cat:"Autres idées", indicatif:true, nom:"GTA VI sur Xbox", sub:"Grand Theft Auto VI, version Xbox Series", marque:"Rockstar Games", age:0, boutique:"Prix indicatif", prix:60, img:"img/custom/gta6-xbox.jpg"},
 ];
 const AILLEURS_CHARLES = {
  "gants-sparco-meca3": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Amazon.fr : 36,00 € en taille 10 (M) bleu/orange, en stock (prix relevé le 11/11/2026). Pas d'autre vendeur comparé."},
