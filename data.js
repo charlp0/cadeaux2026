@@ -305,16 +305,43 @@ const ITEMS_CLEMENTINE = [
  {id:"cordon-tessa", nom:"Cordon de téléphone Tessa, bordeaux-doré", sub:"Bandoulière tressée détachable pour porter le téléphone en mains libres · réglable de 80 à 150 cm · mousquetons plaqués or", marque:"Louvini Paris", age:0, boutique:"Louvini", prix:25, url:"https://louvini.com/products/cordon-tessa-bordeaux-dore", img:"img/custom/cordon-tessa.jpg"},
  {id:"cmwcoeatc", nom:"Appareil à croque-monsieur Philips 5000, 3 en 1", sub:"3 jeux de plaques amovibles : croque-monsieur, panini et gaufres · 750 W, noir (modèle HD2350/80)", marque:"Philips", age:0, boutique:"Amazon.fr", prix:39.99, url:"https://www.amazon.fr/dp/B0CPJ23RHZ", img:"img/custom/cmwcoeatc.jpg"},
  {id:"cmwcog2n3", nom:"Cocotte ovale Le Creuset Signature 33 cm, cerise", sub:"Cocotte en fonte émaillée avec couvercle, 7,5 litres, coloris cerise", marque:"Le Creuset", age:0, boutique:"Amazon.fr", prix:297.99, url:"https://www.amazon.fr/dp/B00VA5HNL8?th=1", img:"img/custom/cmwcog2n3.jpg"},
+ {id:"cmwe2c42w", nom:"La Bonne Paye, jeu de société", sub:"Jeu de société familial sur la gestion de l'argent · 2 à 6 joueurs", marque:"Hasbro Gaming", age:8, boutique:"Amazon.fr", prix:19.99, url:"https://www.amazon.fr/dp/B0CKXQN88L", img:"img/custom/cmwe2c42w.jpg"},
+ {id:"cmwe3ywk8", nom:"Lampe LED 36 W Peggy Sage, Purple", sub:"Lampe hybride UV/LED pour catalyser vernis semi-permanents et gels · minuteur 30, 60 et 90 s · réf. 144060", marque:"Peggy Sage", age:0, boutique:"Peggy Sage", prix:66.02, url:"https://www.peggysage.com/fr-FR/lampe-led-36w-hybrid-technology-purple-144060", img:"img/custom/cmwe3ywk8.jpg"},
+ {id:"cmwe4c5r3", nom:"Vernis semi-permanent 1-LAK, falling night", sub:"Vernis semi-permanent 3 en 1 Peggy Sage, teinte falling night · réf. 182065", marque:"Peggy Sage", age:0, boutique:"Peggy Sage", prix:8.9, url:"https://www.peggysage.com/fr-FR/vernis-semi-permanent-3en1-1-lak-falling-night-182065", img:"img/custom/cmwe4c5r3.jpg"},
+ {id:"cmwe4gwgk", nom:"Vernis semi-permanent 1-LAK, elegant wine", sub:"Vernis semi-permanent 3 en 1 Peggy Sage, teinte elegant wine · réf. 182082", marque:"Peggy Sage", age:0, boutique:"Peggy Sage", prix:8.9, url:"https://www.peggysage.com/fr-FR/vernis-semi-permanent-3en1-1-lak-elegant-wine-182082", img:"img/custom/cmwe4gwgk.jpg"},
+ {id:"cmwe4hile", nom:"Vernis semi-permanent One-LAK, fresh watermelon", sub:"Vernis semi-permanent 3 en 1 Peggy Sage, teinte fresh watermelon · réf. 182142", marque:"Peggy Sage", age:0, boutique:"Peggy Sage", prix:8.9, url:"https://www.peggysage.com/fr-FR/one-lak-vernis-semi-permanent-3-en-1-fresh-watermelon-182142", img:"img/custom/cmwe4hile.jpg"},
+ {id:"cmwe4ok34", nom:"Poudre bronzante Terracotta, Guerlain", sub:"Poudre de soleil à 96 % d'ingrédients d'origine naturelle · teinte à choisir avec Clémentine", marque:"Guerlain", age:0, boutique:"Sephora", prix:42.75, url:"https://www.sephora.fr/p/terracotta---la-poudre-bronzante-96%25-d-ingredients-d-origine-naturelle-P10014102.html", img:"img/custom/cmwe4ok34.jpg"},
+ {id:"cmwe4wl21", nom:"Mascara Love the Lift, Sephora Collection", sub:"Mascara courbe instantanée et volume lifté", marque:"Sephora Collection", age:0, boutique:"Sephora", prix:14.99, url:"https://www.sephora.fr/p/love-the-lift---mascara-courbe-instantanee-et-volume-lifte-P10055781.html", img:"img/custom/cmwe4wl21.jpg"},
+ {id:"cmwe55l0f", nom:"Pantalon en maille Uniqlo, marron foncé, taille S", sub:"Pantalon en maille pour femme, lavable en machine · coupe Regular, coloris marron foncé, taille S", marque:"Uniqlo", age:0, boutique:"Uniqlo", prix:29.9, url:"https://www.uniqlo.com/fr/fr/products/E486095-000/00?colorDisplayCode=38&sizeDisplayCode=003&pldDisplayCode=020", img:"img/custom/cmwe55l0f.jpg"},
+ {id:"cmwe5oq9h", nom:"Chaussettes à froufrou vichy bordeaux, Odaje", sub:"Une paire en coton bio, motif à carreaux et finition volantée · taille unique", marque:"Odaje", age:0, boutique:"Odaje", prix:12, url:"https://www.odaje.com/products/pack-unitaire-froufrou-vichy-bordeaux", img:"img/custom/cmwe5oq9h.jpg"},
 ];
 const AILLEURS_CLEMENTINE = {
  "cordon-tessa": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Louvini : 25 €, en stock, livré dans un pochon ou une boîte cadeau (prix relevé le 11/11/2026)."},
  "cmwcoeatc": {"vendeur":"Boulanger","prix":47.69,"url":null,"verifie":false,"note":"Amazon.fr : 39,99 € au lieu de 52,99 €, en stock (relevé le 11/11/2026). Boulanger annonce le même modèle à partir de 47,69 €, prix non vérifié sur sa fiche."},
- "cmwcog2n3": {"vendeur":"Galeries Lafayette","prix":494.95,"url":null,"verifie":false,"note":"Amazon.fr : 297,99 € au lieu de 495,00 €, en stock, en 33 cm cerise (relevé le 11/11/2026). Galeries Lafayette l'affiche à 494,95 €, prix non vérifié sur sa fiche."}
+ "cmwcog2n3": {"vendeur":"Galeries Lafayette","prix":494.95,"url":null,"verifie":false,"note":"Amazon.fr : 297,99 € au lieu de 495,00 €, en stock, en 33 cm cerise (relevé le 11/11/2026). Galeries Lafayette l'affiche à 494,95 €, prix non vérifié sur sa fiche."},
+ "cmwe2c42w": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Amazon.fr : 19,99 € au lieu de 36,99 €, en stock (relevé le 13/11/2026). Pas d'autre vendeur comparé."},
+ "cmwe3ywk8": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Peggy Sage : 66,02 €, en stock (relevé le 13/11/2026)."},
+ "cmwe4c5r3": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Peggy Sage : 8,90 €, en stock (relevé le 13/11/2026)."},
+ "cmwe4gwgk": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Peggy Sage : 8,90 €, en stock (relevé le 13/11/2026)."},
+ "cmwe4hile": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Peggy Sage : 8,90 €, en stock (relevé le 13/11/2026)."},
+ "cmwe4ok34": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Sephora : 42,75 € au lieu de 57,00 € (relevé le 13/11/2026). Le lien n'indique pas la teinte. Pas d'autre vendeur comparé."},
+ "cmwe4wl21": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Sephora : 14,99 € (relevé le 13/11/2026). Marque propre de Sephora."},
+ "cmwe55l0f": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Uniqlo : 29,90 €, en stock (relevé le 13/11/2026)."},
+ "cmwe5oq9h": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Odaje : 12,00 €, en stock (relevé le 13/11/2026)."}
 };
 const AMAZON_CLEMENTINE = {
  "cordon-tessa": {"prix":null,"url":null,"note":"Pas vendu sur Amazon.fr (recherche du 11/11/2026)."},
  "cmwcoeatc": {"prix":39.99,"url":"https://www.amazon.fr/dp/B0CPJ23RHZ","note":"Prix barré 52,99 €, en stock (relevé le 11/11/2026)."},
- "cmwcog2n3": {"prix":297.99,"url":"https://www.amazon.fr/dp/B00VA5HNL8?th=1","note":"Prix barré 495,00 €, en stock (relevé le 11/11/2026)."}
+ "cmwcog2n3": {"prix":297.99,"url":"https://www.amazon.fr/dp/B00VA5HNL8?th=1","note":"Prix barré 495,00 €, en stock (relevé le 11/11/2026)."},
+ "cmwe2c42w": {"prix":19.99,"url":"https://www.amazon.fr/dp/B0CKXQN88L","note":"Prix barré 36,99 €."},
+ "cmwe3ywk8": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmwe4c5r3": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmwe4gwgk": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmwe4hile": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmwe4ok34": {"prix":null,"url":null,"note":"Pas cherché sur Amazon.fr."},
+ "cmwe4wl21": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmwe55l0f": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmwe5oq9h": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."}
 };
 const CATEGORIES_CHARLES = ["Projet Sim Racing","Autres idées"];   // « Cadeaux communs » renommée par Charles le 11/11/2026
 // badge:"…" = pastille bien visible sous le nom du cadeau (ex. « Achat d'occasion 💪 »)
