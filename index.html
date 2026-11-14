@@ -460,7 +460,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=42"></script>
+<script src="data.js?v=43"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -728,7 +728,7 @@ function canSeePrice(i){
 }
 function elseCell(i){
   const c=el("td",{class:"col-else","data-label":"Le moins cher du web"});
-  if(i.indicatif){ c.setAttribute("data-label","Prix indicatif"); if(canSeePrice(i)) c.append(el("span",{class:"price",text:eur(shopPrice(i))})); c.append(el("span",{class:"small",text:"Prix indicatif, à acheter où vous voulez."})); return c; }
+  if(i.indicatif){ c.setAttribute("data-label","Prix indicatif"); if(canSeePrice(i)) c.append(el("span",{class:"price",text:eur(shopPrice(i))})); if(!kres(i)) c.append(el("span",{class:"small",text:"Prix indicatif, à acheter où vous voulez."})); else if(!canSeePrice(i)) c.append(el("span",{class:"nobetter",text:"—"})); return c; }
   if(i.commun){ c.setAttribute("data-label","Cadeau à plusieurs"); c.append(el("span",{class:"commun-tag",text:"🤝 Cadeau commun"}),el("span",{class:"small",text:"On se cotise : chacun met ce qu'il veut."})); return c; }
   const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
   if(!canSeePrice(i)){ // réservé par quelqu'un d'autre : seulement le lien vers la boutique
