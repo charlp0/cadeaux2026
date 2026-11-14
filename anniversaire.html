@@ -461,7 +461,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=41"></script>
+<script src="data.js?v=42"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -776,7 +776,8 @@ function resCell(i){
     const v=splitVoter(r.voter);
     const box=el("div",{class:"taken"+(v.ours?" ours":"")});
     const who=el("div",{class:"who"}); who.innerHTML='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>';
-    who.append(v.ours?"Réservé par Maman et Papa":"Réservé par "+v.name); box.append(who);
+    who.append(i.achete?i.achete.titre:(v.ours?"Réservé par Maman et Papa":"Réservé par "+v.name)); box.append(who);
+    if(i.achete&&i.achete.note) box.append(el("div",{class:"occ",text:i.achete.note}));   // cadeau déjà acheté : précision sous le libellé
     if(!ANNIV&&v.occ==="Anniversaire"&&state.parents) box.append(el("div",{class:"occ",text:"offert pour l'anniversaire"}));
     if(v.ours&&!state.parents){ c.append(box); return c; }
     // Seul l'auteur de la réservation (prénom saisi sur cet appareil) ou les parents peuvent annuler
