@@ -190,6 +190,9 @@ details.note p{margin:4px 0 0;max-width:36ch}
 .err{color:var(--accent);font-size:12.5px;font-weight:700}
 .form input[type=number]{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px;background:var(--paper);color:var(--ink);width:100%}
 .gift-badge{display:inline-block;margin:4px 0 2px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:13.5px;border-radius:999px;padding:4px 12px;box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.infobox{font-size:13px;line-height:1.4;background:color-mix(in srgb,var(--gold) 24%,var(--paper));border-radius:10px;padding:8px 10px;margin-bottom:8px;max-width:260px}
+.infobox .how{display:block;margin-top:4px;font-weight:700}
+.taken .infobox{margin:4px 0 0}
 .commun-tag{display:inline-block;background:color-mix(in srgb,var(--gold) 34%,var(--paper));color:var(--ink);font-weight:800;font-size:13px;border-radius:999px;padding:4px 11px;white-space:nowrap}
 .parts{display:grid;gap:6px;margin-bottom:8px}
 .parts .mine{font-weight:800;color:var(--green);display:flex;align-items:flex-start;gap:6px;line-height:1.3}
@@ -460,7 +463,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=43"></script>
+<script src="data.js?v=44"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -595,6 +598,12 @@ function partBox(c,i){
     if(state.online===false) c.append(el("span",{class:"small",text:"Participations inaccessibles pour le moment."}));
   }
 }
+function showAchete(i,name){
+  document.getElementById("merci-title").textContent="Merci "+name+" !";
+  document.getElementById("merci-text").textContent="« "+i.nom+" » est réservé à votre nom. Rien à commander : "+i.achete.titre.charAt(0).toLowerCase()+i.achete.titre.slice(1)+".";
+  document.getElementById("merci-clem").textContent="👉 Voyez maintenant avec "+i.achete.par+" pour le paiement.";
+  document.getElementById("merci").showModal();
+}
 function showMerci(i,name,amt){
   document.getElementById("merci-title").textContent="Merci "+name+" !";
   document.getElementById("merci-text").textContent="Votre participation de "+amt+" € pour « "+i.nom+" » est bien notée.";
@@ -728,7 +737,7 @@ function canSeePrice(i){
 }
 function elseCell(i){
   const c=el("td",{class:"col-else","data-label":"Le moins cher du web"});
-  if(i.indicatif){ c.setAttribute("data-label","Prix indicatif"); if(canSeePrice(i)) c.append(el("span",{class:"price",text:eur(shopPrice(i))})); if(!kres(i)) c.append(el("span",{class:"small",text:"Prix indicatif, à acheter où vous voulez."})); else if(!canSeePrice(i)) c.append(el("span",{class:"nobetter",text:"—"})); return c; }
+  if(i.indicatif){ c.setAttribute("data-label","Prix indicatif"); if(canSeePrice(i)) c.append(el("span",{class:"price",text:eur(shopPrice(i))})); if(i.achete){ if(canSeePrice(i)) c.append(el("span",{class:"small",text:"Prix indicatif. Rien à commander, à régler avec "+i.achete.par+"."})); else c.append(el("span",{class:"nobetter",text:"—"})); } else if(!kres(i)) c.append(el("span",{class:"small",text:"Prix indicatif, à acheter où vous voulez."})); else if(!canSeePrice(i)) c.append(el("span",{class:"nobetter",text:"—"})); return c; }
   if(i.commun){ c.setAttribute("data-label","Cadeau à plusieurs"); c.append(el("span",{class:"commun-tag",text:"🤝 Cadeau commun"}),el("span",{class:"small",text:"On se cotise : chacun met ce qu'il veut."})); return c; }
   const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
   if(!canSeePrice(i)){ // réservé par quelqu'un d'autre : seulement le lien vers la boutique
@@ -770,13 +779,14 @@ function elseCell(i){
 function resCell(i){
   const c=el("td",{class:"col-res","data-label":"Réservation"});
   const r=kres(i);
+  if(i.achete&&!r) c.append(el("div",{class:"infobox"},el("b",{text:i.achete.titre+"."})," "+i.achete.note,el("span",{class:"how",text:"Pour l'offrir : réservez-le, puis voyez avec "+i.achete.par+" pour le paiement."})));
   if(i.commun){ partBox(c,i); }
   else if(r){
     const v=splitVoter(r.voter);
     const box=el("div",{class:"taken"+(v.ours?" ours":"")});
     const who=el("div",{class:"who"}); who.innerHTML='<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5l4 4 8-9"/></svg>';
-    who.append(i.achete?i.achete.titre:(v.ours?"Réservé par Maman et Papa":"Réservé par "+v.name)); box.append(who);
-    if(i.achete&&i.achete.note) box.append(el("div",{class:"occ",text:i.achete.note}));   // cadeau déjà acheté : précision sous le libellé
+    who.append(v.ours?"Réservé par Maman et Papa":"Réservé par "+v.name); box.append(who);
+    if(i.achete&&!v.ours) box.append(el("div",{class:"infobox",text:i.achete.titre+" : à régler avec "+i.achete.par+"."}));   // cadeau déjà acheté par un proche, qui l'a avancé
     if(!ANNIV&&v.occ==="Anniversaire"&&state.parents) box.append(el("div",{class:"occ",text:"offert pour l'anniversaire"}));
     if(v.ours&&!state.parents){ c.append(box); return c; }
     // Seul l'auteur de la réservation (prénom saisi sur cet appareil) ou les parents peuvent annuler
@@ -802,7 +812,7 @@ function resCell(i){
       if(/[|·]/.test(name)){err.textContent="Prénom invalide.";return;}
       confirm.disabled=true; err.textContent="";
       const out=await reserve(i,name);
-      if(out.ok){state.open=null;toast("Réservé : "+i.nom);render();}
+      if(out.ok){state.open=null;toast("Réservé : "+i.nom);render(); if(i.achete) showAchete(i,name);}
       else{confirm.disabled=false;err.textContent=out.msg;}
     }});
     const form=el("div",{class:"form"},el("label",{for:"nom-"+i.id,text:"Qui offre ce cadeau ?"}),inp);
