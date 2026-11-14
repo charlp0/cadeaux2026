@@ -236,6 +236,7 @@ const ITEMS_CAPUCINE = [
  {id:"funko-vaiana", cat:"Poupées & figurines", nom:"Figurine Vaiana · Funko Pop", sub:"Figurine en vinyle Disney", marque:"Funko", age:3, ref:"862348", prixCat:17.99, prixWeb:17.99, prixWebOrig:null, url:KJ+"/jeu-jouet/jeux-imitation-mondes-imaginaires/figurines-cartes-a-collectionner/ref-862348-figurine-vaiana-funko-pop.htm", img:"img/862348.jpg"},
  {id:"velo-expl500", cat:"Vélo & plein air", nom:"VTT enfant 24\" Rockrider EXPL 500, vert", sub:"Pour 9-12 ans (135 à 150 cm) : fourche suspendue, 7 vitesses, pour les sentiers vallonnés", marque:"Decathlon · Rockrider", age:9, boutique:"Decathlon", prix:239.99, url:"https://www.decathlon.fr/p/vtt-enfant-24-expl-500-vert-9-12-ans/337767/c192m8985176", img:"img/custom/velo-capucine.jpg"},
  {id:"roller-play5", cat:"Vélo & plein air", nom:"Rollers enfant Oxelo Play5 menthe, taille 34/36", sub:"Rollers en ligne pour débuter : solides, confortables, pointure réglable (prendre la taille 34/36), vert menthe pastel", marque:"Decathlon · Oxelo", age:0, boutique:"Decathlon", prix:34.99, url:"https://www.decathlon.fr/p/roller-enfant-play5-menthe/7961/c202m8739811", img:"img/custom/roller-play5.jpg"},
+ {id:"cmwf947w8", cat:"Créatif & mode", nom:"Boîte à bijoux Songmics, 3 niveaux", sub:"Coffret à bijoux avec 2 tiroirs, miroir, mini-boîte de voyage, serrure et 2 clés · noir et jaune sable", marque:"Songmics", age:0, boutique:"Amazon.fr", prix:38.19, url:"https://www.amazon.fr/dp/B00FXIFYPK?th=1", img:"img/custom/cmwf947w8.jpg"},
 ];
 const CATEGORIES_CAPUCINE = ["Peluches & compagnons","Poupées & figurines","Électronique & jeux","Créatif & mode","Miniverse","Expériences & découverte","LEGO & construction","Action & aventure","Vélo & plein air"];
 
@@ -267,7 +268,8 @@ const AILLEURS_CAPUCINE = {
  "lego-valise": {"vendeur":"E.Leclerc","prix":39.99,"url":"https://www.e.leclerc/fp/lego-friends-la-maison-de-poupee-dans-la-valise-creative-42697-5702018060575","verifie":true,"note":"Vendu par E.Leclerc, en stock. Auchan 40,99 €."},
  "funko-vaiana": {"vendeur":"E.Leclerc","prix":15.86,"url":"https://www.e.leclerc/fp/pop-disney-vaiana-vaiana-et-pua-0889698932059","verifie":false,"note":"Funko Pop Vaiana et Pua chez E.Leclerc ; le modèle exact de King Jouet n'est pas certain. Auchan 15,99 €."},
  "velo-expl500": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 239,99 €, en stock, retrait en magasin ou livraison (prix relevé le 08/11/2026)."},
- "roller-play5": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 34,99 €, taille 34/36 proposée sur la fiche, retrait en magasin ou livraison (prix relevé le 11/11/2026)."}
+ "roller-play5": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Decathlon : 34,99 €, taille 34/36 proposée sur la fiche, retrait en magasin ou livraison (prix relevé le 11/11/2026)."},
+ "cmwf947w8": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Amazon.fr : 38,19 €, en stock, coloris noir et jaune sable (relevé le 14/11/2026). Pas d'autre vendeur comparé."}
 };
 const AMAZON_CAPUCINE = {
  "kitty-life": {"prix": 39.99, "url": "https://www.amazon.fr/dp/B0GX7CS966"},
@@ -297,7 +299,8 @@ const AMAZON_CAPUCINE = {
  "lego-valise": {"prix": 39.99, "url": "https://www.amazon.fr/dp/B0FPXDC9M4"},
  "funko-vaiana": {"prix": 14.9, "url": "https://www.amazon.fr/dp/B08P5YC75P", "approx": true, "note": "Funko Pop Disney Princesses Moana : vérifier que c'est le même modèle que la réf. King Jouet."},
  "velo-expl500": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."},
- "roller-play5": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."}
+ "roller-play5": {"prix":null,"url":null,"note":"Marque Decathlon, vendue uniquement chez Decathlon."},
+ "cmwf947w8": {"prix":38.19,"url":"https://www.amazon.fr/dp/B00FXIFYPK?th=1","note":"En stock."}
 };
 
 // Listes de Clémentine et Charles : remplies au fil des idées complétées (scripts/idees.js) ou de découpages.
@@ -314,6 +317,12 @@ const ITEMS_CLEMENTINE = [
  {id:"cmwe4wl21", nom:"Mascara Love the Lift, Sephora Collection", sub:"Mascara courbe instantanée et volume lifté", marque:"Sephora Collection", age:0, boutique:"Sephora", prix:14.99, url:"https://www.sephora.fr/p/love-the-lift---mascara-courbe-instantanee-et-volume-lifte-P10055781.html", img:"img/custom/cmwe4wl21.jpg"},
  {id:"cmwe55l0f", nom:"Pantalon en maille Uniqlo, marron foncé, taille S", sub:"Pantalon en maille pour femme, lavable en machine · coupe Regular, coloris marron foncé, taille S", marque:"Uniqlo", age:0, boutique:"Uniqlo", prix:29.9, url:"https://www.uniqlo.com/fr/fr/products/E486095-000/00?colorDisplayCode=38&sizeDisplayCode=003&pldDisplayCode=020", img:"img/custom/cmwe55l0f.jpg"},
  {id:"cmwe5oq9h", nom:"Chaussettes à froufrou vichy bordeaux, Odaje", sub:"Une paire en coton bio, motif à carreaux et finition volantée · taille unique", marque:"Odaje", age:0, boutique:"Odaje", prix:12, url:"https://www.odaje.com/products/pack-unitaire-froufrou-vichy-bordeaux", img:"img/custom/cmwe5oq9h.jpg"},
+ {id:"cmweyft8a", nom:"Lot de 5 paires de chaussettes à languette cœur doré", sub:"5 paires de chaussettes courtes pour femme, languette brodée d'un cœur doré · coloris assortis, taille 35-41", marque:"Tites Chaussettes", age:0, boutique:"Tites Chaussettes", prix:24.95, url:"https://titeschaussettes.com/products/chaussettes-coeur-languette-lot-x5", img:"img/custom/cmweyft8a.jpg"},
+ {id:"cmwez106v", nom:"Reminders of Him, Colleen Hoover", sub:"Roman, version française, format poche", marque:"Livre", age:0, boutique:"Fnac", prix:7.9, url:"https://www.fnac.com/a20883289/Colleen-Hoover-Reminders-Of-Him-version-francaise", img:"img/custom/cmwez106v.jpg"},
+ {id:"cmwezb8tt", nom:"Nos âmes tourmentées, Morgane Moncomble", sub:"Roman, format poche", marque:"Livre", age:0, boutique:"Fnac", prix:8.9, url:"https://www.fnac.com/a14967496/Morgane-Moncomble-Nos-ames-tourmentees", img:"img/custom/cmwezb8tt.jpg"},
+ {id:"cmwezbi0v", nom:"Petits secrets, grands mensonges, Liane Moriarty", sub:"Roman qui a inspiré la série Big Little Lies, édition brochée", marque:"Livre", age:0, boutique:"Fnac", prix:22, url:"https://www.fnac.com/a9631746/Beatrice-Taupeau-Petits-secrets-grands-mensonges-big-little-lies", img:"img/custom/cmwezbi0v.jpg"},
+ {id:"cmwf7oin8", nom:"Soutien-gorge push-up plongeant N.2 Pure Fit, Etam", sub:"Ligne Pure Fit en microfibre, coloris blush · taille à voir avec Clémentine", marque:"Etam", age:0, boutique:"Etam", prix:29.99, url:"https://www.etam.com/p/soutien-gorge-n.2---le-push-up-plongeant-653832794.html", img:"img/custom/cmwf7oin8.jpg"},
+ {id:"cmwf7p5qb", nom:"Culotte en microfibre Pure Fit, Etam", sub:"Ligne Pure Fit en microfibre, coloris blush · taille à voir avec Clémentine", marque:"Etam", age:0, boutique:"Etam", prix:7.99, url:"https://www.etam.com/p/culotte-en-microfibre-653574194.html", img:"img/custom/cmwf7p5qb.jpg"},
 ];
 const AILLEURS_CLEMENTINE = {
  "cordon-tessa": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Louvini : 25 €, en stock, livré dans un pochon ou une boîte cadeau (prix relevé le 11/11/2026)."},
@@ -327,7 +336,13 @@ const AILLEURS_CLEMENTINE = {
  "cmwe4ok34": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Sephora : 42,75 € au lieu de 57,00 € (relevé le 13/11/2026). Le lien n'indique pas la teinte. Pas d'autre vendeur comparé."},
  "cmwe4wl21": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Sephora : 14,99 € (relevé le 13/11/2026). Marque propre de Sephora."},
  "cmwe55l0f": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Uniqlo : 29,90 €, en stock (relevé le 13/11/2026)."},
- "cmwe5oq9h": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Odaje : 12,00 €, en stock (relevé le 13/11/2026)."}
+ "cmwe5oq9h": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Odaje : 12,00 €, en stock (relevé le 13/11/2026)."},
+ "cmweyft8a": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Tites Chaussettes : 24,95 € le lot de 5, en stock (relevé le 14/11/2026)."},
+ "cmwez106v": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Fnac : 7,90 € en poche, en stock (relevé le 14/11/2026). Prix unique du livre neuf, identique en librairie."},
+ "cmwezb8tt": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Fnac : 8,90 € en poche, en stock (relevé le 14/11/2026). Prix unique du livre neuf, identique en librairie."},
+ "cmwezbi0v": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Fnac : 22,00 € en édition brochée neuve, en stock (relevé le 14/11/2026). Une édition de poche existe peut-être à moindre prix, non vérifié."},
+ "cmwf7oin8": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Etam : 29,99 €, en stock (relevé le 14/11/2026). Le lien n'indique pas la taille."},
+ "cmwf7p5qb": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Etam : 7,99 €, en stock (relevé le 14/11/2026). Le lien n'indique pas la taille."}
 };
 const AMAZON_CLEMENTINE = {
  "cordon-tessa": {"prix":null,"url":null,"note":"Pas vendu sur Amazon.fr (recherche du 11/11/2026)."},
@@ -341,7 +356,13 @@ const AMAZON_CLEMENTINE = {
  "cmwe4ok34": {"prix":null,"url":null,"note":"Pas cherché sur Amazon.fr."},
  "cmwe4wl21": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
  "cmwe55l0f": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
- "cmwe5oq9h": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."}
+ "cmwe5oq9h": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmweyft8a": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmwez106v": {"prix":null,"url":null,"note":"Livre neuf à prix unique : même prix chez tous les libraires."},
+ "cmwezb8tt": {"prix":null,"url":null,"note":"Livre neuf à prix unique : même prix chez tous les libraires."},
+ "cmwezbi0v": {"prix":null,"url":null,"note":"Livre neuf à prix unique : même prix chez tous les libraires."},
+ "cmwf7oin8": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmwf7p5qb": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."}
 };
 const CATEGORIES_CHARLES = ["Projet Sim Racing","Autres idées"];   // « Cadeaux communs » renommée par Charles le 11/11/2026
 // badge:"…" = pastille bien visible sous le nom du cadeau (ex. « Achat d'occasion 💪 »)
