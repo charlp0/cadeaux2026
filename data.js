@@ -387,7 +387,7 @@ const AMAZON_CLEMENTINE = {
  "cmwhmrsok": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."}
 };
 const CATEGORIES_CHARLES = ["Projet Sim Racing","Autres idées"];   // « Cadeaux communs » renommée par Charles le 11/11/2026
-// choix:"…" = taille, teinte ou couleur à prendre, affichée en gros sous le nom du cadeau (toutes les listes)
+// choix:"…" = taille, teinte ou couleur à prendre, affichée dans une pastille sous le nom du cadeau, sans étiquette (toutes les listes)
 // badge:"…" = pastille bien visible sous le nom du cadeau (ex. « Achat d'occasion 💪 »)
 // achete:{par,titre,note} = cadeau déjà acheté par un proche qui l'a avancé : il reste réservable, la personne qui réserve règle avec « par »
 // indicatif:true = prix indicatif affiché, sans lien d'achat
