@@ -331,6 +331,7 @@ const ITEMS_CLEMENTINE = [
  {id:"cmwgn6xdg", cat:"Livres", nom:"Les Renaissances, Agnès Martin-Lugand", sub:"Roman, format poche", marque:"Livre", age:0, boutique:"Amazon.fr", prix:9.9, url:"https://www.amazon.fr/dp/226635549X", img:"img/custom/cmwgn6xdg.jpg"},
  {id:"cmwgtdc7j", cat:"Beauté & ongles", nom:"Poudre bronzante Terracotta Classique, Guerlain", choix:"Teinte 03 Moyen Doré", sub:"Poudre de soleil rechargeable à 96 % d'ingrédients d'origine naturelle", marque:"Guerlain", age:0, boutique:"My Origines", prix:32.6, url:"https://www.my-origines.com/fr/terracotta-classique-43733943.html", img:"img/custom/cmwgtdc7j.jpg"},
  {id:"cmwhmrsok", cat:"Mode & lingerie", nom:"Sweat à col zippé Uniqlo, nude, taille S", choix:"Taille S · nude", sub:"Sweat unisexe à col zippé", marque:"Uniqlo", age:0, boutique:"Uniqlo", prix:34.9, url:"https://www.uniqlo.com/fr/fr/products/E491119-000/00?colorDisplayCode=30&sizeDisplayCode=003", img:"img/custom/cmwhmrsok.jpg"},
+ {id:"cmwicjjfo", cat:"Maison & cuisine", nom:"Gaufrier et croque-monsieur Tefal Snack Collection", sub:"Appareil multifonction avec 4 jeux de plaques amovibles et leurs livrets de recettes · modèle SW854D", marque:"Tefal", age:0, boutique:"Amazon.fr", prix:79.99, url:"https://www.amazon.fr/dp/B015SJQ7KY?th=1", img:"img/custom/cmwicjjfo.jpg"},
 ];
 const AILLEURS_CLEMENTINE = {
  "cordon-tessa": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Louvini : 25 €, en stock, livré dans un pochon ou une boîte cadeau (prix relevé le 11/11/2026)."},
@@ -357,7 +358,8 @@ const AILLEURS_CLEMENTINE = {
  "cmwgn3mhb": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Amazon.fr : 8,90 € en poche, en stock (relevé le 15/11/2026). Prix unique du livre neuf, identique en librairie."},
  "cmwgn6xdg": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Amazon.fr : 9,90 € en poche, en stock (relevé le 15/11/2026). Prix unique du livre neuf, identique en librairie."},
  "cmwgtdc7j": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"My Origines : 32,60 €, prix de comparaison affiché 53,40 €, en stock (relevé le 15/11/2026). Le lien ouvre directement la teinte 03 Moyen Doré."},
- "cmwhmrsok": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Uniqlo : 34,90 € (relevé le 15/11/2026)."}
+ "cmwhmrsok": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Uniqlo : 34,90 € (relevé le 15/11/2026)."},
+ "cmwicjjfo": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Amazon.fr : 79,99 € au lieu de 119,99 €, en stock, modèle SW854D avec 4 jeux de plaques (relevé le 15/11/2026). Pas d'autre vendeur comparé."}
 };
 const AMAZON_CLEMENTINE = {
  "cordon-tessa": {"prix":null,"url":null,"note":"Pas vendu sur Amazon.fr (recherche du 11/11/2026)."},
@@ -384,7 +386,8 @@ const AMAZON_CLEMENTINE = {
  "cmwgn3mhb": {"prix":8.9,"url":"https://www.amazon.fr/dp/2253245682","note":"En stock."},
  "cmwgn6xdg": {"prix":9.9,"url":"https://www.amazon.fr/dp/226635549X","note":"En stock."},
  "cmwgtdc7j": {"prix":null,"url":null,"note":"Pas cherché sur Amazon.fr."},
- "cmwhmrsok": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."}
+ "cmwhmrsok": {"prix":null,"url":null,"note":"Marque vendue sur son propre site, pas cherchée sur Amazon.fr."},
+ "cmwicjjfo": {"prix":79.99,"url":"https://www.amazon.fr/dp/B015SJQ7KY?th=1","note":"Prix barré 119,99 €, en stock."}
 };
 const CATEGORIES_CHARLES = ["Projet Sim Racing","Autres idées"];   // « Cadeaux communs » renommée par Charles le 11/11/2026
 // choix:"…" = taille, teinte ou couleur à prendre, affichée dans une pastille sous le nom du cadeau, sans étiquette (toutes les listes)
