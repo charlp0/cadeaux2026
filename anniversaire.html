@@ -190,6 +190,10 @@ details.note p{margin:4px 0 0;max-width:36ch}
 .row{display:flex;gap:6px;flex-wrap:wrap}
 .err{color:var(--accent);font-size:12.5px;font-weight:700}
 .form input[type=number]{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:14px;background:var(--paper);color:var(--ink);width:100%}
+.toy .zoom .mosaic{display:grid;grid-template-columns:repeat(3,104px);gap:6px}
+.toy .zoom .mosaic img{width:104px;height:104px}
+.pack-list{margin:4px 0 2px;padding-left:18px;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.pack-list b{color:var(--ink)}
 .gift-choice{display:inline-block;margin:5px 0 3px;padding:4px 11px;border:2px solid var(--ink);border-radius:11px;background:color-mix(in srgb,var(--gold) 30%,var(--paper));color:var(--ink);font-family:var(--display);font-weight:800;font-size:16px;line-height:1.25}
 .gift-badge{display:inline-block;margin:4px 0 2px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:13.5px;border-radius:999px;padding:4px 12px;box-shadow:0 2px 0 rgba(0,0,0,.15)}
 .infobox{font-size:13px;line-height:1.4;background:color-mix(in srgb,var(--gold) 24%,var(--paper));border-radius:10px;padding:8px 10px;margin-bottom:8px;max-width:260px}
@@ -278,6 +282,8 @@ footer p{margin:6px 0}
   .tablewrap tbody td[data-label]::before{content:attr(data-label);display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}
   .col-avis,.col-toy,.col-age,.col-else,.col-res{width:auto}
   .toy .zoom img{width:110px;height:110px}
+  .toy .zoom .mosaic{grid-template-columns:repeat(3,96px)}
+  .toy .zoom .mosaic img{width:96px;height:96px}
 }
 @media (max-width:860px){
   header.hero{grid-template-columns:1fr auto;gap:12px 14px;padding-block:18px 30px;align-items:start}
@@ -317,6 +323,12 @@ footer p{margin:6px 0}
   .tablewrap .col-else::before{content:"Le moins cher du web";display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:2px}
   .toy{gap:10px}
   .toy .zoom img{width:96px;height:96px}
+  .tablewrap tbody tr:has(.col-res .infobox){grid-template-areas:"toy toy" "avis age" "price price" "res res"}   /* encart « déjà acheté » : pleine largeur sur téléphone */
+  .tablewrap tbody tr:has(.col-res .infobox) .infobox{max-width:none}
+  .toy.has-pack{flex-wrap:wrap}
+  .toy.has-pack .zoom{flex:1 1 100%}
+  .toy .zoom .mosaic{grid-template-columns:repeat(3,1fr);width:100%}
+  .toy .zoom .mosaic img{width:100%;height:auto;aspect-ratio:1}
   .toy .name{font-size:15px}
   .toy .sub{font-size:12.5px;margin-top:2px}
   .toy .brand{margin-top:4px;font-size:10.5px}
@@ -465,7 +477,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=48"></script>
+<script src="data.js?v=49"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -878,10 +890,11 @@ function render(){
     const tr=el("tr",{class:(kres(i)?"reserved":"")+(khide(i)?" hiddenrow":""),"data-id":i.id,id:"c-"+i.id});
     if(dragOK) tr.classList.add("draggable");
     const img=i.img||"img/placeholder.svg";
-    const toy=el("td",{class:"col-toy"},el("div",{class:"toy"},
+    const toy=el("td",{class:"col-toy"},el("div",{class:"toy"+(i.imgs?" has-pack":"")},
       dragOK?el("span",{class:"drag-handle",title:"Maintenez et glissez pour déplacer ce cadeau","aria-label":"Déplacer "+i.nom,role:"button",tabindex:"0"},"⠿"):null,
-      el("button",{class:"zoom",type:"button","aria-label":"Voir "+i.nom+" en grand",onclick:()=>openLightbox(i)},el("img",{src:img,alt:"",loading:"lazy",width:"128",height:"128",draggable:"false",onerror:e=>{e.target.onerror=null;e.target.src="img/placeholder.svg";}})),
+      el("button",{class:"zoom"+(i.imgs?" pack":""),type:"button","aria-label":"Voir "+i.nom+" en grand",onclick:()=>openLightbox(i)},i.imgs?el("span",{class:"mosaic"},...i.imgs.map(u=>el("img",{src:u,alt:"",loading:"lazy",draggable:"false"}))):el("img",{src:img,alt:"",loading:"lazy",width:"128",height:"128",draggable:"false",onerror:e=>{e.target.onerror=null;e.target.src="img/placeholder.svg";}})),
       el("div",{style:"min-width:0"},el("p",{class:"name",text:i.nom}),i.choix?el("p",{class:"gift-choice",text:i.choix}):null,i.badge?el("span",{class:"gift-badge",text:i.badge}):null,i.sub?el("p",{class:"sub",text:i.sub}):null,
+        i.pack?el("ul",{class:"pack-list"},...i.pack.map(x=>el("li",{},el("b",{text:x.nom}),x.sub?" · "+x.sub:""))):null,
         i.marque?el("span",{class:"brand",text:i.marque}):null,i.custom?el("span",{class:"custom",text:"ajouté par les parents"}):null,i.aCompleter?el("span",{class:"todo",text:"fiche en cours de complétion"}):null,
         el("div",{},el("button",{class:"share",type:"button",title:"Copier le lien direct vers ce cadeau",onclick:()=>copyLink(i)},"🔗 copier le lien")),
         (state.parents&&hasCats())?(()=>{const sel=el("select",{class:"catsel","aria-label":"Catégorie du cadeau"});for(const c of catOrder(baseItems()).concat(catOrder(baseItems()).includes(AUTRES)?[]:[AUTRES])) sel.append(el("option",{value:c,text:c,selected:c===kcat(i)?"":null}));sel.append(el("option",{value:"__new__",text:"Nouvelle catégorie…"}));sel.addEventListener("change",async()=>{let v=sel.value;if(v==="__new__"){const w=el("input",{type:"text",class:"catsel",placeholder:"Nom de la nouvelle catégorie",maxlength:"40"});sel.replaceWith(w);w.focus();w.addEventListener("keydown",async e=>{if(e.key==="Enter"&&w.value.trim()){w.disabled=true;await moveCat(i,w.value.trim());}if(e.key==="Escape")render();});return;}sel.disabled=true;await moveCat(i,v);});return sel;})():null)));
@@ -989,7 +1002,7 @@ function openLightbox(i){
   img.onerror=()=>{img.onerror=null;img.src=small;};
   img.src=big; img.alt=i.nom;
   document.getElementById("lb-title").textContent=i.nom;
-  document.getElementById("lb-sub").textContent=[i.choix,i.badge,i.sub,i.age?"dès "+i.age+" ans":""].filter(Boolean).join(" · ");
+  document.getElementById("lb-sub").textContent=[i.choix,i.badge,i.sub,i.pack?i.pack.map(x=>x.nom).join(" + "):"",i.age?"dès "+i.age+" ans":""].filter(Boolean).join(" · ");
   const pr=document.getElementById("lb-price"); const p=shopPrice(i); const shop=(i.custom||i.boutique)?(i.boutique||"la boutique"):state.list.boutique;
   const bst=bestElsewhere(i); const cheap=(bst&&p!=null&&bst.prix<p-0.001)?bst:null;
   if(i.commun) pr.replaceChildren("Cadeau commun · participation libre");
