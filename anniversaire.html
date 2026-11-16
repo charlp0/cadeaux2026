@@ -477,7 +477,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=51"></script>
+<script src="data.js?v=52"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -793,7 +793,7 @@ function elseCell(i){
 function resCell(i){
   const c=el("td",{class:"col-res","data-label":"Réservation"});
   const r=kres(i);
-  if(i.achete&&!r) c.append(el("div",{class:"infobox"},el("b",{text:i.achete.titre+"."})," "+i.achete.note,el("span",{class:"how",text:"Pour l'offrir : réservez-le, puis voyez avec "+i.achete.par+" pour le paiement."})));
+  if(i.achete&&!r) c.append(el("div",{class:"infobox"},el("b",{text:i.achete.titre+"."}),i.achete.note?" "+i.achete.note:null,el("span",{class:"how",text:"Pour l'offrir : réservez-le, puis voyez avec "+i.achete.par+" pour le paiement."})));
   if(i.commun){ partBox(c,i); }
   else if(r){
     const v=splitVoter(r.voter);
