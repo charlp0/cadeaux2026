@@ -85,8 +85,10 @@ async function main(){
     for(const [a,v] of Object.entries(amz)) if(!v.err&&!v.absent&&num(v.prix)!=null) now['amz:'+a]={prix:num(v.prix),barre:num(v.barre),badge:v.badge||null,dispo:true};
     for(const [k,v] of Object.entries(aut)) if(!v.err) now[k]=v;
     // Réservations en ligne
-    let resa={};
+    // + cadeaux retirés de la liste (cadeau-hide:<liste>:<id>) : jamais d'alerte dessus
+    let resa={}; const retires=new Set();
     try{ const r=await fetch(SUPA+'?select=block_id,voter&block_id=like.cadeau:*',{headers:{apikey:KEY,authorization:'Bearer '+KEY}}); for(const x of await r.json()) resa[x.block_id.slice(7)]=x.voter; }catch(e){ console.error('réservations illisibles',e.message); }
+    try{ const r=await fetch(SUPA+'?select=block_id&block_id=like.cadeau-hide:*',{headers:{apikey:KEY,authorization:'Bearer '+KEY}}); for(const x of await r.json()) retires.add(x.block_id.slice(12)); }catch(e){ console.error('cadeaux retirés illisibles',e.message); }
     fs.mkdirSync(outDir,{recursive:true}); const etatP=path.join(outDir,'etat.json');
     const etat=fs.existsSync(etatP)?JSON.parse(fs.readFileSync(etatP,'utf8')):{offres:{},signale:{}};
     const today=new Date().toLocaleDateString('sv-SE',{timeZone:'Europe/Paris'});
@@ -94,6 +96,7 @@ async function main(){
     const lignes=[]; let nouvelles=0; const nonSuivis=[];
     for(const {L,i,o} of tous){
       const k=L.id+':'+i.id; const r=resa[k]||null;
+      if(retires.has(k)&&!achats.has(k)){ delete etat.signale[k]; continue; }
       const vus=o.filter(z=>now[z.key]&&now[z.key].prix!=null).map(z=>({...z,...now[z.key]}));
       if(!vus.length){ if(!o.some(z=>z.key.startsWith('kj:')||z.key.startsWith('amz:'))||achats.has(k)) nonSuivis.push(L.prenom+' · '+i.nom); continue; }
       const best=vus.filter(z=>z.dispo!==false).sort((a,b)=>a.prix-b.prix)[0]||vus.sort((a,b)=>a.prix-b.prix)[0];
