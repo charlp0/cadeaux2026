@@ -415,7 +415,25 @@ const AMAZON_CHARLES = {
  "box-signature": {"prix":null,"url":null,"note":"Box vendue par Trois Fois Vin sur son site."}
 };
 
-// Les 4 listes du site. Les idées ajoutées par les parents (mode parents) sont stockées en ligne jusqu'à leur complétion, puis intégrées ici.
+// Liste d'Iris : sans onglet (cache:true), accessible seulement par le lien direct #iris
+const CATEGORIES_IRIS = ["LEGO","Vêtements"];
+const ITEMS_IRIS = [
+ {id:"iris-lego-luxo", cat:"LEGO", nom:"LEGO Ideas Disney Pixar Luxo Jr. (21357)", sub:"La lampe de bureau de Pixar et sa balle, 613 pièces, tête et bras articulés · pour adultes", marque:"LEGO", age:0, boutique:"LEGO", prix:69.99, url:"https://www.lego.com/fr-fr/product/disney-pixar-luxo-jr-21357", img:"img/custom/iris-lego-luxo.jpg"},
+ {id:"iris-lego-bonsai", cat:"LEGO", nom:"LEGO Botanicals Bonsaï (10281)", sub:"Bonsaï à construire avec son pot, feuillage vert ou fleurs de cerisier roses interchangeables, 878 pièces · pour adultes", marque:"LEGO", age:0, boutique:"LEGO", prix:49.99, url:"https://www.lego.com/fr-fr/product/bonsai-tree-10281", img:"img/custom/iris-lego-bonsai.jpg"},
+ {id:"iris-zipper-navy", cat:"Vêtements", nom:"Hoodie zippé Visionnaire, navy", choix:"Taille XS", sub:"Sweat à capuche zippé, logo Visionnaire sur l'avant, 100 % coton", marque:"Visionnaire", age:0, boutique:"Visionnaire", prix:100, url:"https://vision-naire.com/products/zipper-vision-naire-navy?variant=53598996693329", img:"img/custom/iris-zipper-navy.jpg"},
+ {id:"iris-tshirt-chronologie", cat:"Vêtements", nom:"T-shirt Chronologie Visionnaire", choix:"Taille XS", sub:"Sérigraphie noire devant et dos, coton premium prélavé", marque:"Visionnaire", age:0, boutique:"Visionnaire", prix:49, url:"https://vision-naire.com/products/t-shirt-curation?variant=53828542693713", img:"img/custom/iris-tshirt-chronologie.jpg"},
+ {id:"iris-pull-soleil", cat:"Vêtements", nom:"Pull loose rose pâle en grosse maille, broderie Soleil", badge:"Épuisé sur le site pour l'instant", sub:"Coupe ample, col cheminée, manches ballon, soleil rose et orange brodé devant et dos · taille unique", marque:"Horizons Lointains", age:0, boutique:"Horizons Lointains", prix:49, url:"https://horizons-lointains.fr/products/pull-loose-rose-pale-grosse-maille-broderie-soleil-colore", img:"img/custom/iris-pull-soleil.jpg"},
+];
+const AILLEURS_IRIS = {
+ "iris-lego-luxo": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"LEGO : 69,99 €, en stock (relevé le 21/11/2026). Amazon ne l'a qu'en marketplace, à 67,34 € chez un vendeur tiers."},
+ "iris-lego-bonsai": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"LEGO : 49,99 €. Amazon.fr : 34,99 € au lieu de 49,99 €, vendu par Amazon, en stock (relevé le 21/11/2026)."},
+ "iris-pull-soleil": {"vendeur":null,"prix":null,"url":null,"verifie":false,"note":"Horizons Lointains : 49 €, épuisé le 21/11/2026."},
+};
+const AMAZON_IRIS = {
+ "iris-lego-bonsai": {"prix":34.99,"url":"https://www.amazon.fr/dp/B08G4PCG8F","note":"Vendu par Amazon, prix barré 49,99 € (relevé le 21/11/2026)."},
+};
+
+// Les listes du site. Les idées ajoutées par les parents (mode parents) sont stockées en ligne jusqu'à leur complétion, puis intégrées ici.
 const LISTS = [
  {id:"louis", prenom:"Louis", titre:"La liste de Louis", eyebrow:"Noël 2026", photo:"img/louis.jpg",
   intro:"Louis a choisi ses envies dans le catalogue King Jouet.",
@@ -426,4 +444,6 @@ const LISTS = [
   intro:"Les idées de cadeaux de Clémentine pour Noël.", items:ITEMS_CLEMENTINE, ailleurs:AILLEURS_CLEMENTINE, amazon:AMAZON_CLEMENTINE, boutique:"Boutique", cats:CATEGORIES_CLEMENTINE},
  {id:"charles", prenom:"Charles", titre:"La liste de Charles", eyebrow:"Noël 2026", photo:"img/charles.jpg",
   intro:"Les idées de cadeaux de Charles pour Noël.", items:ITEMS_CHARLES, ailleurs:AILLEURS_CHARLES, amazon:AMAZON_CHARLES, boutique:"Boutique", cats:CATEGORIES_CHARLES},
+ {id:"iris", prenom:"Iris", de:"d'Iris", titre:"La liste d'Iris", eyebrow:"Noël 2026", photo:"img/iris.svg", cache:true,
+  intro:"Les idées de cadeaux d'Iris pour Noël.", items:ITEMS_IRIS, ailleurs:AILLEURS_IRIS, amazon:AMAZON_IRIS, boutique:"Boutique", cats:CATEGORIES_IRIS},
 ];

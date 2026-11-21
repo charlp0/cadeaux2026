@@ -476,7 +476,7 @@ footer p{margin:6px 0}
 </footer>
 </div>
 
-<script src="data.js?v=53"></script>
+<script src="data.js?v=54"></script>
 <script>
 /* Neige légère dans le bandeau (page Noël) ou confettis (page anniversaire) ; désactivé si l'utilisateur préfère moins d'animations */
 (function(){
@@ -519,6 +519,7 @@ const eur=n=>n==null?"":Number(n).toLocaleString("fr-FR",{style:"currency",curre
 const key=(prefix,i)=>prefix+":"+state.list.id+":"+i.id;
 const OURS="__nous__";   // réservation « acheté par nous » (parents), affichée sans prénom
 const MODE=document.documentElement.dataset.mode||"noel"; const ANNIV=MODE==="anniv";   // index.html = Noël, anniversaire.html = anniversaire de Louis (généré par scripts/build_anniv.js)
+const deP=L=>L.de||("de "+L.prenom); // « de Louis », « d'Iris »
 const PAGE_LISTS=ANNIV?LISTS.filter(l=>l.id==="louis"):LISTS;
 const scopeId=()=>state.list.id+(ANNIV?"-anniv":"");   // étoiles et retraits distincts entre la page anniversaire et la page Noël
 const DATES={anniv:new Date("2026-12-03T00:00:00+01:00"), noel:new Date("2026-12-25T00:00:00+01:00")};
@@ -694,7 +695,7 @@ function avisCell(i){
     const box=el("div",{class:"stars",role:"group","aria-label":"Priorité"});
     for(let k=1;k<=3;k++) box.append(el("button",{type:"button",class:k<=n?"on":"","aria-label":k+" étoile"+(k>1?"s":""),title:AVIS_LABEL[k],onclick:async e=>{e.currentTarget.disabled=true;await setAvis(i,k===n?0:k);}},"★"));
     c.append(box); c.append(el("span",{class:"avis-label",text:n?AVIS_LABEL[n]:"cliquez pour noter"}));
-    if(n&&state.avis[state.list.id+":"+i.id]==null&&i.avisDefaut) c.append(el("span",{class:"small",text:"(d'après l'ordre de "+state.list.prenom+")"}));
+    if(n&&state.avis[state.list.id+":"+i.id]==null&&i.avisDefaut) c.append(el("span",{class:"small",text:"(d'après l'ordre "+deP(state.list)+")"}));
   }else if(n){
     const box=el("div",{class:"stars","aria-label":n+" étoile"+(n>1?"s":"")+" sur 3"});
     for(let k=1;k<=3;k++) box.append(el("span",{class:"s"+(k<=n?" on":""),text:"★"}));
@@ -971,8 +972,8 @@ function render(){
 
 /* ───── Onglets ───── */
 function renderTabs(){
-  const t=document.getElementById("tabs"); t.replaceChildren(); t.hidden=ANNIV; if(ANNIV) return;
-  for(const L of PAGE_LISTS){
+  const t=document.getElementById("tabs"); t.replaceChildren(); t.hidden=ANNIV||!!(state.list&&state.list.cache); if(t.hidden) return;
+  for(const L of PAGE_LISTS.filter(x=>!x.cache)){
     // même compte que la liste affichée : sans les cadeaux retirés par les parents ni, pour Louis, ceux déjà offerts pour l'anniversaire
     const n=L.items.concat(state.custom[L.id]||[]).filter(i=>{ if(state.hide[L.id+":"+i.id]) return false; const r=state.res[L.id+":"+i.id]; return !(L.id==="louis"&&r&&splitVoter(r.voter).occ==="Anniversaire"); }).length;
     t.append(el("button",{class:"tab",role:"tab","aria-selected":String(L===state.list),onclick:()=>selectList(L.id,true)},el("img",{src:L.photo,alt:""}),L.prenom,el("span",{class:"n",text:n?String(n):""})));
@@ -987,7 +988,7 @@ function selectList(id,push){
     el("li",{},el("span",{class:"ic",text:"✓"}),el("span",{},el("b",{text:"Pour offrir : « Réserver » + votre prénom."})," Tout le monde voit alors que c'est pris, mais c'est à vous de commander 😇")),
     (!ANNIV&&L.items.some(i=>i.commun))?el("li",{},el("span",{class:"ic",text:"🤝"}),el("span",{},el("b",{text:"Cadeau commun : « Participer » + votre prénom et un montant."})," Voyez ensuite avec "+CAGNOTTE+", qui tient la cagnotte")):null].filter(Boolean));
   const pi=document.getElementById("photo-img"); pi.src=L.photo; pi.alt=L.prenom; document.getElementById("photo-tag").textContent=L.prenom;
-  document.getElementById("q").placeholder="Chercher dans la liste de "+L.prenom+"…";
+  document.getElementById("q").placeholder="Chercher dans la liste "+deP(L)+"…";
   if(push){ try{history.replaceState(null,"","#"+L.id);}catch(e){} window.scrollTo({top:0,behavior:"smooth"}); }
   renderTabs(); render();
 }
@@ -1053,7 +1054,7 @@ function renderBilan(){
 document.getElementById("p-quit").addEventListener("click",()=>{ setParents(false); toast("Mode parents quitté"); });
 document.getElementById("p-hidden").addEventListener("click",()=>{ state.showHidden=!state.showHidden; state.showAnniv=false; render(); });
 document.getElementById("p-anniv").addEventListener("click",()=>{ state.showAnniv=!state.showAnniv; state.showHidden=false; render(); });
-document.getElementById("p-add").addEventListener("click",()=>{ document.getElementById("add-form").reset(); document.getElementById("add-err").textContent=""; document.getElementById("add-help").textContent="Ce cadeau sera ajouté à la liste de "+state.list.prenom+", visible par tout le monde."; ADD.showModal(); setTimeout(()=>document.getElementById("a-url").focus(),50); });
+document.getElementById("p-add").addEventListener("click",()=>{ document.getElementById("add-form").reset(); document.getElementById("add-err").textContent=""; document.getElementById("add-help").textContent="Ce cadeau sera ajouté à la liste "+deP(state.list)+", visible par tout le monde."; ADD.showModal(); setTimeout(()=>document.getElementById("a-url").focus(),50); });
 document.getElementById("add-cancel").addEventListener("click",()=>ADD.close());
 document.getElementById("add-form").addEventListener("submit",async e=>{
   e.preventDefault();
@@ -1067,7 +1068,7 @@ document.getElementById("add-form").addEventListener("submit",async e=>{
   o.aCompleter=!(o.prix!=null&&o.img); o.ajoute=new Date().toISOString().slice(0,10);
   const ok=document.getElementById("add-ok"); ok.disabled=true;
   const done=await addCustom(o); ok.disabled=false;
-  if(done){ ADD.close(); toast(o.aCompleter?"Idée ajoutée, Claude complète la fiche dans la journée":"Ajouté à la liste de "+state.list.prenom); } else document.getElementById("add-err").textContent="Impossible d'enregistrer, réessayez.";
+  if(done){ ADD.close(); toast(o.aCompleter?"Idée ajoutée, Claude complète la fiche dans la journée":"Ajouté à la liste "+deP(state.list)); } else document.getElementById("add-err").textContent="Impossible d'enregistrer, réessayez.";
 });
 
 let toastT; function toast(msg){ let t=document.getElementById("toast"); if(!t){t=el("div",{id:"toast",class:"toast",role:"status"});document.body.append(t);} t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>{t.hidden=true},2600); }
